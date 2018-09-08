@@ -3,4 +3,9 @@
     <string name="string_posts">posts</string>
     <string name="string_followers">followers</string>
     <string name="string_following">following</string>
+    <string name="string_login">Log in</string>
+    <string name="string_username">Username</string>
+    <string name="string_password">Password</string>
+    <string name="string_forgot_password">Forgot password?</string>
+
 </resources>

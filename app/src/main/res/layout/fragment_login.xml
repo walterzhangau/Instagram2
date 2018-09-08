@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <EditText
+        android:id="@+id/textUsername"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="168dp"
+        android:hint="@string/string_username"
+        android:paddingLeft="5dp"
+        android:inputType="textPersonName"
+        android:background="@color/gray200"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/textPassword"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below = "@+id/textUsername"
+        android:layout_centerHorizontal = "true"
+        android:background="@color/gray200"
+        android:hint="@string/string_password"
+        android:paddingLeft="5dp"
+        android:inputType="textPassword"
+        android:textSize="12sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal = "true"
+        android:layout_below = "@+id/textPassword"
+        android:text="@string/string_login"
+        android:background="@color/blue200"
+        android:textSize="10sp"/>
+
+    <TextView
+        android:id="@+id/textForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal = "true"
+        android:layout_below = "@+id/button"
+        android:text="@string/string_forgot_password"
+        android:textSize="10sp"
+        android:layout_marginTop="15dp" />
+
+</RelativeLayout>
