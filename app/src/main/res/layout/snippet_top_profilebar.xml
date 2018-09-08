@@ -25,8 +25,16 @@
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginLeft="15dp"
-                    android:id="@+id/profileName"
-                    />
+                    android:id="@+id/profileName"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/profileMenu"
+                    android:src="@drawable/ic_ellipses"/>
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
