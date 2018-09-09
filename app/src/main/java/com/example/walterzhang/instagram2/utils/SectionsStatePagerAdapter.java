@@ -37,7 +37,7 @@ public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
         return mFragmentList.size();
     }
 
-    private void addFragment(Fragment fragment,String fragmentName){
+    public void addFragment(Fragment fragment,String fragmentName){
         mFragmentList.add(fragment);
         mFragments.put(fragment,mFragmentList.size()-1);
         mFragmentNames.put(mFragmentList.size()-1, fragmentName);
@@ -66,6 +66,19 @@ public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
     public Integer getFragmentNumber(Fragment fragment){
         if (mFragmentNumbers.containsKey(fragment)){
             return mFragmentNumbers.get(fragment);
+        }
+        else{
+            return null;
+        }
+    }
+    /**
+     * returns the fragment with the @param
+     * @param fragmentNumber
+     * @return
+     */
+    public String getFragmentNumber(Integer fragmentNumber){
+        if (mFragmentNames.containsKey(fragmentNumber)){
+            return mFragmentNames.get(fragmentNumber);
         }
         else{
             return null;

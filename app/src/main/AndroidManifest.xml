@@ -23,22 +23,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
+
         <activity android:name=".Likes.LikesActivity"></activity>
         <activity android:name=".Profile.ProfileActivity"></activity>
         <activity android:name=".Search.SearchActivity"></activity>
         <activity android:name=".Share.ShareActivity"></activity>
         <activity android:name=".Profile.AccountSettingsActivity"></activity>
+        <activity android:name=".Home.HomeActivity"></activity>
 
 
-
-=======
-        <activity android:name=".Home.HomeActivity" />
-        <activity android:name=".Likes.LikesActivity" />
-        <activity android:name=".Profile.ProfileActivity" />
-        <activity android:name=".Search.SearchActivity" />
-        <activity android:name=".Share.ShareActivity" />
->>>>>>> origin/master
     </application>
 
 </manifest>
