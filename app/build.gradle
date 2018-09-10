@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.example.walterzhang.instagram2"
         minSdkVersion 18
@@ -30,7 +30,8 @@ dependencies {
 
     //Design Library for Coordinator Layout and Toolbars
     compile 'com.android.support:design:26.3.1'
-
+    compile 'com.google.firebase:firebase-auth:16.0.3' //Firebase Authentication
+    compile 'com.google.firebase:firebase-core:16.0.3' //Firebase Analytics
     //Bottom Navigation View EX Library
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     compile "com.android.support:design:26.+"
@@ -47,3 +48,4 @@ configurations.all {
         }
     }
 }
+apply plugin: 'com.google.gms.google-services'
