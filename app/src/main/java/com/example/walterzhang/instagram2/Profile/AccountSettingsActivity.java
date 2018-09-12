@@ -1,16 +1,26 @@
 package com.example.walterzhang.instagram2.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.example.walterzhang.instagram2.Login.LoginActivity;
 import com.example.walterzhang.instagram2.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -23,6 +33,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private static final String TAG = "AccountSettingsActivity";
 
     private Context mContext;
+    private GoogleSignInClient mGoogleSignInClient;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +51,22 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "onClick: Navigating back to Profile Page");
                 finish();
+
             }
         });
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        super.onStart();
     }
 
     private void setupSettingsList(){
@@ -51,6 +77,20 @@ public class AccountSettingsActivity extends AppCompatActivity {
         options.add(getString(R.string.sign_out));
         ArrayAdapter adapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1,options);
         listView.setAdapter(adapter);
-        
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position==1)
+                {
+                mGoogleSignInClient.signOut().addOnCompleteListener(AccountSettingsActivity.this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        startActivity(new Intent(AccountSettingsActivity.this,LoginActivity.class));
+                    }
+                });
+                }
+            }
+        });
+
     }
 }
