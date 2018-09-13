@@ -4,6 +4,12 @@
     <string name="string_followers">followers</string>
     <string name="string_following">following</string>
 
+
+    <string name="edit_profile">Edit Profile</string>
+    <string name="sign_out">Sign Out</string>
+
+
+
     <string name="edit_profile_fragment">Edit Profile</string>
     <string name="sign_out_fragment">Sign Out</string>
 
@@ -20,5 +26,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
 
 </resources>
