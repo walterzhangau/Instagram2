@@ -13,6 +13,7 @@ import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.fragment_post_list;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
+import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class HomeActivity extends AppCompatActivity implements fragment_post_list.OnListFragmentInteractionListener {
