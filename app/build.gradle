@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -34,6 +35,7 @@ dependencies {
     //Bottom Navigation View EX Library
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     compile "com.android.support:design:26.+"
+    compile 'com.android.support:recyclerview-v7:26.3.1'
     //circle image view
     compile "de.hdodenhof:circleimageview:2.2.0"
     //image loader

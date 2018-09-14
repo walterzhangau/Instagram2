@@ -1,20 +1,22 @@
 package com.example.walterzhang.instagram2.Home;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.dummy.DummyContent;
+import com.example.walterzhang.instagram2.fragment_post_list;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements fragment_post_list.OnListFragmentInteractionListener {
     
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;
@@ -36,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setupViewPager(){
         SectionsPagerAdapter adpater = new SectionsPagerAdapter(getSupportFragmentManager());
         adpater.addFragment(new CameraFragment());
-        adpater.addFragment(new HomeFragment());
+        adpater.addFragment(new fragment_post_list());
         adpater.addFragment(new MessagesFragment());
         ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(adpater);
@@ -61,5 +63,9 @@ public class HomeActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
 
+    }
+
+    public void onListFragmentInteraction(DummyContent.DummyItem uri){
+        //you can leave it empty
     }
 }

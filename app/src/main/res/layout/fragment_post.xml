@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/text_author_name"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="25dp"
+            android:text="Gus" />
+
+        <ImageView
+            android:id="@+id/imageView_photo"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_below="@+id/text_author_name"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/text_likes_count"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_below="@+id/imageView_photo"
+            android:text="10 likes"
+            android:onClick="onClick"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@+id/text_view_all_comments"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_weight="1"
+            android:layout_below="@+id/text_likes_count"
+            android:text="View All 3 Comments"
+            android:onClick="onClick"
+            android:clickable="true" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/text_view_all_comments"
+            android:hint="Add a comment..."
+            android:onClick="onClick"
+            android:clickable="true"
+            android:inputType="textMultiLine" />
+        <!-- app:menu = "@menu/user_feed_menu" -->
+    </RelativeLayout>
+</LinearLayout>
