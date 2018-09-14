@@ -14,7 +14,9 @@ import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.fragment_post_list;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
+import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity extends AppCompatActivity implements fragment_post_list.OnListFragmentInteractionListener {
     
@@ -28,8 +30,17 @@ public class HomeActivity extends AppCompatActivity implements fragment_post_lis
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting");
 
+
+        initImageLoader();
+
         setupBottomNavigationView();
         setupViewPager();
+    }
+
+    private void initImageLoader(){
+
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 
     /**
