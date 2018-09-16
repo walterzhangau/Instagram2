@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.fragment_like.OnListFragmentInteractionListener;
+import com.example.walterzhang.instagram2.fragment_like_list.OnListFragmentInteractionListener;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_like, parent, false);
+                .inflate(R.layout.layout_user, parent, false);
         return new ViewHolder(view);
     }
 
