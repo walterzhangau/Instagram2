@@ -1,4 +1,4 @@
-package com.example.walterzhang.instagram2;
+package com.example.walterzhang.instagram2.Home;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.walterzhang.instagram2.MyLikeRecyclerViewAdapter;
+import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 

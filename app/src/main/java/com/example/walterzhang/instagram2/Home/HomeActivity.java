@@ -11,12 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.walterzhang.instagram2.PostFragment;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.UserFragment;
 import com.example.walterzhang.instagram2.dummy.DummyContent;
-import com.example.walterzhang.instagram2.fragment_like_list;
-import com.example.walterzhang.instagram2.fragment_post_list;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;

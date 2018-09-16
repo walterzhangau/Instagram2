@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.fragment_like_list.OnListFragmentInteractionListener;
+import com.example.walterzhang.instagram2.Home.fragment_like_list.OnListFragmentInteractionListener;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 
 import java.util.List;

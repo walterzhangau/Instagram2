@@ -1,4 +1,4 @@
-package com.example.walterzhang.instagram2;
+package com.example.walterzhang.instagram2.Home;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.walterzhang.instagram2.R;
 
 
 /**
