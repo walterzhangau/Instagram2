@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.walterzhang.instagram2.CommentFragment;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.UserFragment;
 import com.example.walterzhang.instagram2.dummy.DummyContent;
@@ -18,18 +19,27 @@ import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class HomeActivity extends AppCompatActivity implements fragment_post_list.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener, UserFragment.OnFragmentInteractionListener, fragment_like_list.OnListFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements
+        fragment_post_list.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener,
+        UserFragment.OnFragmentInteractionListener, fragment_like_list.OnListFragmentInteractionListener,
+        CommentFragment.OnFragmentInteractionListener,
+        fragment_comment_list.onCommentListFragmentInteractionListener {
     
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;
 
     private Context mContext = HomeActivity.this;
+    private Class<?> cls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting");
+
+        //TODO:NULL OBJECT ON SETTEXT CALL!!!
+//        TextView post_like_counts = (TextView)findViewById(R.id.text_likes_count);
+//        post_like_counts.setText("My Awesome Text");
 
         setupBottomNavigationView();
         setupViewPager();
@@ -74,13 +84,21 @@ public class HomeActivity extends AppCompatActivity implements fragment_post_lis
 
     public void onFragmentInteraction()
     {
-        Intent intent = new Intent(this, LikesListActivity.class);
+        Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
 
     public void onLikesCountClicked(View view)
     {
         Log.d(TAG, "onLikesCountClicked...");
+        cls = LikesListActivity.class;
+        onFragmentInteraction();
+    }
+
+    public void onCommentsCountClicked(View view)
+    {
+        Log.d(TAG, "onCommentsCountClicked...");
+        cls = CommentsListActivity.class;
         onFragmentInteraction();
     }
 }
