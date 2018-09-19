@@ -1,4 +1,4 @@
-package com.example.walterzhang.instagram2;
+package com.example.walterzhang.instagram2.Home;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,22 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.Home.fragment_post_list.OnListFragmentInteractionListener;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
+import com.example.walterzhang.instagram2.R;
 
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link fragment_comment_list.onCommentListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MypostRecyclerViewAdapter extends RecyclerView.Adapter<MypostRecyclerViewAdapter.ViewHolder> {
+public class MyCommentRecyclerViewAdapter extends RecyclerView.Adapter<MyCommentRecyclerViewAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final fragment_comment_list.onCommentListFragmentInteractionListener mListener;
 
-    public MypostRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyCommentRecyclerViewAdapter(List<DummyItem> items, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -29,15 +29,15 @@ public class MypostRecyclerViewAdapter extends RecyclerView.Adapter<MypostRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_post, parent, false);
+                .inflate(R.layout.fragment_comment, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-/*        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);*/
+        holder.mIdView.setText(mValues.get(position).id);
+        holder.mContentView.setText(mValues.get(position).content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,8 +65,8 @@ public class MypostRecyclerViewAdapter extends RecyclerView.Adapter<MypostRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.text_author_name);
-            mContentView = (TextView) view.findViewById(R.id.text_likes_count);
+            mIdView = (TextView) view.findViewById(R.id.item_number);
+            mContentView = (TextView) view.findViewById(R.id.content);
         }
 
         @Override
