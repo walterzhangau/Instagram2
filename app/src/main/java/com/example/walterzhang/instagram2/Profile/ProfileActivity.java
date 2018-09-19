@@ -50,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity{
 
     private void tempGridSetup(){
         ArrayList<String> imgURLs = new ArrayList<>();
-        imgURLs.add();
+        //imgURLs.add();
     }
 
     //For now takes a list of urls but will take dynamic inut in future
