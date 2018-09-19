@@ -37,10 +37,6 @@ public class HomeActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting");
 
-        //TODO:NULL OBJECT ON SETTEXT CALL!!!
-//        TextView post_like_counts = (TextView)findViewById(R.id.text_likes_count);
-//        post_like_counts.setText("My Awesome Text");
-
         setupBottomNavigationView();
         setupViewPager();
     }
@@ -98,6 +94,13 @@ public class HomeActivity extends AppCompatActivity implements
     public void onCommentsCountClicked(View view)
     {
         Log.d(TAG, "onCommentsCountClicked...");
+        cls = CommentsListActivity.class;
+        onFragmentInteraction();
+    }
+
+    public void onCommentsClicked(View view)
+    {
+        Log.d(TAG, "onCommentsClicked...");
         cls = CommentsListActivity.class;
         onFragmentInteraction();
     }
