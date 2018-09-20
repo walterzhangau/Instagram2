@@ -12,18 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_author_name"
-            android:layout_width="200dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="25dp"
-            android:text="Gus" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/snippet_top_user">
+            <include layout="@layout/snippet_top_feedbar"/>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/imageView_photo"
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:layout_below="@+id/text_author_name"
+            android:layout_below="@+id/snippet_top_user"
             android:src="@mipmap/ic_launcher" />
 
         <ImageButton
