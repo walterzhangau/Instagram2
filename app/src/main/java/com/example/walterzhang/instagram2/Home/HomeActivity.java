@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting");
-
+        
         initImageLoader();
 
         setupBottomNavigationView();
@@ -104,6 +104,13 @@ public class HomeActivity extends AppCompatActivity implements
     public void onCommentsCountClicked(View view)
     {
         Log.d(TAG, "onCommentsCountClicked...");
+        cls = CommentsListActivity.class;
+        onFragmentInteraction();
+    }
+
+    public void onCommentsClicked(View view)
+    {
+        Log.d(TAG, "onCommentsClicked...");
         cls = CommentsListActivity.class;
         onFragmentInteraction();
     }
