@@ -65,15 +65,25 @@
             android:text="View All 3 Comments" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/editTextAddComment"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_below="@+id/text_view_all_comments"
             android:clickable="true"
             android:focusable="true"
             android:hint="Add a comment..."
-            android:inputType="textMultiLine"
-            android:onClick="onClick" />
+            android:inputType="textMultiLine" />
+        <TextView
+            android:id="@+id/text_post_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_all_comments"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:clickable="true"
+            android:onClick="onPostCommentClicked"
+            android:text="Post"
+            android:textColor="@color/blue200" />
         <!-- app:menu = "@menu/user_feed_menu" -->
     </RelativeLayout>
 </LinearLayout>
