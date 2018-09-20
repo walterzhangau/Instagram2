@@ -104,4 +104,9 @@ public class HomeActivity extends AppCompatActivity implements
         cls = CommentsListActivity.class;
         onFragmentInteraction();
     }
+
+    public void onLikePostClicked(View view)
+    {
+        Log.d(TAG, "onLikePostClicked...");
+    }
 }
