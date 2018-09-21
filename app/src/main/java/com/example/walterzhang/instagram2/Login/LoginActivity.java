@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,12 +32,13 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class LoginActivity extends AppCompatActivity {
 
 
-    private AutoCompleteTextView txtEmail;
-    private TextView txtPassword;
+    private EditText txtEmail;
+    private EditText txtPassword;
     private Button btnlogin;
     private FirebaseAuth mAuth;
     public GoogleSignInClient mGoogleSignInClient;
     SignInButton signInButton;
+    private TextView txtRegister;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        txtEmail=(AutoCompleteTextView)findViewById(R.id.textUsername);
+        txtEmail=(EditText)findViewById(R.id.textUsername);
         signInButton= (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +58,16 @@ public class LoginActivity extends AppCompatActivity {
                 signIn();
             }
         });
+        txtRegister=(TextView)findViewById(R.id.link_signUp);
+        txtRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        txtPassword=(TextView)findViewById(R.id.textPassword);
+        txtPassword=(EditText) findViewById(R.id.textPassword);
         btnlogin=(Button)findViewById(R.id.buttonLogin);
         mAuth=FirebaseAuth.getInstance();
         btnlogin.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(LoginActivity.this,HomeActivity.class).putExtra("Name",user.getDisplayName()));
+
                         } else {
                             // If sign in fails, display a message to the user.
                             AlertDialog.Builder builder=new AlertDialog.Builder(LoginActivity.this);

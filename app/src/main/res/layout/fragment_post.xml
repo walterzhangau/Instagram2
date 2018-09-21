@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/post"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Home.PostFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_author_name"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="25dp"
+            android:text="Gus" />
+
+        <ImageView
+            android:id="@+id/imageView_photo"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_below="@+id/text_author_name"
+            android:src="@mipmap/ic_launcher" />
+
+        <ImageButton
+            android:id="@+id/button_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView_photo"
+            android:src="@drawable/ic_like" />
+
+        <ImageButton
+            android:id="@+id/button_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/imageView_photo"
+            android:layout_marginStart="72dp"
+            android:onClick="onCommentsClicked"
+            android:src="@drawable/ic_comment" />
+
+        <TextView
+            android:id="@+id/text_likes_count"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/button_likes"
+            android:layout_marginTop="7dp"
+            android:clickable="true"
+            android:onClick="onLikesCountClicked"
+            android:text="10 likes" />
+
+        <TextView
+            android:id="@+id/text_view_all_comments"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/text_likes_count"
+            android:layout_marginTop="7dp"
+            android:clickable="true"
+            android:onClick="onCommentsCountClicked"
+            android:text="View All 3 Comments" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/text_view_all_comments"
+            android:clickable="true"
+            android:focusable="true"
+            android:hint="Add a comment..."
+            android:inputType="textMultiLine"
+            android:onClick="onClick" />
+        <!-- app:menu = "@menu/user_feed_menu" -->
+    </RelativeLayout>
+</LinearLayout>

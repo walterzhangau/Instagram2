@@ -20,10 +20,7 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="200dp"
-        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -32,17 +29,24 @@
             android:layout_marginTop="100dp"
             android:gravity="center"
             android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:src="@drawable/instagram_logo"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="25dp"
+                />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/textUsername"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
 
-                    android:background="@color/gray200"
+
                     android:hint="@string/string_username"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
@@ -56,14 +60,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.design.widget.TextInputEditText
+                <EditText
                     android:id="@+id/textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_below="@+id/textUsername"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/gray200"
+
                     android:hint="@string/string_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
@@ -77,13 +81,25 @@
                 android:id="@+id/buttonLogin"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/blue200"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_rounded"
                 android:text="@string/string_login"
-                android:textSize="10sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="25dp"
+                android:padding="12dp"
+                android:textStyle="bold"
 
-                android:textStyle="bold" />
-
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:text="New User? Sign Up!"
+                android:gravity="center"
+                android:textSize="16dp"
+                android:id="@+id/link_signUp"
+                android:textColor="@color/blue200"
+                />
             <TextView
                 android:id="@+id/textForgotPassword"
                 android:layout_width="wrap_content"
@@ -98,5 +114,5 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-    </ScrollView>
+
 </LinearLayout>
