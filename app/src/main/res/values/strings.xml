@@ -37,6 +37,7 @@
     <string name="string_name">Name</string>
     <string name="string_register">Sign Up</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="string_email">Email</string>
 
 
 </resources>
