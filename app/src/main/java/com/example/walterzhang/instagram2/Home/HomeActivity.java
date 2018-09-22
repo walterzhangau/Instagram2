@@ -114,4 +114,15 @@ public class HomeActivity extends AppCompatActivity implements
         cls = CommentsListActivity.class;
         onFragmentInteraction();
     }
+
+    public void onLikePostClicked(View view)
+    {
+        Log.d(TAG, "onLikePostClicked...");
+    }
+
+    public void onPostCommentClicked(View view)
+    {
+        Log.d(TAG, "onPostCommentClicked...");
+        //TODO:get the text in add comment editText and send to db
+    }
 }
