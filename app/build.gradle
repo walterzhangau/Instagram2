@@ -35,6 +35,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.3' //Firebase Authentication
     implementation 'com.google.firebase:firebase-core:16.0.3' //Firebase Analytics
+    implementation 'com.google.firebase:firebase-database:16.0.1' //Firebase Database
+
     //Bottom Navigation View EX Library
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     implementation "com.android.support:design:26.+"

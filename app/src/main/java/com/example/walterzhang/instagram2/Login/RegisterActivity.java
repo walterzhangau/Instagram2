@@ -9,14 +9,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.models.User;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -24,10 +32,14 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText txtemail;
     private EditText txtPassword;
     private EditText txtUsername;
+    private TextView txtError;
+    private String user_ID;
     private String name,username,password,email;
     private Button btnsignup;
     private FirebaseAuth mAuth;
     private final String TAG="RegisterActivity";
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +49,49 @@ public class RegisterActivity extends AppCompatActivity {
         txtemail=(EditText) findViewById(R.id.textEmail);
         txtUsername=(EditText)findViewById(R.id.textUsername);
         txtPassword=(EditText)findViewById(R.id.textPassword);
+        txtError=(TextView)findViewById(R.id.txtError);
         btnsignup=(Button)findViewById(R.id.buttonLogin);
         mAuth=FirebaseAuth.getInstance();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference= firebaseDatabase.getReference();
+
         init();
 
+        if(mAuth.getCurrentUser()!=null)
+            user_ID=mAuth.getCurrentUser().getUid();
+
+
+
+    }
+
+
+// Check if Username Exists Already
+    public boolean checkIfUsernameExists(String username, DataSnapshot dataSnapshot)
+    {
+        Log.d(TAG,"checkIfUsernameExists"+ username);
+        User user=new User();
+        for (DataSnapshot ds:dataSnapshot.getChildren())
+        {
+            Log.d(TAG,"checkIfUsernameExists: datasnapshot"+ds);
+                    user.setUsername(ds.getValue(User.class).getUsername());
+            Log.d(TAG,"checkIfUsernameExists: datasnapshot"+user.getUsername());
+
+            if(user.getUsername().equals(username))
+            {
+                Log.d(TAG, "checkifUsernameExists: Username already taken");
+                txtError.setText("Username Already Taken");
+                return true;
+            }
+
+
+        }
+        return false;
     }
 
     private void init()
     {
+
+
         btnsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,37 +105,25 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d(TAG,"OnDataChange"+dataSnapshot);
+                            if(!checkIfUsernameExists(username,dataSnapshot))
+                            {
+                                Log.d(TAG,"Username is unique"+username);
+                                registerNewEmail(email,password,username);
 
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            // Sign in success, update UI with the signed-in user's information
-                                            Log.d(TAG, "createUserWithEmail:success");
-                                            if (mAuth.getCurrentUser() != null) {
-                                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
+                            }
 
+                        }
 
-                                        } else {
-                                            // If sign in fails, display a message to the user.
-                                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                                            if(task.getException() instanceof FirebaseAuthUserCollisionException)
-                                            {
-                                                Toast.makeText(RegisterActivity.this, "User Already Exist", Toast.LENGTH_SHORT).show();
-                                            }
-                                            else
-                                                Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                                        }
-
-                                        // ...
-                                    }
-                                });
 
 
 
@@ -98,7 +133,50 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private boolean validateForm() { // TODO: 10/09/18 Add more validations.
+    private void registerNewEmail(final String email, String password, final String username)
+    {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "createUserWithEmail:success");
+                            if (mAuth.getCurrentUser() != null) {
+                                addNewUser(email,username,"","");// Adds new user's information to the database
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+
+                            if(task.getException() instanceof FirebaseAuthUserCollisionException)
+                            {
+                                txtError.setText("Email is used by another account");
+                            }
+                            else if(task.getException() instanceof FirebaseAuthWeakPasswordException)
+                                txtError.setText("Password is Weak!");
+
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    public void addNewUser(String email,String username, String description, String profile_photo)
+    {
+        User user=new User(user_ID,1,email,username);
+        databaseReference.child("users").child(user_ID).setValue(user);
+
+        UserAccountSettings uas=new UserAccountSettings(description,0,0,0,username,profile_photo,username);
+        databaseReference.child("user_account_settings").child(user_ID).setValue(uas);
+    }
+
+    private boolean validateForm() {
         boolean valid = true;
         String name=txtName.getText().toString();
         if(TextUtils.isEmpty(name))
