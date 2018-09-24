@@ -12,12 +12,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.walterzhang.instagram2.CommentFragment;
+import com.example.walterzhang.instagram2.Login.LoginActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.UserFragment;
 import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
+import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity extends AppCompatActivity implements
         fragment_post_list.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener,
@@ -27,7 +32,8 @@ public class HomeActivity extends AppCompatActivity implements
     
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;
-
+    //Firebase Authentication
+    private FirebaseAuth mAuth;
     private Context mContext = HomeActivity.this;
     private Class<?> cls;
 
@@ -37,8 +43,19 @@ public class HomeActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting");
 
+        //Firebase Auth Object
+        mAuth = FirebaseAuth.getInstance();
+
+        initImageLoader();
+
         setupBottomNavigationView();
         setupViewPager();
+    }
+
+    private void initImageLoader(){
+
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 
     /**
@@ -104,6 +121,31 @@ public class HomeActivity extends AppCompatActivity implements
         cls = CommentsListActivity.class;
         onFragmentInteraction();
     }
+
+    //Firebase Stuff DO NOT WRITE ANYTHING BELOW
+
+    void checkUser(FirebaseUser user)
+    {
+        if(user==null)
+        {
+            Log.d("HomeActivity:","User not Signed in");
+            Intent intent=new Intent(mContext, LoginActivity.class);
+            startActivity(intent);
+        }
+        else
+            Log.d("HomeActivity",user.getEmail());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("HomeActivity","OnStart method of Firebase");
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        checkUser(currentUser);
+    }
+
+
 
     public void onLikePostClicked(View view)
     {
