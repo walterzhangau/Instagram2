@@ -3,8 +3,8 @@ package com.example.walterzhang.instagram2.Profile;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -34,9 +34,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     private Context mContext;
 
+
+
     private SectionsStatePagerAdapter pagerAdapter;
     private ViewPager mViewPager;
     private RelativeLayout mRelativeLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +60,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "onClick: Navigating back to Profile Page");
                 finish();
+
             }
         });
+
+
     }
+
+
 
     private void setupFragments(){
         pagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
@@ -76,6 +84,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
 
+
+
+
     private void setupSettingsList(){
         Log.d(TAG, "setupSettingsList: initialise Account settings List");
         ListView listView = (ListView) findViewById(R.id.lvAccountSettings);
@@ -85,9 +96,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
         ArrayAdapter adapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1,options);
         listView.setAdapter(adapter);
 
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Log.d(TAG, "onItemClick: Navigating to Fragment #: "+position);
                 setViewPager(position);
             }
@@ -109,6 +122,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         menuItem.setChecked(true);
 
     }
-        
+
 
 }

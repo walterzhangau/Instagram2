@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "705331680354",
+    "firebase_url": "https://instagram2-c4bcd.firebaseio.com",
+    "project_id": "instagram2-c4bcd",
+    "storage_bucket": "instagram2-c4bcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705331680354:android:e8370f958f9938ff",
+        "android_client_info": {
+          "package_name": "com.example.walterzhang.instagram2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705331680354-3tn5r7h5346772h4h4n87elnecolkg01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.walterzhang.instagram2",
+            "certificate_hash": "0d48a19cff75fe228c37502fd5612024840ca957"
+          }
+        },
+        {
+          "client_id": "705331680354-0b29vcsvrl3qieov2ksmp320grgvsi2b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.walterzhang.instagram2",
+            "certificate_hash": "07ca95cb4abaf88116fc3c389002244a0eb5913d"
+          }
+        },
+        {
+          "client_id": "705331680354-m6hk6vbdeg51fkqh8ms5li3tln1mo9kq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFybBEjgsKbDJ0LIbUmAzWMd_f2qssi4o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705331680354-m6hk6vbdeg51fkqh8ms5li3tln1mo9kq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
