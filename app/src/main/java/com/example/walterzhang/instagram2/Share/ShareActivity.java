@@ -42,10 +42,11 @@ public class ShareActivity extends AppCompatActivity{
         } else {
             verifyPermissions(Permissions.PERMISSIONS);
         }
-
-        //setupBottomNavigationView();
     }
 
+    /**
+     * Setup viewpager for managing the tabs
+     */
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new GalleryFragment());
@@ -59,6 +60,16 @@ public class ShareActivity extends AppCompatActivity{
 
         tabLayout.getTabAt(0).setText(R.string.gallery);
         tabLayout.getTabAt(1).setText(R.string.photo);
+    }
+
+    /**
+     * Return the current tab number
+     * 0 = GalleryFragment
+     * 1 = PhotoFragment
+     * @return
+     */
+    public int getCurrentTabNumber() {
+        return mViewPager.getCurrentItem();
     }
 
     /**
