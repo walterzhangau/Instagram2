@@ -48,4 +48,14 @@ public class Photo {
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
+
+    @Override
+    public String toString() {
+        return "Photo{" +
+                "photo_id='" + photo_id + '\'' +
+                ", date_taken='" + date_taken + '\'' +
+                ", image_path='" + image_path + '\'' +
+                ", user_id='" + user_id + '\'' +
+                '}';
+    }
 }
