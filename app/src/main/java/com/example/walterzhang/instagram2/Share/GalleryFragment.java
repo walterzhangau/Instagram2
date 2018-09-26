@@ -1,7 +1,6 @@
 package com.example.walterzhang.instagram2.Share;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FilePaths;
 import com.example.walterzhang.instagram2.utils.FileSearch;
+import com.example.walterzhang.instagram2.utils.GridImageAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +30,9 @@ import java.util.Collections;
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment";
 
+    // Constants
+    final static int NUM_GRID_COLUMNS = 4;
+
     // Widgets
     private ImageView galleryImage;
     private GridView galleryGrid;
@@ -38,6 +41,7 @@ public class GalleryFragment extends Fragment {
 
     // Variables
     private ArrayList<String> directories;
+    private String mAppend = "file:/";
 
     @Nullable
     @Override
@@ -77,6 +81,7 @@ public class GalleryFragment extends Fragment {
     private void setupDirectories() {
         FilePaths filePaths = new FilePaths();
 
+        // Check for all directories inside "Pictures" and sort them
         if (FileSearch.getDirectoryPaths(filePaths.PICTURES) != null) {
             directories = FileSearch.getDirectoryPaths(filePaths.PICTURES);
             Collections.sort(directories);
@@ -93,6 +98,7 @@ public class GalleryFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemClick: selected: " + directories.get(position));
                 // setup our image grid for chosen directory
+                setupGalleryGrid(directories.get(position));
             }
 
             @Override
@@ -100,6 +106,20 @@ public class GalleryFragment extends Fragment {
 
             }
         });
+    }
+
+    private void setupGalleryGrid(String selectedDirectory) {
+        Log.d(TAG, "setupGalleryGrid: directory chosen: " + selectedDirectory);
+        final ArrayList<String> imgUrls = FileSearch.getFilePaths(selectedDirectory);
+
+        // Set the grid column width
+        int gridWidth = getResources().getDisplayMetrics().widthPixels;
+        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
+        galleryGrid.setColumnWidth(imageWidth);
+
+        // Use the grid adapter to adapt images to gridview
+        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgUrls);
+        galleryGrid.setAdapter(adapter);
     }
 
 }

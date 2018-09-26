@@ -30,17 +30,17 @@ public class GridImageAdapter extends ArrayAdapter<String>{
     private String mAppend;
     private ArrayList<String> imgUrls;
 
-    public GridImageAdapter(Context mContext, LayoutInflater mInflater, int layoutResource, String mAppend, ArrayList<String> imgUrls) {
-        super(mContext, layoutResource,imgUrls);
+    public GridImageAdapter(Context mContext, int layoutResource, String mAppend, ArrayList<String> imgUrls) {
+        super(mContext, layoutResource, imgUrls);
         this.mContext = mContext;
-        this.mInflater = mInflater;
+        this.mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.layoutResource = layoutResource;
         this.mAppend = mAppend;
         this.imgUrls = imgUrls;
 
     }
     private static class ViewHolder{
-        ImageView image;
+        SquareImageView image;
         ProgressBar mProgressBar;
     }
 
@@ -55,7 +55,7 @@ public class GridImageAdapter extends ArrayAdapter<String>{
             convertView = mInflater.inflate(layoutResource,parent,false);
             holder = new ViewHolder();
             holder.mProgressBar = (ProgressBar) convertView.findViewById(R.id.gridImageProgressBar);
-            holder.image = (ImageView) convertView.findViewById(R.id.gridImageView);
+            holder.image = (SquareImageView) convertView.findViewById(R.id.gridImageView);
 
             convertView.setTag(holder);
         }
