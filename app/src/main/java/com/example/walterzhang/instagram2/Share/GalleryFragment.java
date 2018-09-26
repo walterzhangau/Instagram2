@@ -1,5 +1,7 @@
 package com.example.walterzhang.instagram2.Share;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +21,11 @@ import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FilePaths;
 import com.example.walterzhang.instagram2.utils.FileSearch;
 import com.example.walterzhang.instagram2.utils.GridImageAdapter;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -42,6 +48,7 @@ public class GalleryFragment extends Fragment {
     // Variables
     private ArrayList<String> directories;
     private String mAppend = "file:/";
+    private String mSelectedImage = "";
 
     @Nullable
     @Override
@@ -65,11 +72,15 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-        TextView nextScreen = (TextView) view.findViewById(R.id.txtViewScreenNext);
-        nextScreen.setOnClickListener(new View.OnClickListener() {
+        TextView nextActivity = (TextView) view.findViewById(R.id.txtViewActivityNext);
+        nextActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating to the final share screen.");
+
+                Intent intent = new Intent(getActivity(), NextActivity.class);
+                intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                startActivity(intent);
             }
         });
 
@@ -86,10 +97,20 @@ public class GalleryFragment extends Fragment {
             directories = FileSearch.getDirectoryPaths(filePaths.PICTURES);
             Collections.sort(directories);
         }
-        directories.add(filePaths.CAMERA);
+
+        File file = new File(filePaths.CAMERA);
+        if (file.exists()) {
+            directories.add(filePaths.CAMERA);
+        }
+
+        ArrayList<String> directoryNames = new ArrayList<String>();
+        for (int i = 0; i < directories.size(); i++) {
+            int index = directories.get(i).lastIndexOf("/");
+            directoryNames.add(directories.get(i).substring(index));
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, directories);
+                android.R.layout.simple_spinner_item, directoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         directorySpinner.setAdapter(adapter);
 
@@ -120,6 +141,51 @@ public class GalleryFragment extends Fragment {
         // Use the grid adapter to adapt images to gridview
         GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgUrls);
         galleryGrid.setAdapter(adapter);
+
+        // Set the first image to be displayed when the activity fragment view is inflated
+        if (!imgUrls.isEmpty()) {
+            setImage(imgUrls.get(0), galleryImage, mAppend);
+            mSelectedImage = imgUrls.get(0);
+        } else {
+            galleryImage.setImageResource(R.drawable.no_image_available);
+        }
+
+        galleryGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick: selected an image: " + imgUrls.get(position));
+
+                setImage(imgUrls.get(position), galleryImage, mAppend);
+                mSelectedImage = imgUrls.get(position);
+            }
+        });
     }
 
+    private void setImage(String imgUrl, ImageView image, String append) {
+        Log.d(TAG, "setImage: setting image.");
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        imageLoader.displayImage(append + imgUrl, image, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
 }

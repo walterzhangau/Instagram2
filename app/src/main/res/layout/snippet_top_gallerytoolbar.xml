@@ -39,7 +39,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
                     android:layout_centerVertical="true"
-                    android:id="@+id/txtViewScreenNext"
+                    android:id="@+id/txtViewActivityNext"
                     android:text="@string/next"
                     android:textSize="20dp"
                     android:textColor="@color/black" />
