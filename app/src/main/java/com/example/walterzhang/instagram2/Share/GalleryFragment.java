@@ -72,7 +72,7 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-        TextView nextActivity = (TextView) view.findViewById(R.id.txtViewActivityNext);
+        TextView nextActivity = (TextView) view.findViewById(R.id.txtViewNext);
         nextActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

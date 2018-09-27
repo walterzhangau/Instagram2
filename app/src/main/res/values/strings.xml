@@ -36,6 +36,7 @@
     <string name="photo">PHOTO</string>
     <string name="open_camera">Open Camera</string>
     <string name="next">Next</string>
+    <string name="share">Share</string>
 
     <!-- Intent extras -->
     <string name="selected_image">selected_image</string>

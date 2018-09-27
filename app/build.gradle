@@ -43,10 +43,11 @@ dependencies {
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     implementation "com.android.support:design:26.+"
     implementation 'com.android.support:recyclerview-v7:26.3.1'
-    //circle image view
+
+    //Circle image view
     implementation "de.hdodenhof:circleimageview:2.2.0"
 
-    //image loader
+    //Universal image loader
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
 configurations.all {
@@ -59,4 +60,6 @@ configurations.all {
         }
     }
 }
+
+//Firebase
 apply plugin: 'com.google.gms.google-services'

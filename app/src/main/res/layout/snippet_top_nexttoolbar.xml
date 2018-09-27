@@ -9,7 +9,7 @@
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/galleryToolBar">
+            android:id="@+id/nextToolBar">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -20,18 +20,8 @@
                     android:layout_height="30dp"
                     android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
-                    android:id="@+id/imgViewCloseShare"
-                    android:src="@drawable/ic_black_close" />
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/imgViewCloseShare"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/spinnerDirectory"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical" />
+                    android:id="@+id/imgViewBackArrow"
+                    android:src="@drawable/ic_back_arrow" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -39,8 +29,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
                     android:layout_centerVertical="true"
-                    android:id="@+id/txtViewNext"
-                    android:text="@string/next"
+                    android:id="@+id/txtViewShare"
+                    android:text="@string/share"
                     android:textSize="20dp"
                     android:textColor="@color/websiteBlue" />
 
