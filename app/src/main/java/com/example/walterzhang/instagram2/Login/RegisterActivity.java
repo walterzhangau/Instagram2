@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DataSnapshot;
@@ -157,6 +158,10 @@ public class RegisterActivity extends AppCompatActivity {
                             if(task.getException() instanceof FirebaseAuthUserCollisionException)
                             {
                                 txtError.setText("Email is used by another account");
+                            }
+                            else if(task.getException() instanceof FirebaseAuthInvalidCredentialsException)
+                            {
+                                txtError.setText("Invalid Email");
                             }
                             else if(task.getException() instanceof FirebaseAuthWeakPasswordException)
                                 txtError.setText("Password is Weak!");
