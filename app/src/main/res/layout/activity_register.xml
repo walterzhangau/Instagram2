@@ -38,9 +38,7 @@
 
                 android:layout_gravity="center_horizontal"
                 />
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
 
                 <EditText
                     android:id="@+id/textName"
@@ -56,10 +54,7 @@
                     android:textSize="12sp" />
 
 
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
 
                 <EditText
                     android:id="@+id/textEmail"
@@ -73,10 +68,8 @@
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textSize="12sp" />
-            </android.support.design.widget.TextInputLayout>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
+
 
                 <EditText
                     android:id="@+id/textUsername"
@@ -90,7 +83,7 @@
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textSize="12sp" />
-            </android.support.design.widget.TextInputLayout>
+
 
 
 
