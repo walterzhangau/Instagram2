@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.models.User;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -145,6 +147,9 @@ public class RegisterActivity extends AppCompatActivity {
                             if (mAuth.getCurrentUser() != null) {
                                 user_ID=mAuth.getCurrentUser().getUid();
                                 addNewUser(email,username,"","");// Adds new user's information to the database
+                                sendEmailVerification();
+                                mAuth.signOut();
+
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -164,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 txtError.setText("Invalid Email");
                             }
                             else if(task.getException() instanceof FirebaseAuthWeakPasswordException)
-                                txtError.setText("Password is Weak!");
+                                txtError.setText("Password is Weak! Should be atleast 6 characters");
 
                         }
 
@@ -182,6 +187,29 @@ public class RegisterActivity extends AppCompatActivity {
 
         UserAccountSettings uas=new UserAccountSettings(description,0,0,0,username,profile_photo,username);
         databaseReference.child("user_account_settings").child(user_ID).setValue(uas);
+    }
+
+    public void sendEmailVerification(){
+        final FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null){
+            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(!task.isSuccessful()){
+                        Log.d("sendEmailVerification","Email not Sent");
+                        Toast.makeText(RegisterActivity.this,"Couldn't send Email Verification. Please register again!",Toast.LENGTH_LONG).show();
+                        mAuth.signOut();
+                        user.delete();
+                    }
+                    else
+                    {
+                        Log.d("sendEmailVerification","Email Sent");
+                        Toast.makeText(RegisterActivity.this,"Email Verification Sent",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
     }
 
     private boolean validateForm() {
