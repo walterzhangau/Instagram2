@@ -90,14 +90,29 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
             {
+
+
+
                 if(task.isSuccessful())
                 {
-                    Log.d("login","Successful Login");
+                    if(mAuth.getCurrentUser().isEmailVerified()){
+                        Log.d("login","Successful Login");
+                        Intent intent=new Intent(LoginActivity.this, HomeActivity.class);
+                        txtError.setText("");
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        txtError.setText("Email Not Verified");
+                        mAuth.signOut();
+                    }
+
 
 
                 }
                 else
                 {
+
                     Log.d("login","Login Failed");
                     txtError.setText("Authentication Failed");
                     Toast.makeText(LoginActivity.this,"Authentication Failed",Toast.LENGTH_SHORT).show();
@@ -108,13 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        if(mAuth.getCurrentUser() !=null)
-        {
-            Intent intent=new Intent(this, HomeActivity.class);
-            txtError.setText("");
-            startActivity(intent);
-            finish();
-        }
+
     }
 
     private boolean validateForm() { // TODO: 10/09/18 Add more validations.
