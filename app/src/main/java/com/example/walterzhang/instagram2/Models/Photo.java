@@ -10,13 +10,6 @@ public class Photo {
 
     }
 
-    public Photo(String photo_id, String date_taken, String image_path, String user_id) {
-        this.photo_id = photo_id;
-        this.date_taken = date_taken;
-        this.image_path = image_path;
-        this.user_id = user_id;
-    }
-
     public String getPhoto_id() {
         return photo_id;
     }
