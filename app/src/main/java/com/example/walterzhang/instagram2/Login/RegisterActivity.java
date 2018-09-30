@@ -142,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             if (mAuth.getCurrentUser() != null) {
+                                user_ID=mAuth.getCurrentUser().getUid();
                                 addNewUser(email,username,"","");// Adds new user's information to the database
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
@@ -169,7 +170,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void addNewUser(String email,String username, String description, String profile_photo)
     {
+
         User user=new User(user_ID,1,email,username);
+
         databaseReference.child("users").child(user_ID).setValue(user);
 
         UserAccountSettings uas=new UserAccountSettings(description,0,0,0,username,profile_photo,username);
