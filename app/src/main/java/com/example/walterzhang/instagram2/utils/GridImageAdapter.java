@@ -32,8 +32,9 @@ public class GridImageAdapter extends ArrayAdapter<String>{
 
     public GridImageAdapter(Context mContext, int layoutResource, String mAppend, ArrayList<String> imgUrls) {
         super(mContext, layoutResource, imgUrls);
-        this.mContext = mContext;
         this.mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mContext = mContext;
+
         this.layoutResource = layoutResource;
         this.mAppend = mAppend;
         this.imgUrls = imgUrls;
