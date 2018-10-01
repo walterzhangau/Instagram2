@@ -96,16 +96,16 @@ public class FirebaseMethods {
                             Toast.LENGTH_SHORT).show();
                     storageReference.getDownloadUrl().addOnCompleteListener(
                             new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            // Add photo to "photos" node and "user_photos" node
-                            addPhotoToDatabase(caption, task.getResult().toString());
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    // Add photo to "photos" node and "user_photos" node
+                                    addPhotoToDatabase(caption, task.getResult().toString());
 
-                            // Navigate to the main feed so the user can see their photo
-                            Intent intent = new Intent(mContext, HomeActivity.class);
-                            mContext.startActivity(intent);
-                        }
-                    });
+                                    // Navigate to the main feed so the user can see their photo
+                                    Intent intent = new Intent(mContext, HomeActivity.class);
+                                    mContext.startActivity(intent);
+                                }
+                            });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -132,7 +132,67 @@ public class FirebaseMethods {
         // Profile photo
         else if (photoType.equals(mContext.getString(R.string.profile_photo))) {
             Log.d(TAG, "uploadNewPhoto: uploading profile photo.");
+
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final StorageReference storageReference = mStorageReference
+                    .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + uid + "/profile_photo");
+
+            // Convert imageurl to bitmap
+            Bitmap bm = ImageManager.getBitmap(imgUrl);
+            byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
+
+            UploadTask uploadTask = null;
+            uploadTask = storageReference.putBytes(bytes);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.d(TAG, "onSuccess: photo upload success.");
+                    Toast.makeText(mContext, "Photo upload success.",
+                            Toast.LENGTH_SHORT).show();
+                    storageReference.getDownloadUrl().addOnCompleteListener(
+                            new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                // Insert into the "user_account_settings" node
+                                setProfilePhoto(task.getResult().toString());
+                                }
+                            });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: photo upload failed.");
+                    Toast.makeText(mContext, "Photo upload failed.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100 * taskSnapshot.getBytesTransferred()) /
+                            taskSnapshot.getTotalByteCount();
+                    Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
+
+                    if (progress - 15 > mPhotoUploadProgress) {
+                        Toast.makeText(mContext, "Photo upload progress: " +
+                                String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
+                }
+            });
         }
+    }
+
+    /**
+     * Add a profile photo to the database
+     * @param url
+     */
+    private void setProfilePhoto(String url) {
+        Log.d(TAG, "setProfilePhoto: setting new profile image: " + url);
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(uid).child(mContext.getString(R.string.profile_photo)).setValue(url);
     }
 
     /**
