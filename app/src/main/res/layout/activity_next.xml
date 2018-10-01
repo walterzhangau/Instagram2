@@ -44,7 +44,7 @@
                     android:layout_toRightOf="@id/imageShare"
                     android:layout_marginLeft="20dp"
                     android:layout_centerVertical="true"
-                    android:id="@+id/description"
+                    android:id="@+id/caption"
                     android:hint="Write a description..."
                     android:background="@null"/>
 

@@ -1,54 +1,84 @@
-package com.example.walterzhang.instagram2.Models;
+package com.example.walterzhang.instagram2.models;
 
 public class Photo {
+
     private String photo_id;
-    private String date_taken;
-    private String image_path;
     private String user_id;
+    private String date_created;
+    private String image_path;
+    private String caption;
+    private String tags;
 
     public Photo() {
 
+    }
+
+    public Photo(String photo_id, String user_id, String date_created, String image_path, String caption, String tags) {
+        this.photo_id = photo_id;
+        this.user_id = user_id;
+        this.date_created = date_created;
+        this.image_path = image_path;
+        this.caption = caption;
+        this.tags = tags;
     }
 
     public String getPhoto_id() {
         return photo_id;
     }
 
-    public String getDate_taken() {
-        return date_taken;
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public String getDate_created() {
+        return date_created;
     }
 
     public String getImage_path() {
         return image_path;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getCaption() {
+        return caption;
+    }
+
+    public String getTags() {
+        return tags;
     }
 
     public void setPhoto_id(String photo_id) {
         this.photo_id = photo_id;
     }
 
-    public void setDate_taken(String date_taken) {
-        this.date_taken = date_taken;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setDate_created(String date_created) {
+        this.date_created = date_created;
     }
 
     public void setImage_path(String image_path) {
         this.image_path = image_path;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     @Override
     public String toString() {
         return "Photo{" +
                 "photo_id='" + photo_id + '\'' +
-                ", date_taken='" + date_taken + '\'' +
-                ", image_path='" + image_path + '\'' +
                 ", user_id='" + user_id + '\'' +
+                ", date_created='" + date_created + '\'' +
+                ", image_path='" + image_path + '\'' +
+                ", caption='" + caption + '\'' +
+                ", tags='" + tags + '\'' +
                 '}';
     }
 }

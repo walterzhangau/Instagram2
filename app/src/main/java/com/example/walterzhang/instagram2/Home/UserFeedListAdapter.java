@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyContent.DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link //DummyContent.DummyItem} and makes a call to the
  * specified {@link fragment_post_list.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
