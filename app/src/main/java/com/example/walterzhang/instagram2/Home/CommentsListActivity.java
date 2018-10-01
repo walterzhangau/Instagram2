@@ -67,7 +67,6 @@ public class CommentsListActivity extends AppCompatActivity implements fragment_
     public void onBackClicked(View view)
     {
         Log.d(TAG, "onBackClicked...");
-        cls = HomeActivity.class;
-        onFragmentInteraction();
+        onBackPressed();
     }
 }

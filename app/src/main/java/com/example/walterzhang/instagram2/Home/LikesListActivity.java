@@ -68,7 +68,6 @@ public class LikesListActivity extends AppCompatActivity implements fragment_lik
     public void onBackClicked(View view)
     {
         Log.d(TAG, "onBackClicked...");
-        cls = HomeActivity.class;
-        onFragmentInteraction();
+        onBackPressed();
     }
 }
