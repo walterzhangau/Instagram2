@@ -1,18 +1,17 @@
 package com.example.walterzhang.instagram2.Home;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.models.Photo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,6 +30,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 //        CircleImageView profileImage;
 //        TextView username;
         ImageView image;
+        ImageView mHeartWhite, mHeartRed;
 
 //        boolean likedByCurrentUser;
 //        Photo photo;
@@ -43,6 +43,41 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             view = v;
 
             image = v.findViewById(R.id.imageView_photo);
+
+            mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
+            mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
+            mHeartRed.setVisibility(View.GONE);
+            mHeartWhite.setVisibility(View.VISIBLE);
+
+            mHeartWhite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: toggling like...");
+                    onLikePostClicked();
+                }
+            });
+
+            mHeartRed.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: toggling like...");
+                    onLikePostClicked();
+                }
+            });
+        }
+
+        /* Toggle between photo liked and not liked */
+        public void onLikePostClicked()
+        {
+            Log.d(TAG, "onLikePostClicked...");
+            if (mHeartWhite.getVisibility() == View.VISIBLE) {
+                mHeartWhite.setVisibility(View.GONE);//setBackgroundColor(getResources().getColor(R.color.red));
+                mHeartRed.setVisibility(View.VISIBLE);
+            }
+            else {
+                mHeartRed.setVisibility(View.GONE);
+                mHeartWhite.setVisibility(View.VISIBLE);
+            }
         }
     }
 
