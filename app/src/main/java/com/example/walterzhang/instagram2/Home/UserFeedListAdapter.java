@@ -10,10 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.utils.FirebaseMethods;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -24,13 +31,26 @@ import java.util.List;
  */
 public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapter.MyViewHolder> {
 
+    private static final String TAG = "UserFeedListAdapter";
+
+    private LayoutInflater mInflater;
+    private int mLayoutResource;
+    private Context mContext;
+    private DatabaseReference mReference;
+    private String username;
+
+    private List<Photo> mDataset;
+
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        com.example.walterzhang.instagram2.models.User user = new com.example.walterzhang.instagram2.models.User();
+//        com.example.walterzhang.instagram2.models.User user = new com.example.walterzhang.instagram2.models.User();
 //        StringBuilder users;
 //        CircleImageView profileImage;
 //        TextView username;
         ImageView image;
         ImageView mHeartWhite, mHeartRed;
+
+        private FirebaseMethods mFirebaseMethods;
+        Photo photo;
 
 //        boolean likedByCurrentUser;
 //        Photo photo;
@@ -42,10 +62,13 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             super(v);
             view = v;
 
+            mFirebaseMethods = new FirebaseMethods(v.getContext());
+
             image = v.findViewById(R.id.imageView_photo);
 
             mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
             mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
+
             mHeartRed.setVisibility(View.GONE);
             mHeartWhite.setVisibility(View.VISIBLE);
 
@@ -71,25 +94,49 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         {
             Log.d(TAG, "onLikePostClicked...");
             if (mHeartWhite.getVisibility() == View.VISIBLE) {
-                mHeartWhite.setVisibility(View.GONE);//setBackgroundColor(getResources().getColor(R.color.red));
+                mHeartWhite.setVisibility(View.GONE);
                 mHeartRed.setVisibility(View.VISIBLE);
+                //save the like information to the db:
+                mFirebaseMethods.addNewLike(photo.getPhoto_id());
             }
             else {
                 mHeartRed.setVisibility(View.GONE);
                 mHeartWhite.setVisibility(View.VISIBLE);
+                mFirebaseMethods.removeLike(photo.getPhoto_id());
             }
         }
+
+        /* Check if the photo has been liked by the user and if yes, set heart to red */
+        public void setHeartColor(final String photoId) {
+            DatabaseReference myRef;
+            FirebaseDatabase mFirebaseDatabase;
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            myRef = mFirebaseDatabase.getReference();
+
+            Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
+                    .child(photoId)
+                    .child(view.getContext().getString(R.string.field_likes));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+
+                        if (singleSnapshot.getValue(Like.class).getUser_id()
+                                .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            mHeartRed.setVisibility(View.VISIBLE);
+                            mHeartWhite.setVisibility(View.GONE);
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
-
-    private static final String TAG = "UserFeedListAdapter";
-
-    private LayoutInflater mInflater;
-    private int mLayoutResource;
-    private Context mContext;
-    private DatabaseReference mReference;
-    private String username;
-
-    private List<Photo> mDataset;
 
     public UserFeedListAdapter(@NonNull Context context, int resource, @NonNull List<Photo> photos) {
 
@@ -104,12 +151,16 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
     public UserFeedListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_post, parent, false);
+
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Glide.with(this.mContext).load(mDataset.get(position).getImage_path()).into(holder.image);
+        holder.photo = mDataset.get(position);
+        //if the photo has been liked by the user then set the heart to red:
+        holder.setHeartColor(holder.photo.getPhoto_id());
     }
 
     @Override
