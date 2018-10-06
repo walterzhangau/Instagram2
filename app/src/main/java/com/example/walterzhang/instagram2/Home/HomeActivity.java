@@ -122,6 +122,13 @@ public class HomeActivity extends AppCompatActivity implements
         onFragmentInteraction();
     }
 
+    public void onPostCommentClicked(View view)
+    {
+        Log.d(TAG, "onPostCommentClicked...");
+        //TODO:get the text in add comment editText and send to db
+    }
+
+
     //Firebase Stuff DO NOT WRITE ANYTHING BELOW
 
     void checkUser(FirebaseUser user)
@@ -143,18 +150,5 @@ public class HomeActivity extends AppCompatActivity implements
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         checkUser(currentUser);
-    }
-
-
-
-    public void onLikePostClicked(View view)
-    {
-        Log.d(TAG, "onLikePostClicked...");
-    }
-
-    public void onPostCommentClicked(View view)
-    {
-        Log.d(TAG, "onPostCommentClicked...");
-        //TODO:get the text in add comment editText and send to db
     }
 }

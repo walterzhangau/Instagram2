@@ -12,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
+import com.example.walterzhang.instagram2.models.Photo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,8 +23,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A fragment representing a list of Items.
@@ -144,7 +142,6 @@ public class fragment_post_list extends Fragment {
 
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                         Photo photo  = singleSnapshot.getValue(Photo.class);
-                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
                         //todo: see how to set these values: (and for the other properties of photo too
 //                        photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());

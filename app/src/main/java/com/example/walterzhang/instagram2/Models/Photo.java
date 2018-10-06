@@ -1,5 +1,9 @@
 package com.example.walterzhang.instagram2.models;
 
+import com.example.walterzhang.instagram2.Models.Like;
+
+import java.util.List;
+
 public class Photo {
 
     private String photo_id;
@@ -8,18 +12,20 @@ public class Photo {
     private String image_path;
     private String caption;
     private String tags;
+    private List<Like> likes;
 
     public Photo() {
 
     }
 
-    public Photo(String photo_id, String user_id, String date_created, String image_path, String caption, String tags) {
+    public Photo(String photo_id, String user_id, String date_created, String image_path, String caption, String tags, List<Like> likes) {
         this.photo_id = photo_id;
         this.user_id = user_id;
         this.date_created = date_created;
         this.image_path = image_path;
         this.caption = caption;
         this.tags = tags;
+        this.likes = likes;
     }
 
     public String getPhoto_id() {

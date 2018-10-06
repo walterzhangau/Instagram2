@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Home.HomeActivity;
+import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.models.Photo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,8 +18,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -249,4 +253,94 @@ public class FirebaseMethods {
         return sdf.format(new Date());
     }
 
+    /**
+     * Save new like photo to the database
+     * @return
+     */
+    public void addNewLike(String photoId) {
+        Log.d(TAG, "addNewLike: starting...");
+
+        String newLikeId = myRef.push().getKey();
+        Like like = new Like();
+        like.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        myRef.child(mContext.getString(R.string.dbname_photos))
+                .child(photoId)
+                .child(mContext.getString(R.string.field_likes))
+                .child(newLikeId)
+                .setValue(like);
+
+        myRef.child(mContext.getString(R.string.dbname_user_photos))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(photoId)
+                .child(mContext.getString(R.string.field_likes))
+                .child(newLikeId)
+                .setValue(like);
+    }
+
+    /**
+     * remove the like from the database
+     * @return
+     */
+    public void removeLike(final String photoId) {
+        Log.d(TAG, "removeLike: starting...");
+
+        Query queryPhotos = myRef.child(mContext.getString(R.string.dbname_photos))
+                .child(photoId)
+                .child(mContext.getString(R.string.field_likes));
+        queryPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    String keyId = singleSnapshot.getKey();
+                    Log.d(TAG, "searching to delete from dbname_user_photos...");
+                    if (singleSnapshot.getValue(Like.class).getUser_id()
+                            .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        myRef.child(mContext.getString(R.string.dbname_photos))
+                                .child(photoId)
+                                .child(mContext.getString(R.string.field_likes))
+                                .child(keyId)
+                                .removeValue();
+                        Log.d(TAG, "like deleted from dbname_photos...");
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Query queryUserPhotos = myRef.child(mContext.getString(R.string.dbname_user_photos))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(photoId)
+                .child(mContext.getString(R.string.field_likes));
+        queryUserPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    String keyId = singleSnapshot.getKey();
+                    Log.d(TAG, "searching to delete from dbname_user_photos...");
+                    if (singleSnapshot.getValue(Like.class).getUser_id()
+                            .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        myRef.child(mContext.getString(R.string.dbname_user_photos))
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child(photoId)
+                                .child(mContext.getString(R.string.field_likes))
+                                .child(keyId)
+                                .removeValue();
+                        Log.d(TAG, "like deleted from dbname_user_photos...");
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
