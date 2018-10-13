@@ -1,15 +1,19 @@
 package com.example.walterzhang.instagram2.Home;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.CommentFragment;
 import com.example.walterzhang.instagram2.Login.LoginActivity;
@@ -26,7 +30,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity extends AppCompatActivity implements
         fragment_post_list.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener,
-        UserFragment.OnFragmentInteractionListener, fragment_like_list.OnListFragmentInteractionListener,
+        UserFragment.OnFragmentInteractionListener, fragment_like_list.OnLikeListFragmentInteractionListener,
         CommentFragment.OnFragmentInteractionListener,
         fragment_comment_list.onCommentListFragmentInteractionListener {
     
@@ -36,6 +40,7 @@ public class HomeActivity extends AppCompatActivity implements
     private FirebaseAuth mAuth;
     private Context mContext = HomeActivity.this;
     private Class<?> cls;
+    private String photoId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,11 @@ public class HomeActivity extends AppCompatActivity implements
 
         setupBottomNavigationView();
         setupViewPager();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("photo_info"));
+
+        photoId = getIntent().getStringExtra("photoId"); //use this to receive photo id from home activity
     }
 
     private void initImageLoader(){
@@ -95,17 +105,19 @@ public class HomeActivity extends AppCompatActivity implements
         //you can leave it empty
     }
 
+    public void onListFragmentInteraction(TextView uri){
+        //you can leave it empty
+    }
+
     public void onFragmentInteraction()
     {
         Intent intent = new Intent(this, cls);
-        startActivity(intent);
-    }
 
-    public void onLikesCountClicked(View view)
-    {
-        Log.d(TAG, "onLikesCountClicked...");
-        cls = LikesListActivity.class;
-        onFragmentInteraction();
+        if (cls == LikesListActivity.class) {
+            intent.putExtra("photo_message", photoId);
+        }
+
+        startActivity(intent);
     }
 
     public void onCommentsCountClicked(View view)
@@ -128,6 +140,15 @@ public class HomeActivity extends AppCompatActivity implements
         //TODO:get the text in add comment editText and send to db
     }
 
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            photoId = intent.getStringExtra("photoId");
+            Log.d(TAG, "PhotoID: " + photoId);
+            int test2 = 0;
+        }
+    };
 
     //Firebase Stuff DO NOT WRITE ANYTHING BELOW
 

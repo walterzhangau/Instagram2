@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.example.walterzhang.instagram2.Home.HomeActivity;
 import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

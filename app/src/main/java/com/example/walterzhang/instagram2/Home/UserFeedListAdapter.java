@@ -1,18 +1,21 @@
 package com.example.walterzhang.instagram2.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +40,6 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
     private int mLayoutResource;
     private Context mContext;
     private DatabaseReference mReference;
-    private String username;
 
     private List<Photo> mDataset;
 
@@ -48,6 +50,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 //        TextView username;
         ImageView image;
         ImageView mHeartWhite, mHeartRed;
+        TextView likesText;
 
         private FirebaseMethods mFirebaseMethods;
         Photo photo;
@@ -69,6 +72,8 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
             mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
 
+            likesText = (TextView) view.findViewById(R.id.text_likes_count);
+
             mHeartRed.setVisibility(View.GONE);
             mHeartWhite.setVisibility(View.VISIBLE);
 
@@ -87,6 +92,24 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                     onLikePostClicked();
                 }
             });
+
+            likesText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: getting photoId...");
+
+                    Context context = v.getContext();
+                    String photoId = photo.getPhoto_id();
+                    Intent intent = new Intent("photo_info");
+                    intent.putExtra("photoId",photoId);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+                    intent = new Intent(context, LikesListActivity.class);
+                    intent.putExtra("photo_message", photoId);
+                    context.startActivity(intent);
+                }
+            });
+
         }
 
         /* Toggle between photo liked and not liked */
@@ -159,8 +182,9 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Glide.with(this.mContext).load(mDataset.get(position).getImage_path()).into(holder.image);
         holder.photo = mDataset.get(position);
+        String photoId = holder.photo.getPhoto_id();
         //if the photo has been liked by the user then set the heart to red:
-        holder.setHeartColor(holder.photo.getPhoto_id());
+        holder.setHeartColor(photoId);
     }
 
     @Override
