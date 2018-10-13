@@ -94,7 +94,6 @@ public class LikesListActivity extends AppCompatActivity implements fragment_lik
             // Get extra data included in the Intent
             photoId = intent.getStringExtra("photoId");
             Log.d(TAG, "PhotoID: " + photoId);
-            int test2 = 0;
         }
     };
 }

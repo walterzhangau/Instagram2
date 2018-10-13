@@ -48,16 +48,20 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 //        StringBuilder users;
 //        CircleImageView profileImage;
 //        TextView username;
+
+        DatabaseReference myRef;
+        FirebaseDatabase mFirebaseDatabase;
+
         ImageView image;
         ImageView mHeartWhite, mHeartRed;
         TextView likesText;
+        TextView authorNameTextView;
 
         private FirebaseMethods mFirebaseMethods;
         Photo photo;
 
 //        boolean likedByCurrentUser;
 //        Photo photo;
-//        GestureDetector detector;
 
         View view;
 
@@ -66,8 +70,11 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             view = v;
 
             mFirebaseMethods = new FirebaseMethods(v.getContext());
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            myRef = mFirebaseDatabase.getReference();
 
             image = v.findViewById(R.id.imageView_photo);
+            authorNameTextView = (TextView) view.findViewById(R.id.text_author_name);
 
             mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
             mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
@@ -131,10 +138,6 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
         /* Check if the photo has been liked by the user and if yes, set heart to red */
         public void setHeartColor(final String photoId) {
-            DatabaseReference myRef;
-            FirebaseDatabase mFirebaseDatabase;
-            mFirebaseDatabase = FirebaseDatabase.getInstance();
-            myRef = mFirebaseDatabase.getReference();
 
             Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
                     .child(photoId)
@@ -151,6 +154,52 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                             break;
                         }
                     }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        /*show the number of users who liked the photo if at least one user liked
+          the photo: */
+        private void setLikesCount(String photoId) {
+
+            Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
+                    .child(photoId)
+                    .child(view.getContext().getString(R.string.field_likes));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    long count = 0;
+                    count = dataSnapshot.getChildrenCount();
+
+                    if (count == 1) {
+                        likesText.setText(count + " like");
+                    }
+                    else if (count > 1) {
+                        likesText.setText(count + " likes");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        public void getUserAccountSettingsByUserId(final String userId) {
+
+            myRef.addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "setting photo author name...");
+                    String authorName = dataSnapshot.child(view.getContext().getString(R.string.dbname_user_account_settings)).child(userId).getValue(com.example.walterzhang.instagram2.models.UserAccountSettings.class).getUsername();
+                    authorNameTextView.setText(authorName);
                 }
 
                 @Override
@@ -183,8 +232,15 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         Glide.with(this.mContext).load(mDataset.get(position).getImage_path()).into(holder.image);
         holder.photo = mDataset.get(position);
         String photoId = holder.photo.getPhoto_id();
+        String photoUserId = holder.photo.getUser_id();
+
+        //set the name of the photo's author in the top bar of the post in the user feed:
+        holder.getUserAccountSettingsByUserId(photoUserId);
+
         //if the photo has been liked by the user then set the heart to red:
         holder.setHeartColor(photoId);
+
+        holder.setLikesCount(photoId);
     }
 
     @Override

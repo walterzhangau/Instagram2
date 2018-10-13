@@ -60,7 +60,7 @@
             android:layout_marginTop="7dp"
             android:clickable="true"
             android:onClick="onLikesCountClicked"
-            android:text="10 likes" />
+            android:text="" />
 
         <TextView
             android:id="@+id/text_view_all_comments"
