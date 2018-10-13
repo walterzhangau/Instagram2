@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,8 +55,8 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
         ImageView image;
         ImageView mHeartWhite, mHeartRed;
-        TextView likesText;
-        TextView authorNameTextView;
+        TextView likesText, authorNameTextView, postTextView;
+        EditText editTextAddComment;
 
         private FirebaseMethods mFirebaseMethods;
         Photo photo;
@@ -80,6 +81,8 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
 
             likesText = (TextView) view.findViewById(R.id.text_likes_count);
+            editTextAddComment = (EditText) view.findViewById(R.id.editTextAddComment);
+            postTextView = (TextView) view.findViewById(R.id.text_post_comment);
 
             mHeartRed.setVisibility(View.GONE);
             mHeartWhite.setVisibility(View.VISIBLE);
@@ -117,6 +120,14 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 }
             });
 
+
+            postTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: posting comment...");
+                    onPostCommentClicked();
+                }
+            });
         }
 
         /* Toggle between photo liked and not liked */
@@ -134,6 +145,16 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 mHeartWhite.setVisibility(View.VISIBLE);
                 mFirebaseMethods.removeLike(photo.getPhoto_id());
             }
+        }
+
+        /* Save comment to the db */
+        public void onPostCommentClicked() {
+            Log.d(TAG, "onPostCommentClicked...");
+
+            String text = editTextAddComment.getText().toString();
+
+            mFirebaseMethods.postComment(photo.getPhoto_id(), text);
+            editTextAddComment.setText("");
         }
 
         /* Check if the photo has been liked by the user and if yes, set heart to red */

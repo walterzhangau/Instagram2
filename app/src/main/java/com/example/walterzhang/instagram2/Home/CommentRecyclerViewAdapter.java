@@ -16,12 +16,12 @@ import java.util.List;
  * specified {@link fragment_comment_list.onCommentListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyCommentRecyclerViewAdapter extends RecyclerView.Adapter<MyCommentRecyclerViewAdapter.ViewHolder> {
+public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;
     private final fragment_comment_list.onCommentListFragmentInteractionListener mListener;
 
-    public MyCommentRecyclerViewAdapter(List<DummyItem> items, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
+    public CommentRecyclerViewAdapter(List<DummyItem> items, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +36,8 @@ public class MyCommentRecyclerViewAdapter extends RecyclerView.Adapter<MyComment
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        //holder.mIdView.setText(mValues.get(position).id);
+        //holder.mContentView.setText(mValues.get(position).content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,20 +58,20 @@ public class MyCommentRecyclerViewAdapter extends RecyclerView.Adapter<MyComment
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        //public final TextView mIdView;
+        //public final TextView mContentView;
         public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            //mIdView = (TextView) view.findViewById(R.id.item_number);
+            //mContentView = (TextView) view.findViewById(R.id.content);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" /*+ mContentView.getText() + "'"*/;
         }
     }
 }

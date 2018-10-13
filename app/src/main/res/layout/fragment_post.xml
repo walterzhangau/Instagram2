@@ -88,8 +88,6 @@
             android:layout_below="@id/text_view_all_comments"
             android:layout_alignParentRight="true"
             android:paddingRight="10dp"
-            android:clickable="true"
-            android:onClick="onPostCommentClicked"
             android:text="Post"
             android:textColor="@color/blue200" />
         <!-- app:menu = "@menu/user_feed_menu" -->
