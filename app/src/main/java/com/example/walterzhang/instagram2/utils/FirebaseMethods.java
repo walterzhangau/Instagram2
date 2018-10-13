@@ -343,4 +343,29 @@ public class FirebaseMethods {
             }
         });
     }
+
+    /**
+     * Save a comment to the database
+     * @return
+     */
+    public void postComment(String photoId, String text) {
+        String newCommentId = myRef.push().getKey();
+        com.example.walterzhang.instagram2.models.Comment comment = new com.example.walterzhang.instagram2.models.Comment();
+        comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        comment.setComment(text);
+        comment.setDate_created(getTimeStamp());
+
+        myRef.child(mContext.getString(R.string.dbname_photos))
+                .child(photoId)
+                .child(mContext.getString(R.string.field_comments))
+                .child(newCommentId)
+                .setValue(comment);
+
+        myRef.child(mContext.getString(R.string.dbname_user_photos))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(photoId)
+                .child(mContext.getString(R.string.field_comments))
+                .child(newCommentId)
+                .setValue(comment);
+    }
 }

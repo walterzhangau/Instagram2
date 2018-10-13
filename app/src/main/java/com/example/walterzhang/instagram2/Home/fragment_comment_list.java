@@ -54,7 +54,7 @@ public class fragment_comment_list extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyCommentRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new CommentRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
         return view;
     }
