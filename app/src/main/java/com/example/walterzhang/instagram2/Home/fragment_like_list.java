@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.MyLikeRecyclerViewAdapter;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -145,7 +144,7 @@ public class fragment_like_list extends Fragment {
                     Log.d(TAG, "searching likes...");
 
                     //get the user account settings based on the user id:
-                    getUserAccountSettingsByUserId(singleSnapshot.getValue(Like.class).getUser_id());
+                    displayUsersLikedPhotoByUserId(singleSnapshot.getValue(Like.class).getUser_id());
                 }
             }
 
@@ -169,7 +168,7 @@ public class fragment_like_list extends Fragment {
         }
     }
 
-    public void getUserAccountSettingsByUserId(final String userId) {
+    public void displayUsersLikedPhotoByUserId(final String userId) {
 
         FirebaseDatabase mFirebaseDatabase;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
