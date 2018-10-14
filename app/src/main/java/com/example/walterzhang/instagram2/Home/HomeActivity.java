@@ -134,19 +134,12 @@ public class HomeActivity extends AppCompatActivity implements
         onFragmentInteraction();
     }
 
-    public void onPostCommentClicked(View view)
-    {
-        Log.d(TAG, "onPostCommentClicked...");
-        //TODO:get the text in add comment editText and send to db
-    }
-
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             photoId = intent.getStringExtra("photoId");
             Log.d(TAG, "PhotoID: " + photoId);
-            int test2 = 0;
         }
     };
 

@@ -1,28 +1,46 @@
 package com.example.walterzhang.instagram2.Home;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link TextView} and makes a call to the
  * specified {@link fragment_comment_list.onCommentListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<com.example.walterzhang.instagram2.models.Comment> mComments;
+    private final List<com.example.walterzhang.instagram2.models.UserAccountSettings> mUsersSettings;
     private final fragment_comment_list.onCommentListFragmentInteractionListener mListener;
 
-    public CommentRecyclerViewAdapter(List<DummyItem> items, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
-        mValues = items;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView username;
+        EditText commentText;
+        View view;
+
+        public ViewHolder(View v) {
+            super(v);
+            view = v;
+            username = (TextView) view.findViewById(R.id.unameComment);
+            commentText = (EditText) view.findViewById(R.id.commentText);
+        }
+    }
+
+    public CommentRecyclerViewAdapter(@NonNull List<com.example.walterzhang.instagram2.models.UserAccountSettings> usersAccSettings, List<com.example.walterzhang.instagram2.models.Comment> comments, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
+        mUsersSettings = usersAccSettings;
+        mComments = comments;
         mListener = listener;
     }
 
@@ -35,17 +53,16 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        //holder.mIdView.setText(mValues.get(position).id);
-        //holder.mContentView.setText(mValues.get(position).content);
+        holder.username.setText(mUsersSettings.get(position).getUsername());
+        holder.commentText.setText(mComments.get(position).getComment());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(holder.username);
                 }
             }
         });
@@ -53,25 +70,6 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
     @Override
     public int getItemCount() {
-        return mValues.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        //public final TextView mIdView;
-        //public final TextView mContentView;
-        public DummyItem mItem;
-
-        public ViewHolder(View view) {
-            super(view);
-            mView = view;
-            //mIdView = (TextView) view.findViewById(R.id.item_number);
-            //mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" /*+ mContentView.getText() + "'"*/;
-        }
+        return mComments.size();
     }
 }
