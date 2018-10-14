@@ -55,7 +55,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
         ImageView image;
         ImageView mHeartWhite, mHeartRed;
-        TextView likesText, authorNameTextView, postTextView;
+        TextView likesText, commentsCountTextView, authorNameTextView, postTextView;
         EditText editTextAddComment;
 
         private FirebaseMethods mFirebaseMethods;
@@ -81,6 +81,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
 
             likesText = (TextView) view.findViewById(R.id.text_likes_count);
+            commentsCountTextView = (TextView) view.findViewById(R.id.text_view_all_comments);
             editTextAddComment = (EditText) view.findViewById(R.id.editTextAddComment);
             postTextView = (TextView) view.findViewById(R.id.text_post_comment);
 
@@ -120,6 +121,24 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 }
             });
 
+            commentsCountTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick commentsCountTextView: getting photoId...");
+
+                    //TODO: Extract this into a separata function with parameter as xyzListActivity
+                    //to avoid code duplication with the previous function
+                    Context context = v.getContext();
+                    String photoId = photo.getPhoto_id();
+                    Intent intent = new Intent("photo_info");
+                    intent.putExtra("photoId",photoId);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+                    intent = new Intent(context, CommentsListActivity.class);
+                    intent.putExtra("photo_message", photoId);
+                    context.startActivity(intent);
+                }
+            });
 
             postTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
