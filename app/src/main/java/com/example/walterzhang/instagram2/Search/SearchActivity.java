@@ -49,13 +49,10 @@ import java.util.Locale;
 public class SearchActivity extends AppCompatActivity{
     private static final String TAG = "SearchActivity";
     private static final int ACTIVITY_NUM = 1;
-
     private Context mContext = SearchActivity.this;
-
     private EditText edtSearch;
     private UserListAdapter adapter;
     private DatabaseReference mUserDatabase;
-
     private List<User> mUserList;
     private ListView mListView;
 
@@ -69,15 +66,8 @@ public class SearchActivity extends AppCompatActivity{
 
         edtSearch=(EditText)findViewById(R.id.edtSearch);
         mListView=(ListView)findViewById(R.id.listView);
-
-
-
         mUserDatabase=FirebaseDatabase.getInstance().getReference();
-
-
         initTextListener();
-
-
     }
 
     public void initTextListener(){
