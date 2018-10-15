@@ -23,6 +23,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A fragment representing a list of Items.
@@ -149,6 +150,7 @@ public class fragment_post_list extends Fragment {
 //                        photo.setDate_taken(objectMap.get(getString(R.string.field_date_created)).toString());
 //                        photo.setImage_path(objectMap.get(getString(R.string.field_photo_path)).toString());
                         mPhotos.add(photo);
+                        Collections.reverse(mPhotos);
                     }
 
 //                    if (count >= 1) { //mFollowing.size() - 1) {
