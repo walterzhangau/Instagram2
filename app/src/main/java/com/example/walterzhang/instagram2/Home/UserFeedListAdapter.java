@@ -203,7 +203,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             });
         }
 
-        /*show the number of users who liked the photo if at least one user liked
+        /* show the number of users who liked the photo if at least one user liked
           the photo: */
         private void setLikesCount(String photoId) {
 
@@ -216,11 +216,45 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                     long count = 0;
                     count = dataSnapshot.getChildrenCount();
 
+                    String text = "";
                     if (count == 1) {
-                        likesText.setText(count + " like");
+                        text = count + " like";
+                        likesText.setText(text);
                     }
                     else if (count > 1) {
-                        likesText.setText(count + " likes");
+                        text = count + " likes";
+                        likesText.setText(text);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        /* If at least on person commented on the photo, show the number of users who commented on
+          the photo and provide a link to view comments: */
+        private void setCommentsCount(String photoId) {
+
+            Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
+                    .child(photoId)
+                    .child(view.getContext().getString(R.string.field_comments));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    long count = 0;
+                    count = dataSnapshot.getChildrenCount();
+
+                    String text = "";
+                    if (count == 1) {
+                        text = "View " + count + " comment";
+                        commentsCountTextView.setText(text);
+                    }
+                    else if (count > 1) {
+                        text = "View " + count + " comments";
+                        commentsCountTextView.setText(text);
                     }
                 }
 
@@ -281,6 +315,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         holder.setHeartColor(photoId);
 
         holder.setLikesCount(photoId);
+        holder.setCommentsCount(photoId);
     }
 
     @Override
