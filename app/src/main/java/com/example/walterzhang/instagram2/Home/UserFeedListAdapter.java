@@ -53,18 +53,26 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         DatabaseReference myRef;
         FirebaseDatabase mFirebaseDatabase;
 
-        ImageView image;
+        ImageView image, mButton_comments;
         ImageView mHeartWhite, mHeartRed;
         TextView likesText, commentsCountTextView, authorNameTextView, postTextView;
         EditText editTextAddComment;
 
         private FirebaseMethods mFirebaseMethods;
         Photo photo;
-
-//        boolean likedByCurrentUser;
-//        Photo photo;
-
         View view;
+
+        private void broadcastPhotoIdAndStartActivity() {
+            Context context = view.getContext();
+            String photoId = photo.getPhoto_id();
+            Intent intent = new Intent("photo_info");
+            intent.putExtra("photoId",photoId);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+            intent = new Intent(context, CommentsListActivity.class);
+            intent.putExtra("photo_message", photoId);
+            context.startActivity(intent);
+        }
 
         public MyViewHolder(View v) {
             super(v);
@@ -75,6 +83,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             myRef = mFirebaseDatabase.getReference();
 
             image = v.findViewById(R.id.imageView_photo);
+            mButton_comments = view.findViewById(R.id.button_comments);
             authorNameTextView = (TextView) view.findViewById(R.id.text_author_name);
 
             mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
@@ -108,16 +117,15 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: getting photoId...");
+                    broadcastPhotoIdAndStartActivity();
+                }
+            });
 
-                    Context context = v.getContext();
-                    String photoId = photo.getPhoto_id();
-                    Intent intent = new Intent("photo_info");
-                    intent.putExtra("photoId",photoId);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-                    intent = new Intent(context, LikesListActivity.class);
-                    intent.putExtra("photo_message", photoId);
-                    context.startActivity(intent);
+            mButton_comments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick buttonComment: getting photoId...");
+                    broadcastPhotoIdAndStartActivity();
                 }
             });
 
@@ -125,18 +133,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick commentsCountTextView: getting photoId...");
-
-                    //TODO: Extract this into a separata function with parameter as xyzListActivity
-                    //to avoid code duplication with the previous function
-                    Context context = v.getContext();
-                    String photoId = photo.getPhoto_id();
-                    Intent intent = new Intent("photo_info");
-                    intent.putExtra("photoId",photoId);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-                    intent = new Intent(context, CommentsListActivity.class);
-                    intent.putExtra("photo_message", photoId);
-                    context.startActivity(intent);
+                    broadcastPhotoIdAndStartActivity();
                 }
             });
 
