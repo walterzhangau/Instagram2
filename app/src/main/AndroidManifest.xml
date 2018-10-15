@@ -43,6 +43,8 @@
         </activity>
         <activity android:name=".Home.LikesListActivity" />
         <activity android:name=".Home.CommentsListActivity" />
+
+
     </application>
 
 </manifest>
