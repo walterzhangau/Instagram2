@@ -20,8 +20,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.EditImageFragment;
-import com.example.walterzhang.instagram2.Manifest;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.utils.BitmapUtils;
 import com.example.walterzhang.instagram2.utils.FiltersListFragment;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -57,6 +57,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     Bitmap filteredImage;
 
     Bitmap finalImage;
+    String imgUrl;
 
     FiltersListFragment filtersListFragment;
     EditImageFragment editImageFragment;
@@ -161,7 +162,10 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     }
 
     private void loadImage() {
-        originalImage = //
+        Intent intent = getIntent();
+        ImageView image = (ImageView) findViewById(R.id.imageShare);
+        imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+        originalImage = BitmapUtils.getBitmapFromGallery(this,intent.getData(),300,300);
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         imagePreview.setImageBitmap(originalImage);
@@ -224,7 +228,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
-                            final String path = BitmapUtils.insertImage(getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                            final String path = null;
                             if (!TextUtils.isEmpty(path)) {
                                 Snackbar snackbar = Snackbar
                                         .make(coordinatorLayout, "Image saved to gallery!", Snackbar.LENGTH_LONG)
