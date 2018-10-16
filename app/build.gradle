@@ -33,8 +33,8 @@ dependencies {
 
     // image filters
     implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
     implementation 'com.karumi:dexter:4.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.walterzhang.instagram2.Filter.ThumbnailsAdapter;
+import com.example.walterzhang.instagram2.Filter.filter;
 import com.example.walterzhang.instagram2.R;
 import com.zomato.photofilters.FilterPack;
 import com.zomato.photofilters.imageprocessors.Filter;
@@ -30,8 +31,9 @@ import butterknife.ButterKnife;
 
 public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.ThumbnailsAdapterListener {
 
-    @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
+
 
     ThumbnailsAdapter mAdapter;
 
@@ -63,11 +65,11 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
         View view = inflater.inflate(R.layout.fragment_filters_list, container, false);
 
         ButterKnife.bind(view);
-
+        recyclerView=(RecyclerView)view.findViewById(R.id.recycler_view);
         thumbnailItemList = new ArrayList<>();
         mAdapter = new ThumbnailsAdapter(getActivity(), thumbnailItemList, this);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         int space = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
@@ -95,8 +97,9 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
                 Bitmap thumbImage;
 
                 if(bitmap == null){
+                    thumbImage = BitmapUtils.getBitmapFromAssets(getActivity(), filter.IMAGE_NAME, 100, 100);
                     Log.d("FiltersFragment", "bitmap is null");
-                    thumbImage=null;
+
                 }
                 else{
                     thumbImage= Bitmap.createScaledBitmap(bitmap, 100, 100, false);

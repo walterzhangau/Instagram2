@@ -56,6 +56,8 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     Bitmap originalImage;
     Bitmap filteredImage;
 
+    public static final String IMAGE_NAME = "dog.jpg";
+
     Bitmap finalImage;
     String imgUrl;
 
@@ -162,10 +164,10 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     }
 
     private void loadImage() {
-        Intent intent = getIntent();
-        ImageView image = (ImageView) findViewById(R.id.imageShare);
+       /* Intent intent = getIntent();
         imgUrl = intent.getStringExtra(getString(R.string.selected_image));
-        originalImage = BitmapUtils.getBitmapFromGallery(this,intent.getData(),300,300);
+        imgUrl="file:/"+imgUrl;*/
+        originalImage = BitmapUtils.getBitmapFromAssets(this,IMAGE_NAME,300,300);
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         imagePreview.setImageBitmap(originalImage);
