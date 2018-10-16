@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A fragment representing a list of Items.
@@ -134,13 +135,12 @@ public class fragment_post_list extends Fragment {
         for (int i = 0; i < 1/*mFollowing.size()*/; i++) {
             final int count = i;
             //Query query = reference.child(getString(R.string.dbname_user_photos)).child(mFollowing.get(i).orderByChild(getString(R.string.field_user_id)).equalTo(mFollowing.get(i)));
-            Query query = reference.child("photos/");//.child(""); //TEST ONLY / ALSO REMOVE STRING HARD CODING!
+            Query query = reference.child("photos/"); //.orderByChild("date_created");//.child(""); //TEST ONLY / ALSO REMOVE STRING HARD CODING!
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG, "onDataChange...");
                     mPhotos = new ArrayList<>();
-
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                         Photo photo  = singleSnapshot.getValue(Photo.class);
 
@@ -150,8 +150,15 @@ public class fragment_post_list extends Fragment {
 //                        photo.setDate_taken(objectMap.get(getString(R.string.field_date_created)).toString());
 //                        photo.setImage_path(objectMap.get(getString(R.string.field_photo_path)).toString());
                         mPhotos.add(photo);
-                        Collections.reverse(mPhotos);
                     }
+
+                    Collections.sort(mPhotos, new Comparator<Photo>() {
+                        @Override
+                        public int compare(Photo u1, Photo u2) {
+                            return u1.getDate_created().compareTo(u2.getDate_created());
+                        }
+                    });
+                    Collections.reverse(mPhotos);
 
 //                    if (count >= 1) { //mFollowing.size() - 1) {
                         displayPhotos();
