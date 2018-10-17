@@ -1,6 +1,7 @@
 package com.example.walterzhang.instagram2.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
+import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.SectionsStatePagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -33,10 +35,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private static final int ACTIVITY_NUM = 4;
 
     private Context mContext;
-
-
-
-    private SectionsStatePagerAdapter pagerAdapter;
+    public SectionsStatePagerAdapter pagerAdapter;
     private ViewPager mViewPager;
     private RelativeLayout mRelativeLayout;
 
@@ -52,6 +51,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         setupSettingsList();
         setupBottomNavigationView();
         setupFragments();
+        getIncomingIntent();
 
         //Setup the back arrow for navigating back to profile activity
         ImageView backArrow = (ImageView) findViewById(R.id.backArrow);
@@ -67,7 +67,22 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     }
 
+    private void getIncomingIntent() {
+        Intent intent = getIntent();
 
+        // If an imageUrl is attached as an extra, it was chosen from the gallery/photo fragment
+        if (intent.hasExtra(mContext.getString(R.string.selected_image))) {
+            Log.d(TAG, "getIncomingIntent: New incoming imgUrl");
+
+            if (intent.getStringExtra(getString(R.string.return_to_fragment))
+                    .equals(getString(R.string.edit_profile_fragment))) {
+                // Set the new profile picture
+                FirebaseMethods firebaseMethods = new FirebaseMethods(AccountSettingsActivity.this);
+                firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo),
+                        null, 0, intent.getStringExtra(getString(R.string.selected_image)));
+            }
+        }
+    }
 
     private void setupFragments(){
         pagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
@@ -76,16 +91,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     }
 
-    private void setViewPager(int fragmentNumber){
+    public void setViewPager(int fragmentNumber){
         mRelativeLayout.setVisibility(View.GONE);
         Log.d(TAG, "setViewPager: Navigating to fragment number " + fragmentNumber);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(fragmentNumber);
     }
-
-
-
-
 
     private void setupSettingsList(){
         Log.d(TAG, "setupSettingsList: initialise Account settings List");
@@ -107,7 +118,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         });
 
         }
-
 
     /**
      * BottomNavigationView Setup

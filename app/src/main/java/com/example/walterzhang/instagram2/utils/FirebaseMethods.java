@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Home.HomeActivity;
 import com.example.walterzhang.instagram2.Models.Like;
+import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -136,6 +137,11 @@ public class FirebaseMethods {
         // Profile photo
         else if (photoType.equals(mContext.getString(R.string.profile_photo))) {
             Log.d(TAG, "uploadNewPhoto: uploading profile photo.");
+
+            ((AccountSettingsActivity)mContext).setViewPager(
+                    ((AccountSettingsActivity)mContext).pagerAdapter.getFragmentNumber(
+                            mContext.getString(R.string.edit_profile_fragment))
+            );
 
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final StorageReference storageReference = mStorageReference
