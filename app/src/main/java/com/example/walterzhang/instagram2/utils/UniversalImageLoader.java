@@ -2,6 +2,7 @@ package com.example.walterzhang.instagram2.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -15,10 +16,6 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-/**
- * Created by walterzhang on 10/9/18.
- */
 
 public class UniversalImageLoader {
 
@@ -56,7 +53,8 @@ public class UniversalImageLoader {
      */
     public static void setImage(String imgUrl, ImageView image, final ProgressBar mProgressBar, String append){
         ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(append + imgUrl, image, new ImageLoadingListener() {
+        Log.d("UniversalImageLoader", " In setImage: Trying to display Image");
+        imageLoader.displayImage(append+imgUrl, image, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 if(mProgressBar!= null){

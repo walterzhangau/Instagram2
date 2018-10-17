@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.walterzhang.instagram2.Filter.filter;
 import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FilePaths;
@@ -80,7 +81,7 @@ public class GalleryFragment extends Fragment {
                 Log.d(TAG, "onClick: navigating to the final share screen.");
 
                 if (isRootTask()) {
-                    Intent intent = new Intent(getActivity(), NextActivity.class);
+                    Intent intent = new Intent(getActivity(), filter.class);
                     intent.putExtra(getString(R.string.selected_image), mSelectedImage);
                     startActivity(intent);
                 } else {

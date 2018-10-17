@@ -2,6 +2,7 @@ package com.example.walterzhang.instagram2.Share;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,7 +55,7 @@ public class NextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
         mCaption = (EditText) findViewById(R.id.caption);
-
+        Log.d(TAG, "Creating NextActivity");
         mFirebaseMethods = new FirebaseMethods(NextActivity.this);
         setupFirebaseAuth();
 
@@ -87,6 +88,12 @@ public class NextActivity extends AppCompatActivity {
                     mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
                             caption, imageCount, null, bitmap);
                 }
+                else if(intent.hasExtra("FilterImage")){
+                    byte[] byteArray = getIntent().getByteArrayExtra("FilterImage");
+                    Bitmap bmp=BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
+                            caption, imageCount, null, bmp);
+                }
             }
         });
 
@@ -108,6 +115,10 @@ public class NextActivity extends AppCompatActivity {
             bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
             Log.d(TAG, "setImage: got new bitmap");
             image.setImageBitmap(bitmap);
+        }
+        else if(intent.hasExtra("FilterImage")){
+            byte[] byteArray = getIntent().getByteArrayExtra("FilterImage");
+            image.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
         }
     }
 
