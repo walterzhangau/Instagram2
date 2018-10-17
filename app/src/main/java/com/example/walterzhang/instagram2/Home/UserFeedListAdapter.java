@@ -70,14 +70,14 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         Photo photo;
         View view;
 
-        private void broadcastPhotoIdAndStartActivity() {
+        private void broadcastPhotoIdAndStartActivity(Class mClass) {
             Context context = view.getContext();
             String photoId = photo.getPhoto_id();
             Intent intent = new Intent("photo_info");
             intent.putExtra("photoId",photoId);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
-            intent = new Intent(context, CommentsListActivity.class);
+            intent = new Intent(context, mClass);
             intent.putExtra("photo_message", photoId);
             context.startActivity(intent);
         }
@@ -125,8 +125,8 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             likesText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "onClick: getting photoId...");
-                    broadcastPhotoIdAndStartActivity();
+                    Log.d(TAG, "onClick likesText: getting photoId...");
+                    broadcastPhotoIdAndStartActivity(LikesListActivity.class);
                 }
             });
 
@@ -134,7 +134,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick buttonComment: getting photoId...");
-                    broadcastPhotoIdAndStartActivity();
+                    broadcastPhotoIdAndStartActivity(CommentsListActivity.class);
                 }
             });
 
@@ -142,7 +142,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick commentsCountTextView: getting photoId...");
-                    broadcastPhotoIdAndStartActivity();
+                    broadcastPhotoIdAndStartActivity(CommentsListActivity.class);
                 }
             });
 
