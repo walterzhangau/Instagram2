@@ -90,6 +90,14 @@
             android:paddingRight="10dp"
             android:text="Post"
             android:textColor="@color/blue200" />
+        <TextView
+            android:id="@+id/text_date_posted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextAddComment"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:text="Post" />
         <!-- app:menu = "@menu/user_feed_menu" -->
     </RelativeLayout>
 </LinearLayout>
