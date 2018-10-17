@@ -32,7 +32,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
         TextView username;
 
         private FirebaseMethods mFirebaseMethods;
-        com.example.walterzhang.instagram2.Models.Photo photo;
+        com.example.walterzhang.instagram2.models.Photo photo;
 
         View view;
 

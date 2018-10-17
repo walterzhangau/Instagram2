@@ -9,13 +9,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Home.HomeActivity;
-import com.example.walterzhang.instagram2.Models.Comment;
 import com.example.walterzhang.instagram2.Models.Like;
-import com.example.walterzhang.instagram2.Models.Photo;
-import com.example.walterzhang.instagram2.Models.User;
-import com.example.walterzhang.instagram2.Models.UserAccountSettings;
-import com.example.walterzhang.instagram2.Models.UserSettings;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -70,14 +66,13 @@ public class FirebaseMethods {
 
     /**
      * Upload a new photo
-     *
      * @param photoType
      * @param caption
      * @param count
      * @param imgUrl
      */
     public void uploadNewPhoto(String photoType, final String caption, final int count,
-                               final String imgUrl) {
+                               final String imgUrl, Bitmap bm) {
         Log.d(TAG, "uploadNewPhoto: attempting to upload new photo.");
 
         FilePaths filePaths = new FilePaths();
@@ -90,8 +85,11 @@ public class FirebaseMethods {
             final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + uid + "/photo" + (count + 1));
 
-            // Convert imageurl to bitmap
-            Bitmap bm = ImageManager.getBitmap(imgUrl);
+            // Convert imageUrl to bitmap
+            if (bm == null) {
+                bm = ImageManager.getBitmap(imgUrl);
+            }
+
             byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
 
             UploadTask uploadTask = null;
@@ -146,8 +144,11 @@ public class FirebaseMethods {
             final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + uid + "/profile_photo");
 
-            // Convert imageurl to bitmap
-            Bitmap bm = ImageManager.getBitmap(imgUrl);
+            // Convert imageUrl to bitmap
+            if (bm == null) {
+                bm = ImageManager.getBitmap(imgUrl);
+            }
+
             byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
 
             UploadTask uploadTask = null;
@@ -165,6 +166,11 @@ public class FirebaseMethods {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     // Insert into the "user_account_settings" node
                                     setProfilePhoto(task.getResult().toString());
+
+                                    ((AccountSettingsActivity)mContext).setViewPager(
+                                            ((AccountSettingsActivity)mContext).pagerAdapter.getFragmentNumber(
+                                                    mContext.getString(R.string.edit_profile_fragment))
+                                    );
                                 }
                             });
                 }
@@ -194,7 +200,6 @@ public class FirebaseMethods {
 
     /**
      * Add a profile photo to the database
-     *
      * @param url
      */
     private void setProfilePhoto(String url) {
@@ -207,7 +212,6 @@ public class FirebaseMethods {
 
     /**
      * Add a photo to the database
-     *
      * @param caption
      * @param url
      */
@@ -235,7 +239,6 @@ public class FirebaseMethods {
 
     /**
      * Get the total number of images posted by a user
-     *
      * @param dataSnapshot
      * @return
      */
@@ -252,7 +255,6 @@ public class FirebaseMethods {
 
     /**
      * Get the current timestamp
-     *
      * @return
      */
     private String getTimeStamp() {
@@ -264,7 +266,6 @@ public class FirebaseMethods {
 
     /**
      * Save new like photo to the database
-     *
      * @return
      */
     public void addNewLike(String photoId) {
@@ -290,7 +291,6 @@ public class FirebaseMethods {
 
     /**
      * remove the like from the database
-     *
      * @return
      */
     public void removeLike(final String photoId) {
@@ -357,7 +357,6 @@ public class FirebaseMethods {
 
     /**
      * Save a comment to the database
-     *
      * @return
      */
     public void postComment(String photoId, String text) {
@@ -472,4 +471,3 @@ public class FirebaseMethods {
 
 
 }
-
