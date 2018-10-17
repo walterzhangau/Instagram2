@@ -17,10 +17,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
-/**
- * Created by walterzhang on 10/9/18.
- */
-
 public class UniversalImageLoader {
 
     private static final int default_image = R.drawable.ic_android;
@@ -58,7 +54,7 @@ public class UniversalImageLoader {
     public static void setImage(String imgUrl, ImageView image, final ProgressBar mProgressBar, String append){
         ImageLoader imageLoader = ImageLoader.getInstance();
         Log.d("UniversalImageLoader", " In setImage: Trying to display Image");
-        imageLoader.displayImage(imgUrl, image, new ImageLoadingListener() {
+        imageLoader.displayImage(append+imgUrl, image, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 if(mProgressBar!= null){

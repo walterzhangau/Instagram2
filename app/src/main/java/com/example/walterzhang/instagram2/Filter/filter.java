@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
-
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -24,12 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.example.walterzhang.instagram2.EditImageFragment;
-
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.Search.SearchActivity;
-
 import com.example.walterzhang.instagram2.Share.NextActivity;
 import com.example.walterzhang.instagram2.utils.BitmapUtils;
 import com.example.walterzhang.instagram2.utils.FiltersListFragment;
@@ -42,11 +36,8 @@ import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -243,6 +234,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
 
         if (id == R.id.action_next) {
            String p=saveImageToGallery();
+           p=p.substring(8);
             Intent intent=new Intent(this, NextActivity.class);
             intent.putExtra(getString(R.string.selected_image), p);
             startActivity(intent);

@@ -164,7 +164,7 @@ public class BitmapUtils {
         if (url != null) {
             stringUrl = url.toString();
         }
-
+        Log.d("BitMapUtils", "InsertImage:"+stringUrl);
         return stringUrl;
     }
 

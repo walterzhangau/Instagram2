@@ -23,10 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-/**
- * Created by mingshunc on 26/9/18.
- */
-
 public class NextActivity extends AppCompatActivity {
 
     private static final String TAG = "NextActivity";

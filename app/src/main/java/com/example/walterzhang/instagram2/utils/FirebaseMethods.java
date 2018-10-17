@@ -33,10 +33,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-/**
- * Created by mingshunc on 27/9/18.
- */
-
 public class FirebaseMethods {
 
     private static final String TAG = "FirebaseMethods";
