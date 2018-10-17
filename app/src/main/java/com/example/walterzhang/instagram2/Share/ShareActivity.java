@@ -73,6 +73,15 @@ public class ShareActivity extends AppCompatActivity{
     }
 
     /**
+     * Return the flags of the current intent
+     * @return
+     */
+    public int getTask() {
+        Log.d(TAG, "getTask: TASK: " + getIntent().getFlags());
+        return getIntent().getFlags();
+    }
+
+    /**
      * Get user to verify permissions
      * @param permissions
      */
