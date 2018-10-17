@@ -1,39 +1,24 @@
 package com.example.walterzhang.instagram2.Profile;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.Models.Photo;
-import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
-import com.example.walterzhang.instagram2.utils.GridImageAdapter;
-import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import java.util.ArrayList;
 
 /**
  * Created by walterzhang on 7/9/18.
@@ -70,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         mFirebaseMethods = new FirebaseMethods(this);
         setupFirebaseAuth();
 
-        setupImageGrid();
+        //setupImageGrid();
         init();
 
 //        setupBottomNavigationView();
@@ -105,52 +90,51 @@ public class ProfileActivity extends AppCompatActivity {
 //        GridImageAdapter adapter = new GridImageAdapter(mContext, R.layout.layout_grid_imageview,"" ,imgUrls);
 //        gridView.setAdapter(adapter);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, "onCancelled: quary cancelled.");
+//
+//    public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Log.d(TAG, "onCancelled: quary cancelled.");
+//    }
+//
+//
+//    private void setupImageGrid(){
+//            Log.d(TAG, "setupGridView: Setting up image grid.");
+//
+//    final ArrayList<Photo> photos = new ArrayList<>();
+//            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+//            Query query = reference
+//            .child(getString(R.string.dbname_user_photos))
+//            .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//    @Override
+//    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//            for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+//            photos.add(singleSnapshot.getValue(Photo.class));
+//            }
+//
+//            // Setup our image grid
+//            int gridWidth = getResources().getDisplayMetrics().widthPixels;
+//            int imageWidth = gridWidth/NUM_GRID_COLUMNS;
+//            gridView.setColumnWidth(imageWidth);
+//
+//            ArrayList<String> imgUrls = new ArrayList<String>();
+//            for (int i = 0; i < photos.size(); i++) {
+//            imgUrls.add(photos.get(i).getImage_path());
+//            }
+//
+//            GridImageAdapter adapter = new GridImageAdapter(mContext,
+//            R.layout.layout_grid_imageview,"", imgUrls);
+//            gridView.setAdapter(adapter);
+//            }
+
+    private void init(){
+            Log.d(TAG, "init: inflating  "+getString(R.string.profile_fragment));
+            ProfileFragment fragment = new ProfileFragment();
+            android.support.v4.app.FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, fragment);
+            transaction.addToBackStack(getString(R.string.profile_fragment));
+            transaction.commit();
+
             }
-        });
-    }
-
-private void setupImageGrid(){
-        Log.d(TAG, "setupGridView: Setting up image grid.");
-
-final ArrayList<Photo> photos = new ArrayList<>();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        Query query = reference
-        .child(getString(R.string.dbname_user_photos))
-        .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-@Override
-public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-        photos.add(singleSnapshot.getValue(Photo.class));
-        }
-
-        // Setup our image grid
-        int gridWidth = getResources().getDisplayMetrics().widthPixels;
-        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
-        gridView.setColumnWidth(imageWidth);
-
-        ArrayList<String> imgUrls = new ArrayList<String>();
-        for (int i = 0; i < photos.size(); i++) {
-        imgUrls.add(photos.get(i).getImage_path());
-        }
-
-        GridImageAdapter adapter = new GridImageAdapter(mContext,
-        R.layout.layout_grid_imageview,"", imgUrls);
-        gridView.setAdapter(adapter);
-        }
-
-private void init(){
-        Log.d(TAG, "init: inflating  "+getString(R.string.profile_fragment));
-        ProfileFragment fragment = new ProfileFragment();
-        android.support.v4.app.FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(getString(R.string.profile_fragment));
-        transaction.commit();
-
-        }
 
 //    //will have variable as inut when photo is dynamic
 //    private void setProfileImage(){

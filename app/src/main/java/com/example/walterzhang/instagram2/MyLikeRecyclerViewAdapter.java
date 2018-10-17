@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.Home.fragment_like_list;
 import com.example.walterzhang.instagram2.Home.fragment_like_list.OnLikeListFragmentInteractionListener;
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
@@ -32,7 +33,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
         TextView username;
 
         private FirebaseMethods mFirebaseMethods;
-        com.example.walterzhang.instagram2.models.Photo photo;
+        Photo photo;
 
         View view;
 
