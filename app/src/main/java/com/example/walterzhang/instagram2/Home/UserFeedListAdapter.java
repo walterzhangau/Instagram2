@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.walterzhang.instagram2.Models.Like;
-import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
+import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -272,7 +273,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG, "setting photo author name...");
-                    String authorName = dataSnapshot.child(view.getContext().getString(R.string.dbname_user_account_settings)).child(userId).getValue(com.example.walterzhang.instagram2.models.UserAccountSettings.class).getUsername();
+                    String authorName = dataSnapshot.child(view.getContext().getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class).getUsername();
                     authorNameTextView.setText(authorName);
                 }
 

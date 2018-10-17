@@ -2,12 +2,9 @@ package com.example.walterzhang.instagram2.Profile;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,10 +18,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
-import com.example.walterzhang.instagram2.Login.LoginActivity;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.UserSettings;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
+import com.example.walterzhang.instagram2.utils.FirebaseMethods;
+import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +56,7 @@ public class ProfileFragment extends Fragment{
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
+    private FirebaseMethods mFirebaseMethods;
 
     @Nullable
     @Override
@@ -77,11 +77,33 @@ public class ProfileFragment extends Fragment{
         profileMenu = (ImageView) view .findViewById(R.id.profileMenu);
         bottomNavigationView = (BottomNavigationViewEx) view .findViewById(R.id.bottomNavViewBar);
         mContext = getActivity();
+        mFirebaseMethods = new FirebaseMethods(getActivity());
         Log.d(TAG, "onCreateView: started. ");
 
         setupBottomNavigationView();
         setupToolbar();
+
+        setupFirebaseAuth();
         return view;
+    }
+
+    private void setProfileWidgets(UserSettings userSettings){
+        Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.toString());
+        Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.getSettings().getUsername());
+
+
+        //User user = userSettings.getUser();
+        UserAccountSettings settings = userSettings.getSettings();
+
+        UniversalImageLoader.setImage(settings.getProfile_photo(), mProfilePhoto, null, "");
+
+        mDisplayName.setText(settings.getDisplay_name());
+        mUsername.setText(settings.getUsername());
+        mDescription.setText(settings.getDescription());
+        mPosts.setText(String.valueOf(settings.getPosts()));
+        mFollowing.setText(String.valueOf(settings.getFollowing()));
+        mFollowers.setText(String.valueOf(settings.getFollowers()));
+        mProgressBar.setVisibility(View.GONE);
     }
 
     private void setupToolbar(){
@@ -143,7 +165,7 @@ public class ProfileFragment extends Fragment{
 
                 //retrieve user information from the database
 
-
+                setProfileWidgets(mFirebaseMethods.getUserAccountSettings(dataSnapshot));
                 //retrieve images for the user in question
 
             }

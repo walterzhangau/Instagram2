@@ -9,13 +9,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Home.HomeActivity;
+import com.example.walterzhang.instagram2.Models.Comment;
 import com.example.walterzhang.instagram2.Models.Like;
-import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.Models.UserSettings;
-
+import com.example.walterzhang.instagram2.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -362,7 +362,7 @@ public class FirebaseMethods {
      */
     public void postComment(String photoId, String text) {
         String newCommentId = myRef.push().getKey();
-        com.example.walterzhang.instagram2.models.Comment comment = new com.example.walterzhang.instagram2.models.Comment();
+        Comment comment = new Comment();
         comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
         comment.setComment(text);
         comment.setDate_created(getTimeStamp());
@@ -381,7 +381,7 @@ public class FirebaseMethods {
                 .setValue(comment);
     }
 
-    private UserSettings getUserAccountSettings(DataSnapshot dataSnapshot) {
+    public UserSettings getUserAccountSettings(DataSnapshot dataSnapshot) {
         Log.d(TAG, "getUserAccountSettings: retrieving user account settings from firebase.");
 
 
