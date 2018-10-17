@@ -50,24 +50,24 @@ public class BitmapUtils {
      *
      * @return
      */
-    public static Bitmap getBitmapFromGallery(Context context, Uri path, int width, int height) {
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+    public static Bitmap getBitmapFromGallery(Context context, String path, int width, int height) {
+        /*String[] filePathColumn = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(path, filePathColumn, null, null, null);
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picturePath = cursor.getString(columnIndex);
-        cursor.close();
+        cursor.close();*/
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(picturePath, options);
+        BitmapFactory.decodeFile(path, options);
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, width, height);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(picturePath, options);
+        return BitmapFactory.decodeFile(path, options);
     }
 
     private static int calculateInSampleSize(

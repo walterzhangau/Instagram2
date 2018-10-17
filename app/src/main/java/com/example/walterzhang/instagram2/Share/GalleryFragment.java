@@ -57,14 +57,14 @@ public class GalleryFragment extends Fragment {
         Log.d(TAG, "onCreateView: starting...");
         View view = inflater.inflate(R.layout.fragment_gallery,container,false);
 
-        galleryImage = (ImageView) view.findViewById(R.id.imgViewGallery);
-        galleryGrid = (GridView) view.findViewById(R.id.gridViewGallery);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        galleryImage = view.findViewById(R.id.imgViewGallery);
+        galleryGrid = view.findViewById(R.id.gridViewGallery);
+        mProgressBar = view.findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.GONE);
-        directorySpinner = (Spinner) view.findViewById(R.id.spinnerDirectory);
+        directorySpinner = view.findViewById(R.id.spinnerDirectory);
         directories = new ArrayList<String>();
 
-        ImageView shareClose = (ImageView) view.findViewById(R.id.imgViewCloseShare);
+        ImageView shareClose = view.findViewById(R.id.imgViewCloseShare);
         shareClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,6 +3,8 @@ package com.example.walterzhang.instagram2.Filter;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +35,7 @@ import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +65,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     Bitmap finalImage;
     String imgUrl;
 
+
     FiltersListFragment filtersListFragment;
     EditImageFragment editImageFragment;
 
@@ -72,11 +77,20 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
         System.loadLibrary("NativeImageProcessor");
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+        imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getString(R.string.activity_title_main));
+
         loadImage();
 
         setupViewPager(viewPager);
@@ -88,8 +102,15 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // adding filter list fragment
+
+
+
+        Bundle b = new Bundle();
+        b.putParcelable("image",originalImage);
+
         filtersListFragment = new FiltersListFragment();
         filtersListFragment.setListener(this);
+        filtersListFragment.setArguments(b);
 
         // adding edit image fragment
         editImageFragment = new EditImageFragment();
@@ -164,13 +185,12 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     }
 
     private void loadImage() {
-       /* Intent intent = getIntent();
-        imgUrl = intent.getStringExtra(getString(R.string.selected_image));
-        imgUrl="file:/"+imgUrl;*/
-        originalImage = BitmapUtils.getBitmapFromAssets(this,IMAGE_NAME,300,300);
+
+        originalImage = BitmapUtils.getBitmapFromGallery(this, imgUrl,300,300);
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         imagePreview.setImageBitmap(originalImage);
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
