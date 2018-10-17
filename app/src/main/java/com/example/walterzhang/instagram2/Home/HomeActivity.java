@@ -38,6 +38,8 @@ public class HomeActivity extends AppCompatActivity implements
     private static final int ACTIVITY_NUM = 0;
     //Firebase Authentication
     private FirebaseAuth mAuth;
+    
+
     private Context mContext = HomeActivity.this;
     private Class<?> cls;
     private String photoId;

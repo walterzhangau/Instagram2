@@ -1,4 +1,4 @@
-package com.example.walterzhang.instagram2.models;
+package com.example.walterzhang.instagram2.Models;
 
 public class UserAccountSettings {
 
@@ -9,6 +9,7 @@ public class UserAccountSettings {
     private String display_name;
     private String profile_photo;
     private String username;
+
 
     public UserAccountSettings(String description, long followers, long following, long posts, String display_name, String profile_photo, String username) {
         this.description = description;
