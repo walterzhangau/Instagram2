@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.MyLikeRecyclerViewAdapter;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.models.Like;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
