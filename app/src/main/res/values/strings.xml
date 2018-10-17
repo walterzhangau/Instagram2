@@ -67,4 +67,10 @@
     <string name="field_photo_path">image_path</string>
     <string name="search_user">Search User</string>
 
+
+    <!-- Intent Extras -->
+    <string name="calling_activity">calling_activity</string>
+
+    <!-- activity names -->
+    <string name="profile_activity">Profile Activity</string>
 </resources>
