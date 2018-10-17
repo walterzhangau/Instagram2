@@ -42,7 +42,7 @@ public class NextActivity extends AppCompatActivity {
     private EditText mCaption;
 
     // Variables
-    private String mAppend = "file:/";
+    private String mAppend = "content:";
     private int imageCount = 0;
     private String imgUrl;
 
@@ -52,8 +52,7 @@ public class NextActivity extends AppCompatActivity {
         setContentView(R.layout.activity_next);
         mCaption = (EditText) findViewById(R.id.caption);
 
-        mFirebaseMethods = new FirebaseMethods(NextActivity.this);
-        setupFirebaseAuth();
+
 
         ImageView backArrow = (ImageView) findViewById(R.id.imgViewBackArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +78,9 @@ public class NextActivity extends AppCompatActivity {
             }
         });
 
+
         setImage();
+
     }
 
     /**
@@ -89,7 +90,9 @@ public class NextActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ImageView image = (ImageView) findViewById(R.id.imageShare);
         imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+        Log.d(TAG, "Setting Image in the Thumbnail");
         UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
+        Log.d(TAG, "Image Set in thumbnail");
     }
 
     /**
@@ -113,7 +116,7 @@ public class NextActivity extends AppCompatActivity {
 
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged: signed_in: " + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged: signed_in:" + user.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged: signed_out");
@@ -139,6 +142,9 @@ public class NextActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        mFirebaseMethods = new FirebaseMethods(NextActivity.this);
+        setupFirebaseAuth();
+
         mAuth.addAuthStateListener(mAuthListener);
     }
 

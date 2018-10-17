@@ -1,10 +1,12 @@
 package com.example.walterzhang.instagram2.Filter;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +26,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.EditImageFragment;
+
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.Search.SearchActivity;
+
+import com.example.walterzhang.instagram2.Share.NextActivity;
 import com.example.walterzhang.instagram2.utils.BitmapUtils;
 import com.example.walterzhang.instagram2.utils.FiltersListFragment;
 import com.karumi.dexter.Dexter;
@@ -65,7 +72,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     Bitmap finalImage;
     String imgUrl;
 
-
+    String pathCopy;
     FiltersListFragment filtersListFragment;
     EditImageFragment editImageFragment;
 
@@ -97,8 +104,11 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
         tabLayout.setupWithViewPager(viewPager);
 
     }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+    }
 
-    private void setupViewPager(ViewPager viewPager) {
+        private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // adding filter list fragment
@@ -231,26 +241,27 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_open) {
-
-            return true;
-        }
-
-        if (id == R.id.action_save) {
-            saveImageToGallery();
+        if (id == R.id.action_next) {
+           String p=saveImageToGallery();
+            Intent intent=new Intent(this, NextActivity.class);
+            intent.putExtra(getString(R.string.selected_image), p);
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveImageToGallery() {
-        Dexter.withActivity(this).withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    private String saveImageToGallery() {
+
+        Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
-                            final String path = null;
+                            final String path = BitmapUtils.insertImage(getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                            pathCopy=path;
                             if (!TextUtils.isEmpty(path)) {
                                 Snackbar snackbar = Snackbar
                                         .make(coordinatorLayout, "Image saved to gallery!", Snackbar.LENGTH_LONG)
@@ -262,6 +273,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
                                         });
 
                                 snackbar.show();
+
                             } else {
                                 Snackbar snackbar = Snackbar
                                         .make(coordinatorLayout, "Unable to save image!", Snackbar.LENGTH_LONG);
@@ -278,6 +290,8 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
                         token.continuePermissionRequest();
                     }
                 }).check();
+        Log.d("Filters:" , "Return Path Copy"+ pathCopy);
+    return pathCopy;
 
     }
 
@@ -287,4 +301,6 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
         intent.setDataAndType(Uri.parse(path), "image/*");
         startActivity(intent);
     }
+
+
 }
