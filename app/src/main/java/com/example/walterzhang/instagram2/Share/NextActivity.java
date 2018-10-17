@@ -1,6 +1,7 @@
 package com.example.walterzhang.instagram2.Share;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,6 +46,8 @@ public class NextActivity extends AppCompatActivity {
     private String mAppend = "file:/";
     private int imageCount = 0;
     private String imgUrl;
+    private Bitmap bitmap;
+    private Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,8 +77,16 @@ public class NextActivity extends AppCompatActivity {
                 Toast.makeText(NextActivity.this, "Attempting to upload new photo.",
                         Toast.LENGTH_SHORT).show();
                 String caption = mCaption.getText().toString();
-                mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
-                        caption, imageCount, imgUrl, null);
+
+                if (intent.hasExtra(getString(R.string.selected_image))) {
+                    imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
+                            caption, imageCount, imgUrl, null);
+                } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+                    bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
+                            caption, imageCount, null, bitmap);
+                }
             }
         });
 
@@ -86,10 +97,18 @@ public class NextActivity extends AppCompatActivity {
      * Gets the image url from the incoming intent and displays the chosen image
      */
     private void setImage() {
-        Intent intent = getIntent();
+        intent = getIntent();
         ImageView image = (ImageView) findViewById(R.id.imageShare);
-        imgUrl = intent.getStringExtra(getString(R.string.selected_image));
-        UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
+
+        if (intent.hasExtra(getString(R.string.selected_image))) {
+            imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+            Log.d(TAG, "setImage: got new image url: " + imgUrl);
+            UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
+        } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+            bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            Log.d(TAG, "setImage: got new bitmap");
+            image.setImageBitmap(bitmap);
+        }
     }
 
     /**
