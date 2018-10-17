@@ -1,6 +1,7 @@
 package com.example.walterzhang.instagram2.Filter;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -36,6 +37,8 @@ import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -54,6 +57,8 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
 
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
+
+    private Context mContext=filter.this;
 
     Bitmap originalImage;
     Bitmap filteredImage;
@@ -79,10 +84,12 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("Filter","Starting Filter Activity");
+
         setContentView(R.layout.activity_filter);
         ButterKnife.bind(this);
-        Intent intent = getIntent();
-        imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -160,6 +167,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
         myFilter.addSubFilter(new BrightnessSubFilter(brightnessFinal));
         myFilter.addSubFilter(new ContrastSubFilter(contrastFinal));
         myFilter.addSubFilter(new SaturationSubfilter(saturationFinal));
+        Log.d("Filter:", "Editing Finished");
         finalImage = myFilter.processFilter(bitmap);
     }
 
@@ -186,8 +194,17 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     }
 
     private void loadImage() {
+        Intent intent = getIntent();
+        if(intent.hasExtra(getString(R.string.selected_bitmap))){
+            originalImage=(Bitmap)intent.getParcelableExtra(getString(R.string.selected_bitmap));
+        }
+        else
+        {
+            imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+            originalImage = BitmapUtils.getBitmapFromGallery(this, imgUrl,300,300);
+        }
 
-        originalImage = BitmapUtils.getBitmapFromGallery(this, imgUrl,300,300);
+
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         imagePreview.setImageBitmap(originalImage);
@@ -233,12 +250,21 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
         int id = item.getItemId();
 
         if (id == R.id.action_next) {
-           String p=saveImageToGallery();
-           p=p.substring(8);
-            Intent intent=new Intent(this, NextActivity.class);
-            intent.putExtra(getString(R.string.selected_image), p);
+        /*   String p=saveImageToGallery();
+           p=p.substring(8);*/
+        Log.d("Filter:", "Sharing the image with NextActivity");
+            ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+            finalImage.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+            byte[] byteArray = bStream.toByteArray();
+
+            Intent intent = new Intent(filter.this, NextActivity.class);
+            intent.putExtra("FilterImage", byteArray);
             startActivity(intent);
             return true;
+        }
+        else
+        {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

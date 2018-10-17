@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.walterzhang.instagram2.Filter.filter;
 import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.Permissions;
@@ -76,7 +77,7 @@ public class PhotoFragment extends Fragment {
             if (isRootTask()) {
                 try {
                     Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
-                    Intent intent = new Intent(getActivity(), NextActivity.class);
+                    Intent intent = new Intent(getActivity(), filter.class);
                     intent.putExtra(getString(R.string.selected_bitmap), bitmap);
                     startActivity(intent);
                 } catch (NullPointerException e) {
