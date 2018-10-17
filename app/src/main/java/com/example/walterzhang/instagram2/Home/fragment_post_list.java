@@ -143,12 +143,6 @@ public class fragment_post_list extends Fragment {
                     mPhotos = new ArrayList<>();
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                         Photo photo  = singleSnapshot.getValue(Photo.class);
-
-                        //todo: see how to set these values: (and for the other properties of photo too
-//                        photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
-//                        photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
-//                        photo.setDate_taken(objectMap.get(getString(R.string.field_date_created)).toString());
-//                        photo.setImage_path(objectMap.get(getString(R.string.field_photo_path)).toString());
                         mPhotos.add(photo);
                     }
 
@@ -177,12 +171,6 @@ public class fragment_post_list extends Fragment {
 
     private void displayPhotos() {
         if (mPhotos != null) {
-//            Collections.sort(mPhotos, new Comparator<Photo>() {
-//                @Override
-//                public int compare(Photo o1, Photo o2) {
-//                    return o2.getDate_Created().compareTo(o1.getDate_Created());
-//                }
-//            });
             mAdapter = new UserFeedListAdapter(getActivity(), R.layout.fragment_post_list, mPhotos);
             mListRecyclerView.setAdapter(mAdapter);
         }
