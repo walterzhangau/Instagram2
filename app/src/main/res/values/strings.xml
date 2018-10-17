@@ -50,6 +50,7 @@
 
     <!-- Intent extras -->
     <string name="selected_image">selected_image</string>
+    <string name="selected_bitmap">selected_bitmap</string>
     <string name="return_to_fragment">return_to_fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -73,7 +73,7 @@ public class FirebaseMethods {
      * @param imgUrl
      */
     public void uploadNewPhoto(String photoType, final String caption, final int count,
-                               final String imgUrl) {
+                               final String imgUrl, Bitmap bm) {
         Log.d(TAG, "uploadNewPhoto: attempting to upload new photo.");
 
         FilePaths filePaths = new FilePaths();
@@ -86,8 +86,11 @@ public class FirebaseMethods {
             final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + uid + "/photo" + (count + 1));
 
-            // Convert imageurl to bitmap
-            Bitmap bm = ImageManager.getBitmap(imgUrl);
+            // Convert imageUrl to bitmap
+            if (bm == null) {
+                bm = ImageManager.getBitmap(imgUrl);
+            }
+
             byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
 
             UploadTask uploadTask = null;
@@ -138,17 +141,15 @@ public class FirebaseMethods {
         else if (photoType.equals(mContext.getString(R.string.profile_photo))) {
             Log.d(TAG, "uploadNewPhoto: uploading profile photo.");
 
-            ((AccountSettingsActivity)mContext).setViewPager(
-                    ((AccountSettingsActivity)mContext).pagerAdapter.getFragmentNumber(
-                            mContext.getString(R.string.edit_profile_fragment))
-            );
-
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + uid + "/profile_photo");
 
-            // Convert imageurl to bitmap
-            Bitmap bm = ImageManager.getBitmap(imgUrl);
+            // Convert imageUrl to bitmap
+            if (bm == null) {
+                bm = ImageManager.getBitmap(imgUrl);
+            }
+
             byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
 
             UploadTask uploadTask = null;
@@ -164,8 +165,13 @@ public class FirebaseMethods {
                             new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
-                                // Insert into the "user_account_settings" node
-                                setProfilePhoto(task.getResult().toString());
+                                    // Insert into the "user_account_settings" node
+                                    setProfilePhoto(task.getResult().toString());
+
+                                    ((AccountSettingsActivity)mContext).setViewPager(
+                                            ((AccountSettingsActivity)mContext).pagerAdapter.getFragmentNumber(
+                                                    mContext.getString(R.string.edit_profile_fragment))
+                                    );
                                 }
                             });
                 }

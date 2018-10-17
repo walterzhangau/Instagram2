@@ -75,7 +75,7 @@ public class NextActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 String caption = mCaption.getText().toString();
                 mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
-                        caption, imageCount, imgUrl);
+                        caption, imageCount, imgUrl, null);
             }
         });
 

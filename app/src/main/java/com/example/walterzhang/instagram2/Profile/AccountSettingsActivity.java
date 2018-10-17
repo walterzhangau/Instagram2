@@ -2,6 +2,7 @@ package com.example.walterzhang.instagram2.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -70,16 +71,29 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private void getIncomingIntent() {
         Intent intent = getIntent();
 
-        // If an imageUrl is attached as an extra, it was chosen from the gallery/photo fragment
-        if (intent.hasExtra(mContext.getString(R.string.selected_image))) {
-            Log.d(TAG, "getIncomingIntent: New incoming imgUrl");
+        if (intent.hasExtra(getString(R.string.selected_image))
+                || intent.hasExtra(getString(R.string.selected_bitmap))) {
 
             if (intent.getStringExtra(getString(R.string.return_to_fragment))
                     .equals(getString(R.string.edit_profile_fragment))) {
-                // Set the new profile picture
-                FirebaseMethods firebaseMethods = new FirebaseMethods(AccountSettingsActivity.this);
-                firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo),
-                        null, 0, intent.getStringExtra(getString(R.string.selected_image)));
+
+                if (intent.hasExtra(getString(R.string.selected_image))) {
+                    // If an imageUrl is attached as an extra, it was chosen from the gallery fragment
+                    Log.d(TAG, "getIncomingIntent: New incoming imgUrl");
+
+                    // Set the new profile picture using the imgUrl
+                    FirebaseMethods firebaseMethods = new FirebaseMethods(AccountSettingsActivity.this);
+                    firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo),
+                            null, 0, intent.getStringExtra(getString(R.string.selected_image)), null);
+                } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+                    // If a bitmap is attached as an extra, it was chosen from photo fragment
+                    Log.d(TAG, "getIncomingIntent: New incoming bitmap");
+
+                    // Set the new profile picture using the bitmap
+                    FirebaseMethods firebaseMethods = new FirebaseMethods(AccountSettingsActivity.this);
+                    firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo),
+                            null, 0, null, (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap)));
+                }
             }
         }
     }
