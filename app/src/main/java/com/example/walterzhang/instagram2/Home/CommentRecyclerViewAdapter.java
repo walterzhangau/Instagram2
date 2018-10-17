@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
+import com.example.walterzhang.instagram2.Models.Comment;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder> {
 
-    private final List<com.example.walterzhang.instagram2.models.Comment> mComments;
-    private final List<com.example.walterzhang.instagram2.models.UserAccountSettings> mUsersSettings;
+    private final List<Comment> mComments;
+    private final List<UserAccountSettings> mUsersSettings;
     private final fragment_comment_list.onCommentListFragmentInteractionListener mListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -38,7 +38,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         }
     }
 
-    public CommentRecyclerViewAdapter(@NonNull List<com.example.walterzhang.instagram2.models.UserAccountSettings> usersAccSettings, List<com.example.walterzhang.instagram2.models.Comment> comments, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
+    public CommentRecyclerViewAdapter(@NonNull List<UserAccountSettings> usersAccSettings, List<Comment> comments, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
         mUsersSettings = usersAccSettings;
         mComments = comments;
         mListener = listener;

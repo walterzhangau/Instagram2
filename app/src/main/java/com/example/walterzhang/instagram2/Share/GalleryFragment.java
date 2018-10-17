@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.Filter.filter;
+import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FilePaths;
 import com.example.walterzhang.instagram2.utils.FileSearch;
@@ -57,14 +57,14 @@ public class GalleryFragment extends Fragment {
         Log.d(TAG, "onCreateView: starting...");
         View view = inflater.inflate(R.layout.fragment_gallery,container,false);
 
-        galleryImage = view.findViewById(R.id.imgViewGallery);
-        galleryGrid = view.findViewById(R.id.gridViewGallery);
-        mProgressBar = view.findViewById(R.id.progressBar);
+        galleryImage = (ImageView) view.findViewById(R.id.imgViewGallery);
+        galleryGrid = (GridView) view.findViewById(R.id.gridViewGallery);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.GONE);
-        directorySpinner = view.findViewById(R.id.spinnerDirectory);
+        directorySpinner = (Spinner) view.findViewById(R.id.spinnerDirectory);
         directories = new ArrayList<String>();
 
-        ImageView shareClose = view.findViewById(R.id.imgViewCloseShare);
+        ImageView shareClose = (ImageView) view.findViewById(R.id.imgViewCloseShare);
         shareClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,15 +79,32 @@ public class GalleryFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating to the final share screen.");
 
-                Intent intent = new Intent(getActivity(), filter.class);
-                intent.putExtra(getString(R.string.selected_image), mSelectedImage);
-                startActivity(intent);
+                if (isRootTask()) {
+                    Intent intent = new Intent(getActivity(), NextActivity.class);
+                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
+                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                    intent.putExtra(getString(R.string.return_to_fragment),
+                            getString(R.string.edit_profile_fragment));
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
 
         setupDirectories();
 
         return view;
+    }
+
+    private boolean isRootTask() {
+        if (((ShareActivity)getActivity()).getTask() == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void setupDirectories() {

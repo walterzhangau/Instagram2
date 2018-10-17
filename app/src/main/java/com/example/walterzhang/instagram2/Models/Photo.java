@@ -1,5 +1,4 @@
 package com.example.walterzhang.instagram2.Models;
-import com.example.walterzhang.instagram2.Models.Like;
 
 import java.util.List;
 

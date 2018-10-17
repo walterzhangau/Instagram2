@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.walterzhang.instagram2.Models.Like;
-import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
+import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +27,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link //DummyContent.DummyItem} and makes a call to the
@@ -53,18 +62,30 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         DatabaseReference myRef;
         FirebaseDatabase mFirebaseDatabase;
 
-        ImageView image;
+        ImageView image, mButton_comments;
         ImageView mHeartWhite, mHeartRed;
-        TextView likesText, commentsCountTextView, authorNameTextView, postTextView;
+        TextView likesText, commentsCountTextView, authorNameTextView, postTextView, mTimestamp;
         EditText editTextAddComment;
 
         private FirebaseMethods mFirebaseMethods;
         Photo photo;
 
-//        boolean likedByCurrentUser;
-//        Photo photo;
+//      boolean likedByCurrentUser;
+//      Photo photo;
 
         View view;
+
+        private void broadcastPhotoIdAndStartActivity() {
+            Context context = view.getContext();
+            String photoId = photo.getPhoto_id();
+            Intent intent = new Intent("photo_info");
+            intent.putExtra("photoId",photoId);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+            intent = new Intent(context, CommentsListActivity.class);
+            intent.putExtra("photo_message", photoId);
+            context.startActivity(intent);
+        }
 
         public MyViewHolder(View v) {
             super(v);
@@ -75,6 +96,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             myRef = mFirebaseDatabase.getReference();
 
             image = v.findViewById(R.id.imageView_photo);
+            mButton_comments = view.findViewById(R.id.button_comments);
             authorNameTextView = (TextView) view.findViewById(R.id.text_author_name);
 
             mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
@@ -84,6 +106,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             commentsCountTextView = (TextView) view.findViewById(R.id.text_view_all_comments);
             editTextAddComment = (EditText) view.findViewById(R.id.editTextAddComment);
             postTextView = (TextView) view.findViewById(R.id.text_post_comment);
+            mTimestamp = (TextView) view.findViewById(R.id.text_date_posted);
 
             mHeartRed.setVisibility(View.GONE);
             mHeartWhite.setVisibility(View.VISIBLE);
@@ -108,16 +131,15 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: getting photoId...");
+                    broadcastPhotoIdAndStartActivity();
+                }
+            });
 
-                    Context context = v.getContext();
-                    String photoId = photo.getPhoto_id();
-                    Intent intent = new Intent("photo_info");
-                    intent.putExtra("photoId",photoId);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-                    intent = new Intent(context, LikesListActivity.class);
-                    intent.putExtra("photo_message", photoId);
-                    context.startActivity(intent);
+            mButton_comments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick buttonComment: getting photoId...");
+                    broadcastPhotoIdAndStartActivity();
                 }
             });
 
@@ -125,18 +147,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick commentsCountTextView: getting photoId...");
-
-                    //TODO: Extract this into a separata function with parameter as xyzListActivity
-                    //to avoid code duplication with the previous function
-                    Context context = v.getContext();
-                    String photoId = photo.getPhoto_id();
-                    Intent intent = new Intent("photo_info");
-                    intent.putExtra("photoId",photoId);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-                    intent = new Intent(context, CommentsListActivity.class);
-                    intent.putExtra("photo_message", photoId);
-                    context.startActivity(intent);
+                    broadcastPhotoIdAndStartActivity();
                 }
             });
 
@@ -272,7 +283,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG, "setting photo author name...");
-                    String authorName = dataSnapshot.child(view.getContext().getString(R.string.dbname_user_account_settings)).child(userId).getValue(com.example.walterzhang.instagram2.models.UserAccountSettings.class).getUsername();
+                    String authorName = dataSnapshot.child(view.getContext().getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class).getUsername();
                     authorNameTextView.setText(authorName);
                 }
 
@@ -281,6 +292,37 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
                 }
             });
+        }
+
+        private String getTimestampDifference() {
+            Log.d(TAG, "getTimestampDifference: getting timestamp difference...");
+
+            String difference = "";
+            Date today = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));
+            sdf.format(today);
+            Date timestamp;
+            final String photoTimeStamp = photo.getDate_created();
+
+            try {
+                timestamp = sdf.parse(photoTimeStamp);
+                difference = String.valueOf(Math.round(((today.getTime() - timestamp.getTime()) / 1000 / 60 / 60 / 24)));
+            } catch (ParseException e) {
+                Log.d(TAG, "getTimestampDifference: Parse exception:" + e.getMessage());
+                difference = "0";
+            }
+            return  difference;
+        }
+
+        private void showTimeDifference() {
+            String timestampDiff = getTimestampDifference();
+            if (!timestampDiff.equals("0")) {
+                mTimestamp.setText(timestampDiff + " Days Ago");
+            }
+            else {
+                mTimestamp.setText("Today");
+            }
         }
     }
 
@@ -316,6 +358,8 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
         holder.setLikesCount(photoId);
         holder.setCommentsCount(photoId);
+
+        holder.showTimeDifference();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.walterzhang.instagram2.Share;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * Created by mingshunc on 26/9/18.
+ */
+
 public class NextActivity extends AppCompatActivity {
 
     private static final String TAG = "NextActivity";
@@ -38,9 +43,11 @@ public class NextActivity extends AppCompatActivity {
     private EditText mCaption;
 
     // Variables
-    private String mAppend = "content:";
+    private String mAppend = "file:/";
     private int imageCount = 0;
     private String imgUrl;
+    private Bitmap bitmap;
+    private Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +55,8 @@ public class NextActivity extends AppCompatActivity {
         setContentView(R.layout.activity_next);
         mCaption = (EditText) findViewById(R.id.caption);
 
-
+        mFirebaseMethods = new FirebaseMethods(NextActivity.this);
+        setupFirebaseAuth();
 
         ImageView backArrow = (ImageView) findViewById(R.id.imgViewBackArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -69,26 +77,38 @@ public class NextActivity extends AppCompatActivity {
                 Toast.makeText(NextActivity.this, "Attempting to upload new photo.",
                         Toast.LENGTH_SHORT).show();
                 String caption = mCaption.getText().toString();
-                mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
-                        caption, imageCount, imgUrl);
+
+                if (intent.hasExtra(getString(R.string.selected_image))) {
+                    imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
+                            caption, imageCount, imgUrl, null);
+                } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+                    bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo),
+                            caption, imageCount, null, bitmap);
+                }
             }
         });
 
-
         setImage();
-
     }
 
     /**
      * Gets the image url from the incoming intent and displays the chosen image
      */
     private void setImage() {
-        Intent intent = getIntent();
+        intent = getIntent();
         ImageView image = (ImageView) findViewById(R.id.imageShare);
-        imgUrl = intent.getStringExtra(getString(R.string.selected_image));
-        Log.d(TAG, "Setting Image in the Thumbnail");
-        UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
-        Log.d(TAG, "Image Set in thumbnail");
+
+        if (intent.hasExtra(getString(R.string.selected_image))) {
+            imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+            Log.d(TAG, "setImage: got new image url: " + imgUrl);
+            UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
+        } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+            bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            Log.d(TAG, "setImage: got new bitmap");
+            image.setImageBitmap(bitmap);
+        }
     }
 
     /**
@@ -112,7 +132,7 @@ public class NextActivity extends AppCompatActivity {
 
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged: signed_in:" + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged: signed_in: " + user.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged: signed_out");
@@ -138,9 +158,6 @@ public class NextActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mFirebaseMethods = new FirebaseMethods(NextActivity.this);
-        setupFirebaseAuth();
-
         mAuth.addAuthStateListener(mAuthListener);
     }
 

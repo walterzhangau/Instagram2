@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.walterzhang.instagram2.Models.Comment;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,10 +45,10 @@ public class fragment_comment_list extends Fragment {
     Context context;
     View commentsListView;
 
-    List<com.example.walterzhang.instagram2.models.Comment> commentsList = new ArrayList<>();
-    com.example.walterzhang.instagram2.models.Comment commentDetails;
-    List<com.example.walterzhang.instagram2.models.UserAccountSettings> usersSettingsCommentedList = new ArrayList<>();
-    com.example.walterzhang.instagram2.models.UserAccountSettings userSettingsCommented;
+    List<Comment> commentsList = new ArrayList<>();
+    Comment commentDetails;
+    List<UserAccountSettings> usersSettingsCommentedList = new ArrayList<>();
+    UserAccountSettings userSettingsCommented;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -127,7 +129,7 @@ public class fragment_comment_list extends Fragment {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "searching comments...");
 
-                    commentDetails = singleSnapshot.getValue(com.example.walterzhang.instagram2.models.Comment.class);
+                    commentDetails = singleSnapshot.getValue(Comment.class);
                     commentsList.add(commentDetails);
                     final String userId = commentDetails.getUser_id();
 
@@ -149,7 +151,7 @@ public class fragment_comment_list extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "getting details of user who made a comment...");
-                userSettingsCommented = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(com.example.walterzhang.instagram2.models.UserAccountSettings.class);
+                userSettingsCommented = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class);
                 usersSettingsCommentedList.add(userSettingsCommented);
 
                 if (commentsList != null && commentsList.size() > 0) {

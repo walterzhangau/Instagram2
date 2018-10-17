@@ -3,16 +3,15 @@ package com.example.walterzhang.instagram2.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.walterzhang.instagram2.Models.User;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,13 +20,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class UserListAdapter extends ArrayAdapter<com.example.walterzhang.instagram2.models.User> {
+public class UserListAdapter extends ArrayAdapter<User> {
 
     private LayoutInflater mInflater;
     private List<User> mUsers=null;
@@ -84,7 +82,7 @@ public class UserListAdapter extends ArrayAdapter<com.example.walterzhang.instag
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
                     ImageLoader imageLoader=ImageLoader.getInstance();
-                    imageLoader.displayImage(ds.getValue(com.example.walterzhang.instagram2.models.UserAccountSettings.class).getProfile_photo(),
+                    imageLoader.displayImage(ds.getValue(UserAccountSettings.class).getProfile_photo(),
                             holder.profileImage);
 
 
