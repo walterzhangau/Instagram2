@@ -10,10 +10,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-/**
- * Created by mingshunc on 1/10/18.
- */
-
 public class ImageManager {
 
     private static final String TAG = "ImageManager";
@@ -24,11 +20,13 @@ public class ImageManager {
      * @return
      */
     public static Bitmap getBitmap(String imgUrl) {
+        Log.d("ImageManager", "The path is:"+imgUrl);
         File imageFile = new File(imgUrl);
         FileInputStream fis = null;
         Bitmap bm = null;
 
         try {
+            Log.d(TAG, "Attempting to get FileInputStream");
             fis = new FileInputStream(imageFile);
             bm = BitmapFactory.decodeStream(fis);
         } catch (FileNotFoundException e) {

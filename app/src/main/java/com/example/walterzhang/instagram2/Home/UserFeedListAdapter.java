@@ -1,18 +1,23 @@
 package com.example.walterzhang.instagram2.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.walterzhang.instagram2.Models.Like;
+import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -22,7 +27,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link //DummyContent.DummyItem} and makes a call to the
@@ -37,7 +50,6 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
     private int mLayoutResource;
     private Context mContext;
     private DatabaseReference mReference;
-    private String username;
 
     private List<Photo> mDataset;
 
@@ -46,28 +58,55 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 //        StringBuilder users;
 //        CircleImageView profileImage;
 //        TextView username;
-        ImageView image;
+
+        DatabaseReference myRef;
+        FirebaseDatabase mFirebaseDatabase;
+
+        ImageView image, mButton_comments;
         ImageView mHeartWhite, mHeartRed;
+        TextView likesText, commentsCountTextView, authorNameTextView, postTextView, mTimestamp;
+        EditText editTextAddComment;
 
         private FirebaseMethods mFirebaseMethods;
         Photo photo;
 
-//        boolean likedByCurrentUser;
-//        Photo photo;
-//        GestureDetector detector;
+//      boolean likedByCurrentUser;
+//      Photo photo;
 
         View view;
+
+        private void broadcastPhotoIdAndStartActivity() {
+            Context context = view.getContext();
+            String photoId = photo.getPhoto_id();
+            Intent intent = new Intent("photo_info");
+            intent.putExtra("photoId",photoId);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+            intent = new Intent(context, CommentsListActivity.class);
+            intent.putExtra("photo_message", photoId);
+            context.startActivity(intent);
+        }
 
         public MyViewHolder(View v) {
             super(v);
             view = v;
 
             mFirebaseMethods = new FirebaseMethods(v.getContext());
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            myRef = mFirebaseDatabase.getReference();
 
             image = v.findViewById(R.id.imageView_photo);
+            mButton_comments = view.findViewById(R.id.button_comments);
+            authorNameTextView = (TextView) view.findViewById(R.id.text_author_name);
 
             mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
             mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
+
+            likesText = (TextView) view.findViewById(R.id.text_likes_count);
+            commentsCountTextView = (TextView) view.findViewById(R.id.text_view_all_comments);
+            editTextAddComment = (EditText) view.findViewById(R.id.editTextAddComment);
+            postTextView = (TextView) view.findViewById(R.id.text_post_comment);
+            mTimestamp = (TextView) view.findViewById(R.id.text_date_posted);
 
             mHeartRed.setVisibility(View.GONE);
             mHeartWhite.setVisibility(View.VISIBLE);
@@ -85,6 +124,38 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: toggling like...");
                     onLikePostClicked();
+                }
+            });
+
+            likesText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: getting photoId...");
+                    broadcastPhotoIdAndStartActivity();
+                }
+            });
+
+            mButton_comments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick buttonComment: getting photoId...");
+                    broadcastPhotoIdAndStartActivity();
+                }
+            });
+
+            commentsCountTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick commentsCountTextView: getting photoId...");
+                    broadcastPhotoIdAndStartActivity();
+                }
+            });
+
+            postTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: posting comment...");
+                    onPostCommentClicked();
                 }
             });
         }
@@ -106,12 +177,18 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             }
         }
 
+        /* Save comment to the db */
+        public void onPostCommentClicked() {
+            Log.d(TAG, "onPostCommentClicked...");
+
+            String text = editTextAddComment.getText().toString();
+
+            mFirebaseMethods.postComment(photo.getPhoto_id(), text);
+            editTextAddComment.setText("");
+        }
+
         /* Check if the photo has been liked by the user and if yes, set heart to red */
         public void setHeartColor(final String photoId) {
-            DatabaseReference myRef;
-            FirebaseDatabase mFirebaseDatabase;
-            mFirebaseDatabase = FirebaseDatabase.getInstance();
-            myRef = mFirebaseDatabase.getReference();
 
             Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
                     .child(photoId)
@@ -136,6 +213,117 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 }
             });
         }
+
+        /* show the number of users who liked the photo if at least one user liked
+          the photo: */
+        private void setLikesCount(String photoId) {
+
+            Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
+                    .child(photoId)
+                    .child(view.getContext().getString(R.string.field_likes));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    long count = 0;
+                    count = dataSnapshot.getChildrenCount();
+
+                    String text = "";
+                    if (count == 1) {
+                        text = count + " like";
+                        likesText.setText(text);
+                    }
+                    else if (count > 1) {
+                        text = count + " likes";
+                        likesText.setText(text);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        /* If at least on person commented on the photo, show the number of users who commented on
+          the photo and provide a link to view comments: */
+        private void setCommentsCount(String photoId) {
+
+            Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
+                    .child(photoId)
+                    .child(view.getContext().getString(R.string.field_comments));
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    long count = 0;
+                    count = dataSnapshot.getChildrenCount();
+
+                    String text = "";
+                    if (count == 1) {
+                        text = "View " + count + " comment";
+                        commentsCountTextView.setText(text);
+                    }
+                    else if (count > 1) {
+                        text = "View " + count + " comments";
+                        commentsCountTextView.setText(text);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        public void getUserAccountSettingsByUserId(final String userId) {
+
+            myRef.addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "setting photo author name...");
+                    String authorName = dataSnapshot.child(view.getContext().getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class).getUsername();
+                    authorNameTextView.setText(authorName);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        private String getTimestampDifference() {
+            Log.d(TAG, "getTimestampDifference: getting timestamp difference...");
+
+            String difference = "";
+            Date today = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));
+            sdf.format(today);
+            Date timestamp;
+            final String photoTimeStamp = photo.getDate_created();
+
+            try {
+                timestamp = sdf.parse(photoTimeStamp);
+                difference = String.valueOf(Math.round(((today.getTime() - timestamp.getTime()) / 1000 / 60 / 60 / 24)));
+            } catch (ParseException e) {
+                Log.d(TAG, "getTimestampDifference: Parse exception:" + e.getMessage());
+                difference = "0";
+            }
+            return  difference;
+        }
+
+        private void showTimeDifference() {
+            String timestampDiff = getTimestampDifference();
+            if (!timestampDiff.equals("0")) {
+                mTimestamp.setText(timestampDiff + " Days Ago");
+            }
+            else {
+                mTimestamp.setText("Today");
+            }
+        }
     }
 
     public UserFeedListAdapter(@NonNull Context context, int resource, @NonNull List<Photo> photos) {
@@ -159,8 +347,19 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Glide.with(this.mContext).load(mDataset.get(position).getImage_path()).into(holder.image);
         holder.photo = mDataset.get(position);
+        String photoId = holder.photo.getPhoto_id();
+        String photoUserId = holder.photo.getUser_id();
+
+        //set the name of the photo's author in the top bar of the post in the user feed:
+        holder.getUserAccountSettingsByUserId(photoUserId);
+
         //if the photo has been liked by the user then set the heart to red:
-        holder.setHeartColor(holder.photo.getPhoto_id());
+        holder.setHeartColor(photoId);
+
+        holder.setLikesCount(photoId);
+        holder.setCommentsCount(photoId);
+
+        holder.showTimeDifference();
     }
 
     @Override

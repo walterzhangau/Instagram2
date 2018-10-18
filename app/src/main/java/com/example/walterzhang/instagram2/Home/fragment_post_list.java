@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
-import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +23,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A fragment representing a list of Items.
@@ -133,23 +135,24 @@ public class fragment_post_list extends Fragment {
         for (int i = 0; i < 1/*mFollowing.size()*/; i++) {
             final int count = i;
             //Query query = reference.child(getString(R.string.dbname_user_photos)).child(mFollowing.get(i).orderByChild(getString(R.string.field_user_id)).equalTo(mFollowing.get(i)));
-            Query query = reference.child("photos/");//.child(""); //TEST ONLY / ALSO REMOVE STRING HARD CODING!
+            Query query = reference.child("photos/"); //.orderByChild("date_created");//.child(""); //TEST ONLY / ALSO REMOVE STRING HARD CODING!
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG, "onDataChange...");
                     mPhotos = new ArrayList<>();
-
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                         Photo photo  = singleSnapshot.getValue(Photo.class);
-
-                        //todo: see how to set these values: (and for the other properties of photo too
-//                        photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
-//                        photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
-//                        photo.setDate_taken(objectMap.get(getString(R.string.field_date_created)).toString());
-//                        photo.setImage_path(objectMap.get(getString(R.string.field_photo_path)).toString());
                         mPhotos.add(photo);
                     }
+
+                    Collections.sort(mPhotos, new Comparator<Photo>() {
+                        @Override
+                        public int compare(Photo u1, Photo u2) {
+                            return u1.getDate_created().compareTo(u2.getDate_created());
+                        }
+                    });
+                    Collections.reverse(mPhotos);
 
 //                    if (count >= 1) { //mFollowing.size() - 1) {
                         displayPhotos();
@@ -168,12 +171,6 @@ public class fragment_post_list extends Fragment {
 
     private void displayPhotos() {
         if (mPhotos != null) {
-//            Collections.sort(mPhotos, new Comparator<Photo>() {
-//                @Override
-//                public int compare(Photo o1, Photo o2) {
-//                    return o2.getDate_Created().compareTo(o1.getDate_Created());
-//                }
-//            });
             mAdapter = new UserFeedListAdapter(getActivity(), R.layout.fragment_post_list, mPhotos);
             mListRecyclerView.setAdapter(mAdapter);
         }

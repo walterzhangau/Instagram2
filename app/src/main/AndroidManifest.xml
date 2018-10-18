@@ -18,7 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Home.HomeActivity">
+        <activity
+            android:name=".Home.HomeActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,14 +36,14 @@
         <activity
             android:name=".Login.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
         <activity android:name=".Home.LikesListActivity" />
         <activity android:name=".Home.CommentsListActivity" />
+        <activity android:name=".Filter.filter"></activity>
     </application>
 
 </manifest>

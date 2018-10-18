@@ -60,7 +60,7 @@
             android:layout_marginTop="7dp"
             android:clickable="true"
             android:onClick="onLikesCountClicked"
-            android:text="10 likes" />
+            android:text="" />
 
         <TextView
             android:id="@+id/text_view_all_comments"
@@ -70,7 +70,7 @@
             android:layout_marginTop="7dp"
             android:clickable="true"
             android:onClick="onCommentsCountClicked"
-            android:text="View All 3 Comments" />
+            android:text="" />
 
         <EditText
             android:id="@+id/editTextAddComment"
@@ -88,10 +88,16 @@
             android:layout_below="@id/text_view_all_comments"
             android:layout_alignParentRight="true"
             android:paddingRight="10dp"
-            android:clickable="true"
-            android:onClick="onPostCommentClicked"
             android:text="Post"
             android:textColor="@color/blue200" />
+        <TextView
+            android:id="@+id/text_date_posted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextAddComment"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:text="Post" />
         <!-- app:menu = "@menu/user_feed_menu" -->
     </RelativeLayout>
 </LinearLayout>

@@ -3,16 +3,28 @@ package com.example.walterzhang.instagram2.Home;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.dummy.DummyContent;
-import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
+import com.example.walterzhang.instagram2.Models.Comment;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -26,6 +38,17 @@ public class fragment_comment_list extends Fragment {
     private int mColumnCount = 1;
 
     private fragment_comment_list.onCommentListFragmentInteractionListener mListener;
+    private CommentRecyclerViewAdapter mAdapter;
+    private RecyclerView mListRecyclerView;
+    private DatabaseReference myRef;
+    private static final String TAG = "fragment_comment_list";
+    Context context;
+    View commentsListView;
+
+    List<Comment> commentsList = new ArrayList<>();
+    Comment commentDetails;
+    List<UserAccountSettings> usersSettingsCommentedList = new ArrayList<>();
+    UserAccountSettings userSettingsCommented;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,8 +67,10 @@ public class fragment_comment_list extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comment_list, container, false);
+        mListRecyclerView = (RecyclerView) view.findViewById(R.id.comments_list);
+        context = view.getContext();
+        String photo_id = getArguments().getString("photo_message");
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -54,7 +79,7 @@ public class fragment_comment_list extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyCommentRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            getCommentAndUsersDetails(photo_id);
         }
         return view;
     }
@@ -88,6 +113,62 @@ public class fragment_comment_list extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface onCommentListFragmentInteractionListener {
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(TextView item);
+    }
+
+    public void getCommentAndUsersDetails(String photoId) {
+        FirebaseDatabase mFirebaseDatabase;
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+        Query queryPhotos = myRef.child(context.getString(R.string.dbname_photos))
+                .child(photoId)
+                .child(context.getString(R.string.field_comments));
+        queryPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "searching comments...");
+
+                    commentDetails = singleSnapshot.getValue(Comment.class);
+                    commentsList.add(commentDetails);
+                    final String userId = commentDetails.getUser_id();
+
+                    populateUsersSettingsCommentedList(userId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void populateUsersSettingsCommentedList(final String userId) {
+
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "getting details of user who made a comment...");
+                userSettingsCommented = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class);
+                usersSettingsCommentedList.add(userSettingsCommented);
+
+                if (commentsList != null && commentsList.size() > 0) {
+                    Log.d(TAG, "displayUsersLike: usersSettingsLiked found...");
+
+                    mAdapter = new CommentRecyclerViewAdapter(usersSettingsCommentedList, commentsList, mListener);
+                    mListRecyclerView.setAdapter(mAdapter);
+                }
+                else {
+                    Log.d(TAG, "displayUsersLike: null usersSettingsLiked...");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
