@@ -17,7 +17,7 @@ import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
-import com.example.walterzhang.instagram2.Models.UserSettings;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -391,9 +391,9 @@ public class FirebaseMethods {
 
         for(DataSnapshot ds: dataSnapshot.getChildren()){
             // user_account_settings node
-            if(ds.getKey().equals(mContext.getString(R.string.dbname_user_account_settings))){
+            if(ds.getKey().equals(mContext.getString(R.string.dbname_user_account_settings))) {
                 Log.d(TAG, "getUserAccountSettings: datasnapshot: " + ds);
-                try{
+                try {
 
                     settings.setDisplay_name(
                             ds.child(userID)
@@ -432,11 +432,11 @@ public class FirebaseMethods {
                     );
 
                     Log.d(TAG, "getUserAccountSettings: retrieved user_account_settings information: " + settings.toString());
-                }catch (NullPointerException e){
-                    Log.e(TAG, "getUserAccountSettings: NullPointerException: " + e.getMessage() );
+                } catch (NullPointerException e) {
+                    Log.e(TAG, "getUserAccountSettings: NullPointerException: " + e.getMessage());
                 }
 
-
+            }
                 // users node
                 if(ds.getKey().equals(mContext.getString(R.string.dbname_user))) {
                     Log.d(TAG, "getUserAccountSettings: datasnapshot: " + ds);
@@ -465,11 +465,24 @@ public class FirebaseMethods {
                     Log.d(TAG, "getUserAccountSettings: retrieved users information: " + user.toString());
                 }
             }
-        }
+
         return new UserSettings(user, settings);
 
     }
 
+    public void updateUsername(String username){
+        Log.d(TAG, "updateUsername: upadting username to: " + username);
+
+        myRef.child(mContext.getString(R.string.dbname_user))
+                .child(userID)
+                .child(mContext.getString(R.string.field_username))
+                .setValue(username);
+
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.field_username))
+                .setValue(username);
+    }
 
 
 }

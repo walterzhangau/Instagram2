@@ -58,14 +58,15 @@
     <string name="share">SHARE</string>
 
     <!-- Firebase database fields -->
-    <string name="dbname_user_account_settings">user_account_settings</string>
-    <string name="dbname_photos">photos</string>
-    <string name="dbname_user_photos">user_photos</string>
-    <string name="dbname_user">users</string>
+    <string name = "dbname_user_account_settings">user_account_settings</string>
+    <string name = "dbname_photos">photos</string>
+    <string name = "dbname_user_photos">user_photos</string>
+    <string name = "dbname_user">users</string>
+    <string name = "field_username">username</string>
 
     <!-- Photo types -->
-    <string name="new_photo">new_photo</string>
-    <string name="profile_photo">profile_photo</string>
+    <string name = "new_photo">new_photo</string>
+    <string name = "profile_photo">profile_photo</string>
 
     <!-- Intent extras -->
     <string name="selected_image">selected_image</string>
