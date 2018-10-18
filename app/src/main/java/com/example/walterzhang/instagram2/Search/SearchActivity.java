@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.Profile.ProfileActivity;
 import com.example.walterzhang.instagram2.R;
-
+import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.UserListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +36,10 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+/**
+ * Created by walterzhang on 7/9/18.
+ */
 
 public class SearchActivity extends AppCompatActivity{
     private static final String TAG = "SearchActivity";
@@ -91,7 +95,7 @@ public class SearchActivity extends AppCompatActivity{
         if(text.length()==0)
         {}
         else {
-
+            Toast.makeText(this, "Search Started", Toast.LENGTH_SHORT).show();
 
             Query personsQuery = mUserDatabase.child("users").orderByChild("username").startAt(text).endAt("\uf8ff");
 
