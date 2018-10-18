@@ -1,6 +1,7 @@
 package com.example.walterzhang.instagram2.Search;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,9 +18,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Models.User;
+import com.example.walterzhang.instagram2.Profile.ProfileActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.UserListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,10 +35,6 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-/**
- * Created by walterzhang on 7/9/18.
- */
 
 public class SearchActivity extends AppCompatActivity{
     private static final String TAG = "SearchActivity";
@@ -86,12 +86,11 @@ public class SearchActivity extends AppCompatActivity{
     }
 
     private void firebaseUserSearch(String text) {
-
         mUserList.clear();
         if(text.length()==0)
         {}
         else {
-            Toast.makeText(this, "Search Started", Toast.LENGTH_SHORT).show();
+
 
             Query personsQuery = mUserDatabase.child("users").orderByChild("username").startAt(text).endAt("\uf8ff");
 
@@ -128,8 +127,10 @@ public class SearchActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d(TAG,"onItemClick: selected user;" + mUserList.get(i).toString());
-
-                //TODO Move user to the following user's profile
+                Intent intent=new Intent(SearchActivity.this, ProfileActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.search_activity));
+                intent.putExtra(getString(R.string.intent_user), mUserList.get(i));
+                startActivity(intent);
             }
         });
 
