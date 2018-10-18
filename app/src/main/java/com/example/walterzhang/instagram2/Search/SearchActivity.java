@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.User;
+import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.UserListAdapter;
 import com.google.firebase.database.DataSnapshot;
