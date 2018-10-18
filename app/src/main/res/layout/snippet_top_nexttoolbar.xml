@@ -31,8 +31,9 @@
                     android:layout_centerVertical="true"
                     android:id="@+id/txtViewShare"
                     android:text="@string/share"
-                    android:textSize="20dp"
-                    android:textColor="@color/websiteBlue" />
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 
