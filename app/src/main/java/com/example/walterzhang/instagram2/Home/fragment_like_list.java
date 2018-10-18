@@ -80,7 +80,7 @@ public class fragment_like_list extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_like_list, container, false);
-        mListRecyclerView = (RecyclerView) view.findViewById(R.id.likes_list);
+        mListRecyclerView = view.findViewById(R.id.likes_list);
         context = view.getContext();
         String photo_id = getArguments().getString("photo_message");
 

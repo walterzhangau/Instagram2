@@ -28,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserListAdapter extends ArrayAdapter<User> {
 
     private LayoutInflater mInflater;
-    private List<User> mUsers=null;
+    private List<User> mUsers;
     private int layoutResource;
     private Context context;
 
@@ -57,8 +57,8 @@ public class UserListAdapter extends ArrayAdapter<User> {
         if(convertView==null){
             convertView=mInflater.inflate(layoutResource,parent,false);
             holder=new ViewHolder();
-            holder.username=(TextView)convertView.findViewById(R.id.username);
-            holder.email=(TextView)convertView.findViewById(R.id.email);
+            holder.username=convertView.findViewById(R.id.username);
+            holder.email=convertView.findViewById(R.id.email);
             //holder.profileImage=(TextView)convertView.findViewById(R.id.profileImage);
 
             convertView.setTag(holder);

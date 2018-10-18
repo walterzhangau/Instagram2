@@ -9,14 +9,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Home.HomeActivity;
+import com.example.walterzhang.instagram2.Models.UserSettings;
+import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
+import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Comment;
 import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
-import com.example.walterzhang.instagram2.Models.UserSettings;
-import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
-import com.example.walterzhang.instagram2.R;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

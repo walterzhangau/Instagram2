@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.Models.Photo;
@@ -31,6 +32,7 @@ import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -97,16 +99,16 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
             image = v.findViewById(R.id.imageView_photo);
             mButton_comments = view.findViewById(R.id.button_comments);
-            authorNameTextView = (TextView) view.findViewById(R.id.text_author_name);
+            authorNameTextView = view.findViewById(R.id.text_author_name);
 
-            mHeartWhite = (ImageView) view.findViewById(R.id.button_notLiked);
-            mHeartRed = (ImageView) view.findViewById(R.id.button_liked);
+            mHeartWhite =  view.findViewById(R.id.button_notLiked);
+            mHeartRed =  view.findViewById(R.id.button_liked);
 
-            likesText = (TextView) view.findViewById(R.id.text_likes_count);
-            commentsCountTextView = (TextView) view.findViewById(R.id.text_view_all_comments);
-            editTextAddComment = (EditText) view.findViewById(R.id.editTextAddComment);
-            postTextView = (TextView) view.findViewById(R.id.text_post_comment);
-            mTimestamp = (TextView) view.findViewById(R.id.text_date_posted);
+            likesText =  view.findViewById(R.id.text_likes_count);
+            commentsCountTextView =  view.findViewById(R.id.text_view_all_comments);
+            editTextAddComment = view.findViewById(R.id.editTextAddComment);
+            postTextView = view.findViewById(R.id.text_post_comment);
+            mTimestamp = view.findViewById(R.id.text_date_posted);
 
             mHeartRed.setVisibility(View.GONE);
             mHeartWhite.setVisibility(View.VISIBLE);
@@ -297,7 +299,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         private String getTimestampDifference() {
             Log.d(TAG, "getTimestampDifference: getting timestamp difference...");
 
-            String difference = "";
+            String difference ;
             Date today = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
             sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));
@@ -326,7 +328,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         }
     }
 
-    public UserFeedListAdapter(@NonNull Context context, int resource, @NonNull List<Photo> photos) {
+    public UserFeedListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Photo> photos) {
 
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mLayoutResource = resource;

@@ -84,7 +84,14 @@
     <string name="field_likes">likes</string>
     <string name="field_comments">comments</string>
     <string name="field_photo_id">photo_id</string>
-    <string name="field_date_created">date_taken</string>
+    <string name="field_caption">caption</string>
+    <string name="field_date_created">date_created</string>
+
+    <string name="field_tags">tags</string>
+    <string name="field_image_path">image_path</string>
+
+
+
     <string name="field_photo_path">image_path</string>
     <string name="search_user">Search User</string>
 
@@ -94,4 +101,7 @@
 
     <!-- activity names -->
     <string name="profile_activity">Profile Activity</string>
+    <string name="search_activity">Search Activity</string>
+    <string name="intent_user">intent user</string>
+    <string name="view_profile_fragment">ViewProfile</string>
 </resources>

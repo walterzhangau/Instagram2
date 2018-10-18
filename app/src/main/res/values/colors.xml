@@ -9,13 +9,15 @@
     <color name="black">#000000</color>
 
     <color name="websiteBlue">#0000EE</color>
-
+    <color name="link_blue">#4d94ff</color>
+    <color name="darkRed">#cc0000</color>
     <color name="blue200">#90CAF9</color>
     <color name="gray200">#EEEEEE</color>
 
     <!-- ?>Values related to Image Filters -->
     <color name="color_option_menu">#FF3990</color>
     <color name="filter_label_normal">#8A8889</color>
+
     <color name="filter_label_selected">#221F20</color>
 
 </resources>
