@@ -104,4 +104,8 @@
     <string name="search_activity">Search Activity</string>
     <string name="intent_user">intent user</string>
     <string name="view_profile_fragment">ViewProfile</string>
+
+    <!-- dialog names -->
+    <string name="confirm_password_dialog">ConfirmPaswordDialog</string>
+
 </resources>
