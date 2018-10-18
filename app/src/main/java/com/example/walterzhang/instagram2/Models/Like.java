@@ -1,4 +1,4 @@
-package com.example.walterzhang.instagram2.models;
+package com.example.walterzhang.instagram2.Models;
 
 public class Like {
 

@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Comment;
-import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.Comment;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 
 import java.util.List;
 
@@ -34,8 +34,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         public ViewHolder(View v) {
             super(v);
             view = v;
-            username = (TextView) view.findViewById(R.id.unameComment);
-            commentText = (EditText) view.findViewById(R.id.commentText);
+            username = view.findViewById(R.id.unameComment);
+            commentText = view.findViewById(R.id.commentText);
         }
     }
 

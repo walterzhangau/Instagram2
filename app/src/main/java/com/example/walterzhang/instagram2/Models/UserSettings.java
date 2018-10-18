@@ -1,9 +1,9 @@
-package com.example.walterzhang.instagram2.models;
+package com.example.walterzhang.instagram2.Models;
 
 
 public class UserSettings {
 
-    private com.example.walterzhang.instagram2.Models.User user;
+    private User user;
     private com.example.walterzhang.instagram2.Models.UserAccountSettings settings;
 
     public UserSettings(com.example.walterzhang.instagram2.Models.User user, com.example.walterzhang.instagram2.Models.UserAccountSettings settings) {

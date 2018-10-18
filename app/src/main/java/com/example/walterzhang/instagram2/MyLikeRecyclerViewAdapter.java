@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.example.walterzhang.instagram2.Home.fragment_like_list;
 import com.example.walterzhang.instagram2.Home.fragment_like_list.OnLikeListFragmentInteractionListener;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
-import com.example.walterzhang.instagram2.models.Photo;
-import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
 
             mFirebaseMethods = new FirebaseMethods(v.getContext());
 
-            username = (TextView) view.findViewById(R.id.uname);
+            username = view.findViewById(R.id.uname);
         }
     }
 

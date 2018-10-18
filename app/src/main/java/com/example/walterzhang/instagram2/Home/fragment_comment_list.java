@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Comment;
-import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.Comment;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,7 +67,7 @@ public class fragment_comment_list extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comment_list, container, false);
-        mListRecyclerView = (RecyclerView) view.findViewById(R.id.comments_list);
+        mListRecyclerView = view.findViewById(R.id.comments_list);
         context = view.getContext();
         String photo_id = getArguments().getString("photo_message");
 

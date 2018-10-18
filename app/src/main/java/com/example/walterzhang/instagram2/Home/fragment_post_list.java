@@ -12,9 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
-import com.example.walterzhang.instagram2.models.Photo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -76,7 +76,7 @@ public class fragment_post_list extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: starting...");
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        mListRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        mListRecyclerView = view.findViewById(R.id.list);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -133,7 +133,7 @@ public class fragment_post_list extends Fragment {
         Log.d(TAG, "getPhotos");
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         for (int i = 0; i < 1/*mFollowing.size()*/; i++) {
-            final int count = i;
+
             //Query query = reference.child(getString(R.string.dbname_user_photos)).child(mFollowing.get(i).orderByChild(getString(R.string.field_user_id)).equalTo(mFollowing.get(i)));
             Query query = reference.child("photos/"); //.orderByChild("date_created");//.child(""); //TEST ONLY / ALSO REMOVE STRING HARD CODING!
             query.addListenerForSingleValueEvent(new ValueEventListener() {
