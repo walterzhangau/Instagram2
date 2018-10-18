@@ -127,6 +127,7 @@ public class ViewProfileFragment extends Fragment{
                         .child(getString(R.string.field_user_id))
                         .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 setFollowing();
+                getFollowersCount();
             }
         });
 
@@ -145,6 +146,7 @@ public class ViewProfileFragment extends Fragment{
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .removeValue();
                 setUnfollowing();
+                getFollowersCount();
             }
         });
 
