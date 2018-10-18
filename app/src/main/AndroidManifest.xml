@@ -29,7 +29,8 @@
         </activity>
         <activity android:name=".Likes.LikesActivity" />
         <activity android:name=".Profile.ProfileActivity" />
-        <activity android:name=".Search.SearchActivity" />
+        <activity android:name=".Search.SearchActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".Share.ShareActivity" />
         <activity android:name=".Share.NextActivity" />
         <activity android:name=".Profile.AccountSettingsActivity" />
