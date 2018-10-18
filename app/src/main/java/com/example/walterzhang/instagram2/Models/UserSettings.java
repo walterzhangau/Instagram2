@@ -1,4 +1,4 @@
-package com.example.walterzhang.instagram2.Models;
+package com.example.walterzhang.instagram2.models;
 
 
 public class UserSettings {

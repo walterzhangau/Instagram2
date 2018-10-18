@@ -29,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
 
     private static final int ACTIVITY_NUM = 4;
-    private static final int  NUM_GRID_COLUMNS = 3;
+    private static final int NUM_GRID_COLUMNS = 3;
 
     private Context mContext = ProfileActivity.this;
 
@@ -52,7 +52,6 @@ public class ProfileActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: started ");
 
         mFirebaseMethods = new FirebaseMethods(this);
-        setupFirebaseAuth();
 
 
         init();
@@ -60,15 +59,15 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void init(){
+    private void init() {
 
-            Log.d(TAG, "init: inflating  "+getString(R.string.profile_fragment));
+        Log.d(TAG, "init: inflating  " + getString(R.string.profile_fragment));
 
-        Intent intent=getIntent();
-        if(intent.hasExtra(getString(R.string.calling_activity))){
-            Log.d(TAG,"init: searching for user object from intent");
+        Intent intent = getIntent();
+        if (intent.hasExtra(getString(R.string.calling_activity))) {
+            Log.d(TAG, "init: searching for user object from intent");
 
-            if(intent.hasExtra(getString(R.string.intent_user))){
+            if (intent.hasExtra(getString(R.string.intent_user))) {
                 ViewProfileFragment fragment = new ViewProfileFragment();
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.intent_user),
@@ -79,14 +78,10 @@ public class ProfileActivity extends AppCompatActivity {
                 transaction.replace(R.id.container, fragment);
                 transaction.addToBackStack(getString(R.string.view_profile_fragment));
                 transaction.commit();
-            }
-            else
-            {
+            } else {
                 Toast.makeText(mContext, "Something went wrong!", Toast.LENGTH_LONG).show();
             }
-        }
-        else
-        {
+        } else {
             ProfileFragment fragment = new ProfileFragment();
             android.support.v4.app.FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.container, fragment);
@@ -95,60 +90,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         }
 
-            }
-
-     /* ---------------------------------------- Firebase ----------------------------------------
-     */
-
-    /**
-     * Setup the firebase auth object
-     */
-    private void setupFirebaseAuth() {
-        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
-        mAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged: signed_in: " + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged: signed_out");
-                }
-            }
-        };
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 }
+

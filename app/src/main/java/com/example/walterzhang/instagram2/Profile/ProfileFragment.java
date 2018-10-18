@@ -19,9 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.Models.Photo;
-import com.example.walterzhang.instagram2.Models.UserAccountSettings;
-import com.example.walterzhang.instagram2.Models.UserSettings;
+import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.models.UserSettings;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.GridImageAdapter;
