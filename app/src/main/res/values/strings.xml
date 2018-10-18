@@ -44,6 +44,7 @@
     <string name = "dbname_photos">photos</string>
     <string name = "dbname_user_photos">user_photos</string>
     <string name = "dbname_user">users</string>
+    <string name = "field_username">username</string>
 
     <!-- Photo types -->
     <string name = "new_photo">new_photo</string>
