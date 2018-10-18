@@ -53,6 +53,9 @@ public class FirebaseMethods {
     private Context mContext;
     private double mPhotoUploadProgress = 0;
 
+    private Like like;
+    private String newLikeId;
+
     public FirebaseMethods(Context context) {
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -269,25 +272,58 @@ public class FirebaseMethods {
      * Save new like photo to the database
      * @return
      */
-    public void addNewLike(String photoId) {
+    public void addNewLike(final String photoId) {
         Log.d(TAG, "addNewLike: starting...");
 
-        String newLikeId = myRef.push().getKey();
-        Like like = new Like();
+        newLikeId = myRef.push().getKey();
+        like = new Like();
         like.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+        // save the like on the photos node in the db
         myRef.child(mContext.getString(R.string.dbname_photos))
                 .child(photoId)
                 .child(mContext.getString(R.string.field_likes))
                 .child(newLikeId)
                 .setValue(like);
 
-        myRef.child(mContext.getString(R.string.dbname_user_photos))
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child(photoId)
-                .child(mContext.getString(R.string.field_likes))
-                .child(newLikeId)
-                .setValue(like);
+        // save the like on the user_photos node in the db
+        Query queryUserPhotos = myRef.child(mContext.getString(R.string.dbname_user_photos));
+        queryUserPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    final String userId = singleSnapshot.getKey();
+                    Query query = myRef.child(mContext.getString(R.string.dbname_user_photos))
+                            .child(singleSnapshot.getKey());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                            for (DataSnapshot singleSnapshot2 : dataSnapshot2.getChildren()) {
+                                if (singleSnapshot2.getValue(Photo.class).getPhoto_id()
+                                        .equals(photoId)) {
+                                    myRef.child(mContext.getString(R.string.dbname_user_photos))
+                                            .child(userId)
+                                            .child(photoId)
+                                            .child(mContext.getString(R.string.field_likes))
+                                            .child(newLikeId)
+                                            .setValue(like);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
@@ -297,6 +333,7 @@ public class FirebaseMethods {
     public void removeLike(final String photoId) {
         Log.d(TAG, "removeLike: starting...");
 
+        //remove like from photos node:
         Query queryPhotos = myRef.child(mContext.getString(R.string.dbname_photos))
                 .child(photoId)
                 .child(mContext.getString(R.string.field_likes));
@@ -325,27 +362,38 @@ public class FirebaseMethods {
             }
         });
 
-        Query queryUserPhotos = myRef.child(mContext.getString(R.string.dbname_user_photos))
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child(photoId)
-                .child(mContext.getString(R.string.field_likes));
+        //remove like from user_photos node:
+        Query queryUserPhotos = myRef.child(mContext.getString(R.string.dbname_user_photos));
         queryUserPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    String keyId = singleSnapshot.getKey();
-                    Log.d(TAG, "searching to delete from dbname_user_photos...");
-                    if (singleSnapshot.getValue(Like.class).getUser_id()
-                            .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        myRef.child(mContext.getString(R.string.dbname_user_photos))
-                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .child(photoId)
-                                .child(mContext.getString(R.string.field_likes))
-                                .child(keyId)
-                                .removeValue();
-                        Log.d(TAG, "like deleted from dbname_user_photos...");
-                        break;
-                    }
+                    final String userId = singleSnapshot.getKey();
+                    Query query = myRef.child(mContext.getString(R.string.dbname_user_photos))
+                            .child(singleSnapshot.getKey())
+                            .child(photoId)
+                            .child(mContext.getString(R.string.field_likes));
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                            for (DataSnapshot singleSnapshot2 : dataSnapshot2.getChildren()) {
+                                if (singleSnapshot2.getValue(Like.class).getUser_id()
+                                    .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                    myRef.child(mContext.getString(R.string.dbname_user_photos))
+                                            .child(userId)
+                                            .child(photoId)
+                                            .child(mContext.getString(R.string.field_likes))
+                                            .child(singleSnapshot2.getKey())
+                                            .removeValue();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 
@@ -360,9 +408,9 @@ public class FirebaseMethods {
      * Save a comment to the database
      * @return
      */
-    public void postComment(String photoId, String text) {
-        String newCommentId = myRef.push().getKey();
-        com.example.walterzhang.instagram2.models.Comment comment = new com.example.walterzhang.instagram2.models.Comment();
+    public void postComment(final String photoId, String text) {
+        final String newCommentId = myRef.push().getKey();
+        final com.example.walterzhang.instagram2.models.Comment comment = new com.example.walterzhang.instagram2.models.Comment();
         comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
         comment.setComment(text);
         comment.setDate_created(getTimeStamp());
@@ -373,11 +421,43 @@ public class FirebaseMethods {
                 .child(newCommentId)
                 .setValue(comment);
 
-        myRef.child(mContext.getString(R.string.dbname_user_photos))
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child(photoId)
-                .child(mContext.getString(R.string.field_comments))
-                .child(newCommentId)
-                .setValue(comment);
+
+        Query queryUserPhotos = myRef.child(mContext.getString(R.string.dbname_user_photos));
+        queryUserPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    final String userId = singleSnapshot.getKey();
+                    Query query = myRef.child(mContext.getString(R.string.dbname_user_photos))
+                            .child(singleSnapshot.getKey());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                            for (DataSnapshot singleSnapshot2 : dataSnapshot2.getChildren()) {
+                                if (singleSnapshot2.getValue(Photo.class).getPhoto_id()
+                                        .equals(photoId)) {
+                                    myRef.child(mContext.getString(R.string.dbname_user_photos))
+                                            .child(userId)
+                                            .child(photoId)
+                                            .child(mContext.getString(R.string.field_comments))
+                                            .child(newCommentId)
+                                            .setValue(comment);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
