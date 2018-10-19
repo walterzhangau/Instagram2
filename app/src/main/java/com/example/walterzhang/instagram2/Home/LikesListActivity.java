@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -66,7 +65,7 @@ public class LikesListActivity extends AppCompatActivity implements fragment_lik
         Log.d(TAG, "setupBottomNavigationView: setting up bottom nav view");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);

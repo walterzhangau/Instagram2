@@ -24,7 +24,6 @@ import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.Models.UserSettings;
 import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
-import com.example.walterzhang.instagram2.Profile.ProfileActivity;
 import com.example.walterzhang.instagram2.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -401,7 +400,7 @@ public class ViewProfileFragment extends Fragment{
         Log.d(TAG, "setupBottomNavigationView: setting up bottom nav view");
 
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext,bottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(),bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
