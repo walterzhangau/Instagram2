@@ -1,7 +1,9 @@
 package com.example.walterzhang.instagram2.Share;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -36,6 +38,17 @@ public class PhotoFragment extends Fragment {
         Log.d(TAG, "onCreateView: starting...");
         View view = inflater.inflate(R.layout.fragment_photo,container,false);
 
+        values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+        imageUri = getActivity().getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+
+
+
+
+
         Button btnOpenCamera = (Button) view.findViewById(R.id.btnOpenCamera);
         btnOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +58,9 @@ public class PhotoFragment extends Fragment {
                 if (((ShareActivity) getActivity()).getCurrentTabNumber() == PHOTO_FRAGMENT_NUM) {
                     if (((ShareActivity) getActivity()).checkPermission(Permissions.CAMERA_PERMISSIONS[0])) {
                         Log.d(TAG, "onClick: starting camera.");
+
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
                     } else {
                         Intent intent = new Intent(getActivity(), ShareActivity.class);
@@ -74,22 +89,23 @@ public class PhotoFragment extends Fragment {
         if (requestCode == CAMERA_REQUEST_CODE) {
             Log.d(TAG, "onActivityResult: done taking a photo.");
             Log.d(TAG, "onActivityResult: attempting to navigate to final share screen.");
-            if(data!=null) {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+
+
+                //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 if (isRootTask()) {
                     try {
-                        Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
+                        Log.d(TAG, "onActivityResults: received new bitmap from camera: " + imageUri);
                         Intent intent = new Intent(getActivity(), filter.class);
-                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                        intent.putExtra(getString(R.string.selected_bitmap), imageUri);
                         startActivity(intent);
                     } catch (NullPointerException e) {
                         Log.d(TAG, "onActivityResults: NullPointerException " + e.getMessage());
                     }
                 } else {
                     try {
-                        Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
+                       // Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
                         Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                       // intent.putExtra(getString(R.string.selected_bitmap), bitmap);
                         intent.putExtra(getString(R.string.return_to_fragment),
                                 getString(R.string.edit_profile_fragment));
                         startActivity(intent);
@@ -98,13 +114,9 @@ public class PhotoFragment extends Fragment {
                         Log.d(TAG, "onActivityResults: NullPointerException " + e.getMessage());
                     }
                 }
-            } else{
-                Intent i=getActivity().getIntent();
-                startActivity(i);
-                getActivity().finish();
+            }
 
 
             }
         }
-    }
-}
+
