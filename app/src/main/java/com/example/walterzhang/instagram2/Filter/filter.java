@@ -198,13 +198,8 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     private void loadImage() {
         Intent intent = getIntent();
         if(intent.hasExtra(getString(R.string.selected_bitmap))){
-            Uri imageUri = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-            try {
-                originalImage = MediaStore.Images.Media.getBitmap(
-                        getContentResolver(), imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Bitmap bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            originalImage = bitmap;
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
             originalImage.compress(Bitmap.CompressFormat.JPEG, 80, stream);

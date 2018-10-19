@@ -60,7 +60,6 @@ public class PhotoFragment extends Fragment {
                         Log.d(TAG, "onClick: starting camera.");
 
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
                     } else {
                         Intent intent = new Intent(getActivity(), ShareActivity.class);
@@ -91,21 +90,21 @@ public class PhotoFragment extends Fragment {
             Log.d(TAG, "onActivityResult: attempting to navigate to final share screen.");
 
 
-                //Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 if (isRootTask()) {
                     try {
-                        Log.d(TAG, "onActivityResults: received new bitmap from camera: " + imageUri);
+                        Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
                         Intent intent = new Intent(getActivity(), filter.class);
-                        intent.putExtra(getString(R.string.selected_bitmap), imageUri);
+                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
                         startActivity(intent);
                     } catch (NullPointerException e) {
                         Log.d(TAG, "onActivityResults: NullPointerException " + e.getMessage());
                     }
                 } else {
                     try {
-                       // Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
+                        Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
                         Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                       // intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
                         intent.putExtra(getString(R.string.return_to_fragment),
                                 getString(R.string.edit_profile_fragment));
                         startActivity(intent);
