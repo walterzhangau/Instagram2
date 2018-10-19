@@ -93,7 +93,7 @@ public class SearchActivity extends AppCompatActivity{
         if(text.length()==0)
         {}
         else {
-            Toast.makeText(this, "Search Started", Toast.LENGTH_SHORT).show();
+
 
             // Implement "start with" search in Firebase
             Query personsQuery = mUserDatabase.child("users").orderByChild("username")
@@ -119,7 +119,6 @@ public class SearchActivity extends AppCompatActivity{
 
 
         }
-
     }
 
 
