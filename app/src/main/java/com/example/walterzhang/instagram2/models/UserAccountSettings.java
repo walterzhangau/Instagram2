@@ -3,20 +3,20 @@ package com.example.walterzhang.instagram2.models;
 public class UserAccountSettings {
 
     private String description;
+    private String display_name;
     private long followers;
     private long following;
     private long posts;
-    private String display_name;
     private String profile_photo;
     private String username;
 
 
-    public UserAccountSettings(String description, long followers, long following, long posts, String display_name, String profile_photo, String username) {
+    public UserAccountSettings(String description, String display_name, long followers, long following, long posts, String profile_photo, String username) {
         this.description = description;
+        this.display_name = display_name;
         this.followers = followers;
         this.following = following;
         this.posts = posts;
-        this.display_name = display_name;
         this.profile_photo = profile_photo;
         this.username = username;
     }
@@ -31,6 +31,14 @@ public class UserAccountSettings {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDisplay_name() {
+        return display_name;
+    }
+
+    public void setDisplay_name(String display_name) {
+        this.display_name = display_name;
     }
 
     public long getFollowers() {
@@ -55,14 +63,6 @@ public class UserAccountSettings {
 
     public void setPosts(long posts) {
         this.posts = posts;
-    }
-
-    public String getDisplay_name() {
-        return display_name;
-    }
-
-    public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
     }
 
     public String getProfile_photo() {
