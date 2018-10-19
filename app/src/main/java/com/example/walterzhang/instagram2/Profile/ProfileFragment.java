@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment{
         mWebsite = (TextView) view .findViewById(R.id.website);
         mDescription = (TextView) view .findViewById(R.id.description);
         mProfilePhoto = (CircleImageView) view .findViewById(R.id.profile_photo);
-        mPosts = (TextView) view .findViewById(R.id.tvPosts);
+        mPosts = (TextView) view.findViewById(R.id.tvPosts);
         mFollowers = (TextView) view .findViewById(R.id.tvFollowers);
         mFollowing = (TextView) view .findViewById(R.id.tvFollowing);
         mProgressBar = (ProgressBar) view .findViewById(R.id.profileProgressBar);

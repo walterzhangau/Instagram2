@@ -1,5 +1,6 @@
 package com.example.walterzhang.instagram2.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import com.example.walterzhang.instagram2.Dialogs.ConfirmPasswordDialog;
 import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.Models.UserSettings;
+import com.example.walterzhang.instagram2.Share.ShareActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
@@ -123,13 +125,13 @@ public class EditProfileFragment extends Fragment implements
 
     //vars
     private UserSettings mUserSettings;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_editprofile,container,false);
 
         mChangeProfilePhoto = (TextView) view.findViewById(R.id.changeProfilePhoto);
-
 
         mProfilePhoto = (CircleImageView) view.findViewById(R.id.profile_photo);
         mDisplayName = (EditText) view.findViewById(R.id.display_name);
@@ -138,10 +140,6 @@ public class EditProfileFragment extends Fragment implements
         mEmail = (EditText) view.findViewById(R.id.email);
         mPhoneNumber = (EditText) view.findViewById(R.id.phoneNumber);
         mFirebaseMethods = new FirebaseMethods(getActivity());
-
-
-
-
 
         setupFirebaseAuth();
         //set back button to navigate back to profile
@@ -217,6 +215,8 @@ public class EditProfileFragment extends Fragment implements
         }
 
     }
+
+
     /**
      * Check is @param username already exists in the database
      * @param username
@@ -270,22 +270,18 @@ public class EditProfileFragment extends Fragment implements
         mEmail.setText(userSettings.getUser().getEmail());
         mPhoneNumber.setText(String.valueOf(userSettings.getUser().getPhone_number()));
 
-
+        mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: changing profile photo");
+                Intent intent = new Intent(getActivity(), ShareActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+        });
     }
 
-
-//    private void setProfileWidgets() {
-//        mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "onClick: changing profile photo");
-//                Intent intent = new Intent(getActivity(), ShareActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                getActivity().startActivity(intent);
-//                getActivity().finish();
-//            }
-//        });
-//    }
 
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
@@ -319,7 +315,6 @@ public class EditProfileFragment extends Fragment implements
 
                 //retrieve user information from the database
                 setProfileWidgets(mFirebaseMethods.getUserAccountSettings(dataSnapshot));
-                //setProfileWidgets(mFirebaseMethods.getUserAccountSettings(dataSnapshot));
                 //retrieve images for the user in question
 
             }

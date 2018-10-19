@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Like;
-import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,14 +74,14 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
         View view;
 
-        private void broadcastPhotoIdAndStartActivity() {
+        private void broadcastPhotoIdAndStartActivity(Class mClass) {
             Context context = view.getContext();
             String photoId = photo.getPhoto_id();
             Intent intent = new Intent("photo_info");
             intent.putExtra("photoId",photoId);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
-            intent = new Intent(context, CommentsListActivity.class);
+            intent = new Intent(context, mClass);
             intent.putExtra("photo_message", photoId);
             context.startActivity(intent);
         }
@@ -132,8 +129,8 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             likesText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "onClick: getting photoId...");
-                    broadcastPhotoIdAndStartActivity();
+                    Log.d(TAG, "onClick likesText: getting photoId...");
+                    broadcastPhotoIdAndStartActivity(LikesListActivity.class);
                 }
             });
 
@@ -141,7 +138,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick buttonComment: getting photoId...");
-                    broadcastPhotoIdAndStartActivity();
+                    broadcastPhotoIdAndStartActivity(CommentsListActivity.class);
                 }
             });
 
@@ -149,7 +146,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick commentsCountTextView: getting photoId...");
-                    broadcastPhotoIdAndStartActivity();
+                    broadcastPhotoIdAndStartActivity(CommentsListActivity.class);
                 }
             });
 

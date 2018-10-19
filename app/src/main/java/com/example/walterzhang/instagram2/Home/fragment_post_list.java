@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
-import com.example.walterzhang.instagram2.Models.Photo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
