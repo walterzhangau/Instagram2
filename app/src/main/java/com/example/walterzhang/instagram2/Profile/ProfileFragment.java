@@ -145,7 +145,7 @@ public class ProfileFragment extends Fragment{
                 gridView.setColumnWidth(imageWidth);
 
                 ArrayList<String> imgUrls = new ArrayList<String>();
-                for (int i = 0; i < photos.size(); i++) {
+                for (int i = photos.size()-1; i >= 0 ; i--) {
                     imgUrls.add(photos.get(i).getImage_path());
                 }
 
