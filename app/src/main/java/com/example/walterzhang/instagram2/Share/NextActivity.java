@@ -3,7 +3,9 @@ package com.example.walterzhang.instagram2.Share;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.IOException;
 
 /**
  * Created by mingshunc on 26/9/18.
@@ -112,6 +116,7 @@ public class NextActivity extends AppCompatActivity {
             Log.d(TAG, "setImage: got new image url: " + imgUrl);
             UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
         } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
+
             bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
             Log.d(TAG, "setImage: got new bitmap");
             image.setImageBitmap(bitmap);

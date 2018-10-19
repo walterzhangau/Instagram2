@@ -59,7 +59,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
             holder=new ViewHolder();
             holder.username=convertView.findViewById(R.id.username);
             holder.email=convertView.findViewById(R.id.email);
-            //holder.profileImage=(TextView)convertView.findViewById(R.id.profileImage);
+            holder.profileImage=(CircleImageView)convertView.findViewById(R.id.profile_image);
 
             convertView.setTag(holder);
 
@@ -68,14 +68,13 @@ public class UserListAdapter extends ArrayAdapter<User> {
             holder=(ViewHolder)convertView.getTag();
         }
 
-
         holder.username.setText(getItem(position).getUsername());
         holder.email.setText(getItem(position).getEmail());
 
         DatabaseReference reference=FirebaseDatabase.getInstance().getReference();
         Query query=reference.child(context.getString(R.string.dbname_user_account_settings))
-                .child("profile_photo").orderByChild("user_id")
-                .equalTo(getItem(position).getUser_id());
+                .orderByChild(context.getString(R.string.field_username))
+                .equalTo(getItem(position).getUsername());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -84,8 +83,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
                     ImageLoader imageLoader=ImageLoader.getInstance();
                     imageLoader.displayImage(ds.getValue(UserAccountSettings.class).getProfile_photo(),
                             holder.profileImage);
-
-
                 }
             }
 

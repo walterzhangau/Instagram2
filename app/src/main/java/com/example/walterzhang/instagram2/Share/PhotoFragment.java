@@ -1,7 +1,9 @@
 package com.example.walterzhang.instagram2.Share;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -27,11 +29,25 @@ public class PhotoFragment extends Fragment {
     private static final int PHOTO_FRAGMENT_NUM = 1;
     private static final int CAMERA_REQUEST_CODE = 99;
 
+    private ContentValues values;
+    private Uri imageUri;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: starting...");
         View view = inflater.inflate(R.layout.fragment_photo,container,false);
+
+        values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "New Picture");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+        imageUri = getActivity().getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+
+
+
+
 
         Button btnOpenCamera = (Button) view.findViewById(R.id.btnOpenCamera);
         btnOpenCamera.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +58,7 @@ public class PhotoFragment extends Fragment {
                 if (((ShareActivity) getActivity()).getCurrentTabNumber() == PHOTO_FRAGMENT_NUM) {
                     if (((ShareActivity) getActivity()).checkPermission(Permissions.CAMERA_PERMISSIONS[0])) {
                         Log.d(TAG, "onClick: starting camera.");
+
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
                     } else {
@@ -71,7 +88,8 @@ public class PhotoFragment extends Fragment {
         if (requestCode == CAMERA_REQUEST_CODE) {
             Log.d(TAG, "onActivityResult: done taking a photo.");
             Log.d(TAG, "onActivityResult: attempting to navigate to final share screen.");
-            if(data!=null) {
+
+
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 if (isRootTask()) {
                     try {
@@ -95,13 +113,9 @@ public class PhotoFragment extends Fragment {
                         Log.d(TAG, "onActivityResults: NullPointerException " + e.getMessage());
                     }
                 }
-            } else{
-                Intent i=getActivity().getIntent();
-                startActivity(i);
-                getActivity().finish();
+            }
 
 
             }
         }
-    }
-}
+

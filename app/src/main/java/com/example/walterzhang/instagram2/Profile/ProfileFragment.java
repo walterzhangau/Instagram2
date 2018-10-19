@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.models.User;
 import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.example.walterzhang.instagram2.models.UserSettings;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
@@ -63,6 +64,11 @@ public class ProfileFragment extends Fragment{
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
 
+    //variables
+    private int mFollowersCount = 0;
+    private int mFollowingCount = 0;
+    private int mPostsCount = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,6 +97,10 @@ public class ProfileFragment extends Fragment{
         setupFirebaseAuth();
         setupImageGrid();
 
+        getFollowersCount();
+        getFollowingCount();
+        getPostsCount();
+
         TextView editProfile = (TextView) view.findViewById(R.id.textEditProfile);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,9 +128,6 @@ public class ProfileFragment extends Fragment{
         mDisplayName.setText(settings.getDisplay_name());
         mUsername.setText(settings.getUsername());
         mDescription.setText(settings.getDescription());
-        mPosts.setText(String.valueOf(settings.getPosts()));
-        mFollowing.setText(String.valueOf(settings.getFollowing()));
-        mFollowers.setText(String.valueOf(settings.getFollowers()));
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -186,6 +193,81 @@ public class ProfileFragment extends Fragment{
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
+    }
+
+    private void getFollowersCount(){
+        mFollowersCount = 0;
+        DatabaseReference mUserDatabase = FirebaseDatabase.getInstance().getReference();
+        Query personsQuery = mUserDatabase.child(getString(R.string.dbname_followers))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
+        personsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "OnDataChange: found followers" + singleSnapshot.getValue());
+                    mFollowersCount++;
+                }
+                mFollowers.setText(String.valueOf(mFollowersCount));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getFollowingCount(){
+        mFollowingCount = 0;
+        DatabaseReference mUserDatabase = FirebaseDatabase.getInstance().getReference();
+        Query personsQuery = mUserDatabase.child(getString(R.string.dbname_following))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
+        personsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "OnDataChange: found following user" + singleSnapshot.getValue());
+                    mFollowingCount++;
+                }
+                mFollowing.setText(String.valueOf(mFollowingCount));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getPostsCount(){
+        mPostsCount = 0;
+        DatabaseReference mUserDatabase = FirebaseDatabase.getInstance().getReference();
+        Query personsQuery = mUserDatabase.child(getString(R.string.dbname_user_photos))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
+        personsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "OnDataChange: found post" + singleSnapshot.getValue());
+                    mPostsCount++;
+                }
+                mPosts.setText(String.valueOf(mPostsCount));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
