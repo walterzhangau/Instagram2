@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.Models.Comment;
+import com.example.walterzhang.instagram2.models.Comment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

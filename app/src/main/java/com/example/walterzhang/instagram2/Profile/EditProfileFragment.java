@@ -13,9 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.walterzhang.instagram2.Models.User;
-import com.example.walterzhang.instagram2.Models.UserAccountSettings;
-import com.example.walterzhang.instagram2.Models.UserSettings;
+import com.example.walterzhang.instagram2.models.User;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.models.UserSettings;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.UniversalImageLoader;

@@ -19,12 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.walterzhang.instagram2.Models.Photo;
-import com.example.walterzhang.instagram2.Models.User;
-import com.example.walterzhang.instagram2.Models.UserAccountSettings;
-import com.example.walterzhang.instagram2.Models.UserSettings;
+import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.models.User;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.models.UserSettings;
 import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
-import com.example.walterzhang.instagram2.Profile.ProfileActivity;
 import com.example.walterzhang.instagram2.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

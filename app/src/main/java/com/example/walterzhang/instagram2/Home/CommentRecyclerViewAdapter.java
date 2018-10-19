@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.Models.Comment;
-import com.example.walterzhang.instagram2.Models.UserAccountSettings;
+import com.example.walterzhang.instagram2.models.Comment;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
 
 import java.util.List;
 

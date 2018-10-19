@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.walterzhang.instagram2.Models.User;
+import com.example.walterzhang.instagram2.models.User;
 import com.example.walterzhang.instagram2.Profile.ProfileActivity;
 import com.example.walterzhang.instagram2.R;
 
