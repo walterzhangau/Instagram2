@@ -485,4 +485,18 @@ public class FirebaseMethods {
     }
 
 
+    /**
+     * update the email in the 'user's' node
+     * @param email
+     */
+    public void updateEmail(String email){
+        Log.d(TAG, "updateEmail: upadting email to: " + email);
+
+        myRef.child(mContext.getString(R.string.dbname_user))
+                .child(userID)
+                .child(mContext.getString(R.string.field_email))
+                .setValue(email);
+
+    }
+
 }
