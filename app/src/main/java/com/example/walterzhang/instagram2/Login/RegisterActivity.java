@@ -185,7 +185,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         databaseReference.child("users").child(user_ID).setValue(user);
 
-        UserAccountSettings uas=new UserAccountSettings(description,0,0,0,username,profile_photo,username);
+        UserAccountSettings uas=new UserAccountSettings(description,username,0,0,0,profile_photo,username);
         databaseReference.child("user_account_settings").child(user_ID).setValue(uas);
     }
 

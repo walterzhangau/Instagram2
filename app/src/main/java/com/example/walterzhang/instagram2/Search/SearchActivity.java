@@ -93,10 +93,12 @@ public class SearchActivity extends AppCompatActivity{
         if(text.length()==0)
         {}
         else {
-            Toast.makeText(this, "Search Started", Toast.LENGTH_SHORT).show();
 
-            Query personsQuery = mUserDatabase.child("users").orderByChild("username").startAt(text).endAt("\uf8ff");
 
+            // Implement "start with" search in Firebase
+            Query personsQuery = mUserDatabase.child("users").orderByChild("username")
+                    .startAt(text)
+                    .endAt(text+"\uf8ff");
 
             personsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -117,7 +119,6 @@ public class SearchActivity extends AppCompatActivity{
 
 
         }
-
     }
 
 

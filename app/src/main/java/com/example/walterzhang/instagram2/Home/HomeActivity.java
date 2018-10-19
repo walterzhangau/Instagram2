@@ -87,6 +87,9 @@ public class HomeActivity extends AppCompatActivity implements
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_home);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_arrow);
+
+        TabLayout.Tab tab = tabLayout.getTabAt(1);
+        tab.select();
     }
 
     /**

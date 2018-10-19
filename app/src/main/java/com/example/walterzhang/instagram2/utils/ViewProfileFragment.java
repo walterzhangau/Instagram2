@@ -196,20 +196,17 @@ public class ViewProfileFragment extends Fragment{
 
     private void init(){
 
-
-
-
         //set the profile details
         DatabaseReference mUserDatabase = FirebaseDatabase.getInstance().getReference();
         Query personsQuery = mUserDatabase.child(getString(R.string.dbname_user_account_settings))
-                .orderByChild(getString(R.string.field_user_id)).equalTo(mUser.getUser_id());
+                .orderByChild(getString(R.string.field_username)).equalTo(mUser.getUsername());
 
 
         personsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "OnDataChange: found user" + singleSnapshot.getValue(UserAccountSettings.class).toString());
+                    Log.d(TAG, "OnDataChange: found user in init()" + singleSnapshot.getValue(UserAccountSettings.class).toString());
                     UserSettings settings = new UserSettings();
                     settings.setSettings(singleSnapshot.getValue(UserAccountSettings.class));
                     settings.setUser(mUser);
@@ -351,7 +348,7 @@ public class ViewProfileFragment extends Fragment{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "OnDataChange: found user" + singleSnapshot.getValue());
+                    Log.d(TAG, "OnDataChange: found user in isFollowing()" + singleSnapshot.getValue());
                     setFollowing();
                 }
 
