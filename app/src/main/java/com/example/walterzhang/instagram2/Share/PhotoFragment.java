@@ -27,6 +27,9 @@ public class PhotoFragment extends Fragment {
     private static final int PHOTO_FRAGMENT_NUM = 1;
     private static final int CAMERA_REQUEST_CODE = 99;
 
+    private ContentValues values;
+    private Uri imageUri;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

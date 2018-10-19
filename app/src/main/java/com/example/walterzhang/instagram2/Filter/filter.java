@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -39,6 +40,7 @@ import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -196,7 +198,17 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     private void loadImage() {
         Intent intent = getIntent();
         if(intent.hasExtra(getString(R.string.selected_bitmap))){
-            originalImage=(Bitmap)intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            Uri imageUri = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            try {
+                originalImage = MediaStore.Images.Media.getBitmap(
+                        getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+            originalImage.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+            //originalImage=(Bitmap)intent.getParcelableExtra(getString(R.string.selected_bitmap));
         }
         else
         {
@@ -254,7 +266,7 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
            p=p.substring(8);*/
         Log.d("Filter:", "Sharing the image with NextActivity");
             ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-            finalImage.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+            finalImage.compress(Bitmap.CompressFormat.JPEG, 100, bStream);
             byte[] byteArray = bStream.toByteArray();
 
             Intent intent = new Intent(filter.this, NextActivity.class);
@@ -268,56 +280,6 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private String saveImageToGallery() {
-
-        Dexter.withActivity(this).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()) {
-                            final String path = BitmapUtils.insertImage(getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-                            pathCopy=path;
-                            if (!TextUtils.isEmpty(path)) {
-                                Snackbar snackbar = Snackbar
-                                        .make(coordinatorLayout, "Image saved to gallery!", Snackbar.LENGTH_LONG)
-                                        .setAction("OPEN", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                openImage(path);
-                                            }
-                                        });
-
-                                snackbar.show();
-
-                            } else {
-                                Snackbar snackbar = Snackbar
-                                        .make(coordinatorLayout, "Unable to save image!", Snackbar.LENGTH_LONG);
-
-                                snackbar.show();
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Permissions are not granted!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
-        Log.d("Filters:" , "Return Path Copy"+ pathCopy);
-    return pathCopy;
-
-    }
-
-    private void openImage(String path) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(path), "image/*");
-        startActivity(intent);
     }
 
 
