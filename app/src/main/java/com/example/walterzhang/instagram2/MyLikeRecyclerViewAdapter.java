@@ -1,11 +1,8 @@
 package com.example.walterzhang.instagram2;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +11,11 @@ import android.widget.TextView;
 import com.example.walterzhang.instagram2.Home.fragment_like_list;
 import com.example.walterzhang.instagram2.Home.fragment_like_list.OnLikeListFragmentInteractionListener;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
+import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 
 import java.util.List;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
@@ -27,7 +24,7 @@ import static android.support.constraint.Constraints.TAG;
  */
 public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecyclerViewAdapter.ViewHolder> {
 
-    private final List<com.example.walterzhang.instagram2.models.UserAccountSettings> mUsersSettings;
+    private final List<UserAccountSettings> mUsersSettings;
     private Context mContext;
     private final fragment_like_list.OnLikeListFragmentInteractionListener mListener;
 
@@ -36,7 +33,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
         TextView username;
 
         private FirebaseMethods mFirebaseMethods;
-        com.example.walterzhang.instagram2.Models.Photo photo;
+        Photo photo;
 
         View view;
 
@@ -46,11 +43,11 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
 
             mFirebaseMethods = new FirebaseMethods(v.getContext());
 
-            username = (TextView) view.findViewById(R.id.uname);
+            username = view.findViewById(R.id.uname);
         }
     }
 
-    public MyLikeRecyclerViewAdapter(@NonNull List<com.example.walterzhang.instagram2.models.UserAccountSettings> usersAccSettings, fragment_like_list.OnLikeListFragmentInteractionListener listener) {
+    public MyLikeRecyclerViewAdapter(@NonNull List<UserAccountSettings> usersAccSettings, fragment_like_list.OnLikeListFragmentInteractionListener listener) {
         mUsersSettings = usersAccSettings;
         mListener = listener;
     }

@@ -1,32 +1,28 @@
 package com.example.walterzhang.instagram2.Search;
 
 import android.content.Context;
-import android.nfc.Tag;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.models.User;
+import com.example.walterzhang.instagram2.Profile.ProfileActivity;
+import com.example.walterzhang.instagram2.R;
+
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.UserListAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,9 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +89,6 @@ public class SearchActivity extends AppCompatActivity{
     }
 
     private void firebaseUserSearch(String text) {
-
         mUserList.clear();
         if(text.length()==0)
         {}
@@ -138,8 +130,10 @@ public class SearchActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d(TAG,"onItemClick: selected user;" + mUserList.get(i).toString());
-
-                //TODO Move user to the following user's profile
+                Intent intent=new Intent(SearchActivity.this, ProfileActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.search_activity));
+                intent.putExtra(getString(R.string.intent_user), mUserList.get(i));
+                startActivity(intent);
             }
         });
 

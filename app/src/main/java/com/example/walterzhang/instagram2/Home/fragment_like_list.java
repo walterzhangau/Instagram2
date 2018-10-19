@@ -13,9 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.MyLikeRecyclerViewAdapter;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.models.Like;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,8 +47,8 @@ public class fragment_like_list extends Fragment {
     Context context;
     View likesListView;
 
-    List<com.example.walterzhang.instagram2.models.UserAccountSettings> usersSettingsLiked = new ArrayList<>();
-    com.example.walterzhang.instagram2.models.UserAccountSettings userSettings;
+    List<UserAccountSettings> usersSettingsLiked = new ArrayList<>();
+    UserAccountSettings userSettings;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,7 +80,7 @@ public class fragment_like_list extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_like_list, container, false);
-        mListRecyclerView = (RecyclerView) view.findViewById(R.id.likes_list);
+        mListRecyclerView = view.findViewById(R.id.likes_list);
         context = view.getContext();
         String photo_id = getArguments().getString("photo_message");
 
@@ -179,7 +180,7 @@ public class fragment_like_list extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "searching user accounts...");
-                userSettings = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(com.example.walterzhang.instagram2.models.UserAccountSettings.class);
+                userSettings = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class);
                 usersSettingsLiked.add(userSettings);
 
                 displayUsersLike();

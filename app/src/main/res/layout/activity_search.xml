@@ -24,7 +24,7 @@
                     android:layout_marginTop="94dp"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="@string/search_user" />
+                    android:hint="Search by name/email" />
 
         <ListView
             android:layout_width="match_parent"

@@ -10,6 +10,7 @@ public class UserAccountSettings {
     private String profile_photo;
     private String username;
 
+
     public UserAccountSettings(String description, long followers, long following, long posts, String display_name, String profile_photo, String username) {
         this.description = description;
         this.followers = followers;
