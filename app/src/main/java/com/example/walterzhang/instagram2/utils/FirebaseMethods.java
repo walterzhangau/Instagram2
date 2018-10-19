@@ -409,20 +409,21 @@ public class FirebaseMethods {
      * Save a comment to the database
      * @return
      */
-    public void postComment(String photoId, String text) {
-        String newCommentId = myRef.push().getKey();
-        Comment comment = new Comment();
+    public void postComment(final String photoId, String text) {
+        final String newCommentId = myRef.push().getKey();
+        final Comment comment = new Comment();
         comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
         comment.setComment(text);
         comment.setDate_created(getTimeStamp());
 
+        //save comment to photos node of the database
         myRef.child(mContext.getString(R.string.dbname_photos))
                 .child(photoId)
                 .child(mContext.getString(R.string.field_comments))
                 .child(newCommentId)
                 .setValue(comment);
 
-
+        //save comment to user_photos node of the database
         Query queryUserPhotos = myRef.child(mContext.getString(R.string.dbname_user_photos));
         queryUserPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
