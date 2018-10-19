@@ -89,6 +89,9 @@
     <string name="field_photo_id">photo_id</string>
     <string name="field_caption">caption</string>
     <string name="field_date_created">date_created</string>
+    <string name="field_display_name">display_name</string>
+    <string name="field_description">description</string>
+    <string name="field_phone_number">phone_number</string>
 
     <string name="field_tags">tags</string>
     <string name="field_image_path">image_path</string>
