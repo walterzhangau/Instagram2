@@ -11,6 +11,7 @@
     <string name="edit_profile_fragment">Edit Profile</string>
     <string name="sign_out_fragment">Sign Out</string>
     <string name="profile_fragment">Profile</string>
+    <string name="view_post_fragment">View Post</string>
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
@@ -114,5 +115,7 @@
 
     <!-- dialog names -->
     <string name="confirm_password_dialog">ConfirmPaswordDialog</string>
+
+    <string name="activity_number">activity_number</string>
 
 </resources>

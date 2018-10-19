@@ -3,7 +3,6 @@ package com.example.walterzhang.instagram2.Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,20 +12,37 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.ViewPostFragment;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements ProfileFragment.OnGridImageSelectedListener {
+
     private static final String TAG = "ProfileActivity";
+
+    @Override
+    public void onGridImageSelected(Photo photo, int activityNumber) {
+        Log.d(TAG, "onGridImageSelected: selected image on gridview: " + photo.toString());
+
+        ViewPostFragment fragment = new ViewPostFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.photo), photo);
+        args.putInt(getString(R.string.activity_number), activityNumber);
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(getString(R.string.view_post_fragment));
+        transaction.commit();
+
+    }
+
 
     private static final int ACTIVITY_NUM = 4;
     private static final int NUM_GRID_COLUMNS = 3;
@@ -91,5 +107,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
+
 }
 

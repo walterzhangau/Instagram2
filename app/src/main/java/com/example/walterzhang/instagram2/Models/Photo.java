@@ -1,10 +1,13 @@
 package com.example.walterzhang.instagram2.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.walterzhang.instagram2.Models.Like;
 
 import java.util.List;
 
-public class Photo {
+public class Photo implements Parcelable {
 
     private String photo_id;
     private String user_id;
@@ -27,6 +30,27 @@ public class Photo {
         this.tags = tags;
         this.likes = likes;
     }
+
+    protected Photo(Parcel in) {
+        photo_id = in.readString();
+        user_id = in.readString();
+        date_created = in.readString();
+        image_path = in.readString();
+        caption = in.readString();
+        tags = in.readString();
+    }
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
 
     public String getPhoto_id() {
         return photo_id;
@@ -86,5 +110,20 @@ public class Photo {
                 ", caption='" + caption + '\'' +
                 ", tags='" + tags + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(photo_id);
+        dest.writeString(user_id);
+        dest.writeString(date_created);
+        dest.writeString(image_path);
+        dest.writeString(caption);
+        dest.writeString(tags);
     }
 }
