@@ -1,12 +1,12 @@
-package com.example.walterzhang.instagram2.models;
+package com.example.walterzhang.instagram2.Models;
 
 
 public class UserSettings {
 
     private User user;
-    private com.example.walterzhang.instagram2.models.UserAccountSettings settings;
+    private UserAccountSettings settings;
 
-    public UserSettings(com.example.walterzhang.instagram2.models.User user, com.example.walterzhang.instagram2.models.UserAccountSettings settings) {
+    public UserSettings(User user, UserAccountSettings settings) {
         this.user = user;
         this.settings = settings;
     }
@@ -16,19 +16,19 @@ public class UserSettings {
     }
 
 
-    public com.example.walterzhang.instagram2.models.User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(com.example.walterzhang.instagram2.models.User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public com.example.walterzhang.instagram2.models.UserAccountSettings getSettings() {
+    public UserAccountSettings getSettings() {
         return settings;
     }
 
-    public void setSettings(com.example.walterzhang.instagram2.models.UserAccountSettings settings) {
+    public void setSettings(UserAccountSettings settings) {
         this.settings = settings;
     }
 
