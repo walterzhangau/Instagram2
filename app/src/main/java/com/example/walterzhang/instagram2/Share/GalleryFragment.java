@@ -81,7 +81,7 @@ public class GalleryFragment extends Fragment {
                 Log.d(TAG, "onClick: navigating to the final share screen.");
 
                 if (isRootTask()) {
-                    Intent intent = new Intent(getActivity(), filter.class);
+                    Intent intent = new Intent(getActivity(), CropActivity.class);
                     intent.putExtra(getString(R.string.selected_image), mSelectedImage);
                     startActivity(intent);
                 } else {
