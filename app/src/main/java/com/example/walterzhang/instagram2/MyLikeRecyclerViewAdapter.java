@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.Home.fragment_like_list;
 import com.example.walterzhang.instagram2.Home.fragment_like_list.OnLikeListFragmentInteractionListener;
-import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
@@ -18,14 +17,13 @@ import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link fragment_like_list} and makes a call to the
  * specified {@link OnLikeListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecyclerViewAdapter.ViewHolder> {
 
     private final List<UserAccountSettings> mUsersSettings;
-    private Context mContext;
     private final fragment_like_list.OnLikeListFragmentInteractionListener mListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {

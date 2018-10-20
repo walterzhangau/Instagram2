@@ -37,9 +37,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link //DummyContent.DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link //UserFeedListAdapter.MyViewHolder} and makes a call to the
  * specified {@link fragment_post_list.OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapter.MyViewHolder> {
 
@@ -53,11 +52,6 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
     private List<Photo> mDataset;
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-//        com.example.walterzhang.instagram2.models.User user = new com.example.walterzhang.instagram2.models.User();
-//        StringBuilder users;
-//        CircleImageView profileImage;
-//        TextView username;
-
         DatabaseReference myRef;
         FirebaseDatabase mFirebaseDatabase;
 
@@ -68,10 +62,6 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
         private FirebaseMethods mFirebaseMethods;
         Photo photo;
-
-//      boolean likedByCurrentUser;
-//      Photo photo;
-
         View view;
 
         private void broadcastPhotoIdAndStartActivity(Class mClass) {

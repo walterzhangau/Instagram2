@@ -19,7 +19,6 @@ import com.example.walterzhang.instagram2.CommentFragment;
 import com.example.walterzhang.instagram2.Login.LoginActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.UserFragment;
-import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
 import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
@@ -104,10 +103,6 @@ public class HomeActivity extends AppCompatActivity implements
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
 
-    }
-
-    public void onListFragmentInteraction(DummyContent.DummyItem uri){
-        //you can leave it empty
     }
 
     public void onListFragmentInteraction(TextView uri){
