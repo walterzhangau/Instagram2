@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,14 +32,12 @@ import java.util.Comparator;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class fragment_post_list extends Fragment {
+public class PostListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private static final String TAG = "fragment_post_list";
+    private static final String TAG = "PostListFragment";
 
     private ArrayList<Photo> mPhotos;
     private ArrayList<String> mFollowing;
@@ -51,13 +48,13 @@ public class fragment_post_list extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public fragment_post_list() {
+    public PostListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static fragment_post_list newInstance(int columnCount) {
-        fragment_post_list fragment = new fragment_post_list();
+    public static PostListFragment newInstance(int columnCount) {
+        PostListFragment fragment = new PostListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -127,8 +124,7 @@ public class fragment_post_list extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+
     }
 
     private  void getPhotosFromFollowedUsers() {

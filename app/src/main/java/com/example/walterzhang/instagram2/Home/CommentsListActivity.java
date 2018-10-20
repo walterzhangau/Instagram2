@@ -15,11 +15,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class CommentsListActivity extends AppCompatActivity implements fragment_comment_list.onCommentListFragmentInteractionListener {
+public class CommentsListActivity extends AppCompatActivity implements CommentListFragment.onCommentListFragmentInteractionListener {
     private static final String TAG = "CommentsListActivity";
     private static final int ACTIVITY_NUM = 0;
 
@@ -35,7 +34,7 @@ public class CommentsListActivity extends AppCompatActivity implements fragment_
 
         setupBottomNavigationView();
 
-        android.app.Fragment commentFragment = new fragment_comment_list();
+        android.app.Fragment commentFragment = new CommentListFragment();
 
         photoId = getIntent().getStringExtra("photo_message"); // Use this to receive from home activity
 
