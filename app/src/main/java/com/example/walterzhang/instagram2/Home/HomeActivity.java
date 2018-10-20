@@ -19,7 +19,6 @@ import com.example.walterzhang.instagram2.CommentFragment;
 import com.example.walterzhang.instagram2.Login.LoginActivity;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.UserFragment;
-import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.SectionsPagerAdapter;
 import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
@@ -29,10 +28,10 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity extends AppCompatActivity implements
-        fragment_post_list.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener,
-        UserFragment.OnFragmentInteractionListener, fragment_like_list.OnLikeListFragmentInteractionListener,
+        PostListFragment.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener,
+        UserFragment.OnFragmentInteractionListener, LikeListFragment.OnLikeListFragmentInteractionListener,
         CommentFragment.OnFragmentInteractionListener,
-        fragment_comment_list.onCommentListFragmentInteractionListener {
+        CommentListFragment.onCommentListFragmentInteractionListener {
     
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;
@@ -76,8 +75,13 @@ public class HomeActivity extends AppCompatActivity implements
     private void setupViewPager(){
         SectionsPagerAdapter adpater = new SectionsPagerAdapter(getSupportFragmentManager());
         adpater.addFragment(new CameraFragment());
-        adpater.addFragment(new fragment_post_list());
+
+       
         adpater.addFragment(new DiscoverFragment());
+
+        adpater.addFragment(new PostListFragment());
+      
+
         ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(adpater);
 
@@ -104,10 +108,6 @@ public class HomeActivity extends AppCompatActivity implements
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
 
-    }
-
-    public void onListFragmentInteraction(DummyContent.DummyItem uri){
-        //you can leave it empty
     }
 
     public void onListFragmentInteraction(TextView uri){
