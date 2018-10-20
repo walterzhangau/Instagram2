@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.dummy.DummyContent.DummyItem;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +43,7 @@ public class fragment_post_list extends Fragment {
     private static final String TAG = "fragment_post_list";
 
     private ArrayList<Photo> mPhotos;
+    private ArrayList<String> mFollowing;
     private RecyclerView mListRecyclerView;
     private UserFeedListAdapter mAdapter;
 
@@ -88,7 +90,7 @@ public class fragment_post_list extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            getPhotos();
+            getPhotosFromFollowedUsers();
         }
         else {
             Log.d(TAG, "onCreateView: view not instance of RecyclerView...");
@@ -129,44 +131,70 @@ public class fragment_post_list extends Fragment {
         void onListFragmentInteraction(DummyItem item);
     }
 
+    private  void getPhotosFromFollowedUsers() {
+        final ArrayList<String> userIds = new ArrayList<>();
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        Query queryFollowing = reference.child("following/")
+                .child(FirebaseAuth.getInstance().getUid());
+        queryFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "getting followers: onDataChange...");
+                //mFollowing = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    userIds.add(singleSnapshot.getKey());
+                }
+                mFollowing = userIds;
+                getPhotos();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Log.d(TAG, "Users following count: " + userIds.size());
+    }
+
     private void getPhotos() {
         Log.d(TAG, "getPhotos");
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        for (int i = 0; i < 1/*mFollowing.size()*/; i++) {
 
-            //Query query = reference.child(getString(R.string.dbname_user_photos)).child(mFollowing.get(i).orderByChild(getString(R.string.field_user_id)).equalTo(mFollowing.get(i)));
-            Query query = reference.child("photos/"); //.orderByChild("date_created");//.child(""); //TEST ONLY / ALSO REMOVE STRING HARD CODING!
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onDataChange...");
-                    mPhotos = new ArrayList<>();
-                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                        Photo photo  = singleSnapshot.getValue(Photo.class);
+        Query query = reference.child("photos/");  //todo: REMOVE STRING HARD CODING!
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange...");
+                mPhotos = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    final Photo photo  = singleSnapshot.getValue(Photo.class);
+
+                    if (mFollowing.contains(photo.getUser_id())) {
                         mPhotos.add(photo);
                     }
-
-                    Collections.sort(mPhotos, new Comparator<Photo>() {
-                        @Override
-                        public int compare(Photo u1, Photo u2) {
-                            return u1.getDate_created().compareTo(u2.getDate_created());
-                        }
-                    });
-                    Collections.reverse(mPhotos);
-
-//                    if (count >= 1) { //mFollowing.size() - 1) {
-                        displayPhotos();
-//                    } else {
-//                        Log.d(TAG, "Not following anyone!");
-//                    }
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.w(TAG, "getPhotos:onCancelled", databaseError.toException());
+                Collections.sort(mPhotos, new Comparator<Photo>() {
+                    @Override
+                    public int compare(Photo u1, Photo u2) {
+                        return u1.getDate_created().compareTo(u2.getDate_created());
+                    }
+                });
+                Collections.reverse(mPhotos);
+
+                if (mPhotos.size() > 0) {
+                    displayPhotos();
+                } else {
+                    Log.d(TAG, "Not following anyone!");
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w(TAG, "getPhotos:onCancelled", databaseError.toException());
+            }
+        });
     }
 
     private void displayPhotos() {
