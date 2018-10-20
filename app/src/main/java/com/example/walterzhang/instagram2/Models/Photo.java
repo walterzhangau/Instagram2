@@ -3,8 +3,6 @@ package com.example.walterzhang.instagram2.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.walterzhang.instagram2.Models.Like;
-
 import java.util.List;
 
 public class Photo implements Parcelable {
@@ -28,6 +26,14 @@ public class Photo implements Parcelable {
         this.image_path = image_path;
         this.caption = caption;
         this.tags = tags;
+        this.likes = likes;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
         this.likes = likes;
     }
 
@@ -116,6 +122,7 @@ public class Photo implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
