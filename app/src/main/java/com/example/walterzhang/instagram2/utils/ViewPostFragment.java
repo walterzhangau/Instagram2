@@ -143,21 +143,21 @@ public class ViewPostFragment extends Fragment {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
                 .child(getString(R.string.dbname_user_account_settings))
-                .orderByChild(getString(R.string.field_user_id))
-                .equalTo(mPhoto.getUser_id());
+                .orderByChild(getString(R.string.field_user_id));
+                //.equalTo(mPhoto.getUser_id());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, getString(R.string.dbname_user_account_settings));
-                    Log.d(TAG, getString(R.string.field_user_id));
-                    Log.d(TAG, mPhoto.getUser_id());
-                    Log.d(TAG, mPhoto.getUser_id());
-                    Log.d(TAG, mPhoto.getUser_id());
-                    Log.d(TAG, mPhoto.getUser_id());
+
 
                     mUserAccountSettings = singleSnapshot.getValue(UserAccountSettings.class);
+                    Log.d(TAG, "--------------");
+                    Log.d(TAG, mUserAccountSettings.getUsername());
+
+
+                    Log.d(TAG, mPhoto.getUser_id());
                 }
 
                 setupWidgets();
@@ -181,8 +181,8 @@ public class ViewPostFragment extends Fragment {
             mTimestamp.setText("TODAY");
         }
 
-        //UniversalImageLoader.setImage(mUserAccountSettings.getProfile_photo(), mProfileImage, null, "");
-        //mUsername.setText(mUserAccountSettings.getUsername());
+        UniversalImageLoader.setImage(mUserAccountSettings.getProfile_photo(), mProfileImage, null, "");
+        mUsername.setText(mUserAccountSettings.getUsername());
     }
 
     /**
