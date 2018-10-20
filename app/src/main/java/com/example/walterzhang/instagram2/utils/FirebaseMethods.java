@@ -9,14 +9,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Home.HomeActivity;
-import com.example.walterzhang.instagram2.models.UserSettings;
+import com.example.walterzhang.instagram2.Models.UserSettings;
 import com.example.walterzhang.instagram2.Profile.AccountSettingsActivity;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Comment;
-import com.example.walterzhang.instagram2.models.Like;
-import com.example.walterzhang.instagram2.models.Photo;
-import com.example.walterzhang.instagram2.models.User;
-import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.Comment;
+import com.example.walterzhang.instagram2.Models.Like;
+import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.Models.User;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -273,7 +273,7 @@ public class FirebaseMethods {
      * Save new like photo to the database
      * @return
      */
-    public void addNewLike(final String photoId) {
+    public void addNewLike(final String photoId, final MyCallback myCallback) {
         Log.d(TAG, "addNewLike: starting...");
 
         newLikeId = myRef.push().getKey();
@@ -295,7 +295,7 @@ public class FirebaseMethods {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     final String userId = singleSnapshot.getKey();
                     Query query = myRef.child(mContext.getString(R.string.dbname_user_photos))
-                            .child(singleSnapshot.getKey());
+                            .child(userId);
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
@@ -310,6 +310,14 @@ public class FirebaseMethods {
                                             .setValue(like);
                                 }
                             }
+
+                            getLikesCount(photoId, new FirebaseMethods.MyCallback() {
+                                @Override
+                                public void onCallback(long likesCount) {
+                                    Log.d("TAG", "likes count: " + Long.toString(likesCount));
+                                    myCallback.onCallback(likesCount);
+                                }
+                            });
                         }
 
                         @Override
@@ -327,11 +335,15 @@ public class FirebaseMethods {
         });
     }
 
+    public interface MyCallback {
+        void onCallback(long count);
+    }
+
     /**
      * remove the like from the database
      * @return
      */
-    public void removeLike(final String photoId) {
+    public void removeLike(final String photoId, final MyCallback myCallback) {
         Log.d(TAG, "removeLike: starting...");
 
         //remove like from photos node:
@@ -355,6 +367,13 @@ public class FirebaseMethods {
                         break;
                     }
                 }
+                getLikesCount(photoId, new FirebaseMethods.MyCallback() {
+                    @Override
+                    public void onCallback(long likesCount) {
+                        Log.d("TAG", "likes count: " + Long.toString(likesCount));
+                        myCallback.onCallback(likesCount);
+                    }
+                });
             }
 
             @Override
@@ -402,6 +421,25 @@ public class FirebaseMethods {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });
+    }
+
+    public void getLikesCount(final String photoId, final MyCallback myCallback) {
+       Query query = myRef.child(mContext.getString(R.string.dbname_photos))
+           .child(photoId)
+           .child(mContext.getString(R.string.field_likes));
+       query.addListenerForSingleValueEvent(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               long count = 0;
+               count = dataSnapshot.getChildrenCount();
+               myCallback.onCallback(count);
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
         });
     }
 
@@ -563,6 +601,54 @@ public class FirebaseMethods {
                 .child(userID)
                 .child(mContext.getString(R.string.field_username))
                 .setValue(username);
+    }
+
+
+    /**
+     * update the email in the 'user's' node
+     * @param email
+     */
+    public void updateEmail(String email){
+        Log.d(TAG, "updateEmail: upadting email to: " + email);
+
+        myRef.child(mContext.getString(R.string.dbname_user))
+                .child(userID)
+                .child(mContext.getString(R.string.field_email))
+                .setValue(email);
+
+    }
+
+    /**
+     * Update 'user_account_settings' node for the current user
+     * @param displayName
+     * @param description
+     * @param phoneNumber
+     */
+    public void updateUserAccountSettings(String displayName, String description, long phoneNumber){
+
+        Log.d(TAG, "updateUserAccountSettings: updating user account settings.");
+
+        if(displayName != null){
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_display_name))
+                    .setValue(displayName);
+        }
+
+
+        if(description != null) {
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_description))
+                    .setValue(description);
+        }
+
+        if(phoneNumber != 0) {
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_phone_number))
+                    .setValue(phoneNumber);
+        }
     }
 
 

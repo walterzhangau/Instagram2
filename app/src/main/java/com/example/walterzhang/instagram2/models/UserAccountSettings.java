@@ -1,4 +1,4 @@
-package com.example.walterzhang.instagram2.models;
+package com.example.walterzhang.instagram2.Models;
 
 public class UserAccountSettings {
 
@@ -9,9 +9,12 @@ public class UserAccountSettings {
     private long posts;
     private String profile_photo;
     private String username;
+    private String user_id;
 
 
-    public UserAccountSettings(String description, String display_name, long followers, long following, long posts, String profile_photo, String username) {
+    public UserAccountSettings(String description, String display_name,
+                               long followers, long following, long posts,
+                               String profile_photo, String username, String user_id) {
         this.description = description;
         this.display_name = display_name;
         this.followers = followers;
@@ -19,11 +22,19 @@ public class UserAccountSettings {
         this.posts = posts;
         this.profile_photo = profile_photo;
         this.username = username;
+        this.user_id = user_id;
     }
 
     public UserAccountSettings() {
     }
 
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     public String getDescription() {
         return description;

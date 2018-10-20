@@ -13,8 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.User;
-import com.example.walterzhang.instagram2.models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.User;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -185,7 +185,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         databaseReference.child("users").child(user_ID).setValue(user);
 
-        UserAccountSettings uas=new UserAccountSettings(description,username,0,0,0,profile_photo,username);
+        UserAccountSettings uas=new UserAccountSettings(description,username,0,0,0,profile_photo,username, user_ID);
         databaseReference.child("user_account_settings").child(user_ID).setValue(uas);
     }
 

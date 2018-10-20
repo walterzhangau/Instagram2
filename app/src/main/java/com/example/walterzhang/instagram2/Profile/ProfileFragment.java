@@ -13,16 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.UserSettings;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Photo;
-import com.example.walterzhang.instagram2.models.User;
-import com.example.walterzhang.instagram2.models.UserAccountSettings;
-import com.example.walterzhang.instagram2.models.UserSettings;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.GridImageAdapter;
@@ -38,12 +38,21 @@ import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment{
 
     private static final String TAG = "ProfileFragment";
+
+    public interface OnGridImageSelectedListener{
+        void onGridImageSelected(Photo photo, int activityNumber);
+    }
+    OnGridImageSelectedListener mOnGridImageSelectedListener;
+
+
+
 
     private static final int ACTIVITY_NUM = 4;
     private static final int NUM_GRID_COLUMNS = 3;
@@ -109,10 +118,21 @@ public class ProfileFragment extends Fragment{
                 Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
                 intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        try{
+            mOnGridImageSelectedListener = (OnGridImageSelectedListener) getActivity();
+        }catch (ClassCastException e){
+            Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage() );
+        }
+        super.onAttach(context);
     }
 
     private void setProfileWidgets(UserSettings userSettings){
@@ -145,20 +165,28 @@ public class ProfileFragment extends Fragment{
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     photos.add(singleSnapshot.getValue(Photo.class));
                 }
+                final ArrayList<Photo> photos_reversed = new ArrayList<>();
+                Collections.reverse(photos);
 
-                // Setup our image grid
                 int gridWidth = getResources().getDisplayMetrics().widthPixels;
                 int imageWidth = gridWidth / NUM_GRID_COLUMNS;
                 gridView.setColumnWidth(imageWidth);
 
                 ArrayList<String> imgUrls = new ArrayList<String>();
-                for (int i = 0; i < photos.size(); i++) {
+                for (int i = 0; i < photos.size() ; i++) {
                     imgUrls.add(photos.get(i).getImage_path());
                 }
 
                 GridImageAdapter adapter = new GridImageAdapter(mContext,
                         R.layout.layout_grid_imageview, "", imgUrls);
                 gridView.setAdapter(adapter);
+
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        mOnGridImageSelectedListener.onGridImageSelected(photos.get(position),ACTIVITY_NUM);
+                    }
+                });
             }
 
             @Override
@@ -178,6 +206,7 @@ public class ProfileFragment extends Fragment{
                 Log.d(TAG, "onClick: navigation to account settings clicked ");
                 Intent intent =new Intent(mContext,AccountSettingsActivity.class);
                 startActivity(intent);
+
             }
         });
     }
@@ -189,7 +218,7 @@ public class ProfileFragment extends Fragment{
         Log.d(TAG, "setupBottomNavigationView: setting up bottom nav view");
 
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext,bottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(mContext,getActivity(),bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
