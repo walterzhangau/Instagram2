@@ -181,8 +181,8 @@ public class ViewPostFragment extends Fragment {
             mTimestamp.setText("TODAY");
         }
 
-        //UniversalImageLoader.setImage(mUserAccountSettings.getProfile_photo(), mProfileImage, null, "");
-        //mUsername.setText(mUserAccountSettings.getUsername());
+        UniversalImageLoader.setImage(mUserAccountSettings.getProfile_photo(), mProfileImage, null, "");
+        mUsername.setText(mUserAccountSettings.getUsername());
     }
 
     /**
