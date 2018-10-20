@@ -28,10 +28,16 @@
         </activity>
         <activity android:name=".Likes.LikesActivity" />
         <activity android:name=".Profile.ProfileActivity" />
-        <activity android:name=".Search.SearchActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".Search.SearchActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".Share.ShareActivity" />
         <activity android:name=".Share.NextActivity" />
+        <activity android:name=".Share.CropActivity" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".Profile.AccountSettingsActivity" />
         <activity
             android:name=".Login.RegisterActivity"
@@ -40,10 +46,10 @@
         <activity
             android:name=".Login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".Home.LikesListActivity" />
         <activity android:name=".Home.CommentsListActivity" />
-        <activity android:name=".Filter.filter"></activity>
+        <activity android:name=".Filter.filter" />
     </application>
 
 </manifest>
