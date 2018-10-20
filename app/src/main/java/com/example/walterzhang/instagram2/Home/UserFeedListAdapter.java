@@ -145,6 +145,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: posting comment...");
                     onPostCommentClicked();
+                    setCommentsCount(photo.getPhoto_id());
                 }
             });
         }
