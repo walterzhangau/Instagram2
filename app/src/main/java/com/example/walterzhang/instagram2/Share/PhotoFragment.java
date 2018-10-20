@@ -159,10 +159,9 @@ public class PhotoFragment extends Fragment {
                         }
                     } else {
                         try {
-                            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                             Log.d(TAG, "onActivityResults: received new bitmap from camera: ");
                             Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                            intent.putExtra(getString(R.string.selected_bitmap), thumbnail);
+                            intent.putExtra(getString(R.string.selected_image), storedPhotoFile.toString());
                             intent.putExtra(getString(R.string.return_to_fragment),
                                     getString(R.string.edit_profile_fragment));
                             startActivity(intent);

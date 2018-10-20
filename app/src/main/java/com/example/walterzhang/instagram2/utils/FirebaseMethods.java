@@ -154,7 +154,7 @@ public class FirebaseMethods {
                 bm = ImageManager.getBitmap(imgUrl);
             }
 
-            byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
+            byte[] bytes = ImageManager.getBytesFromBitmap(bm, 25);
 
             UploadTask uploadTask = null;
             uploadTask = storageReference.putBytes(bytes);
