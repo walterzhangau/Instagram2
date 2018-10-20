@@ -2,6 +2,8 @@ package com.example.walterzhang.instagram2.Share;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -133,7 +135,7 @@ public class PhotoFragment extends Fragment {
                 File file = new File(mCurrentPhotoPath);
                 Bitmap bitmap = MediaStore.Images.Media
                         .getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
-
+                bitmap = rotateImageIfRequired(bitmap, Uri.fromFile(file));
                 FilePaths filePaths = new FilePaths();
                 File storedPhotoFile = new File(filePaths.UNISOCIAL + "/" +
                         generateImageFilename() + ".jpg");
@@ -147,6 +149,9 @@ public class PhotoFragment extends Fragment {
                 }
 
                 if (bitmap != null) {
+
+
+
                     if (isRootTask()) {
                         try {
                             Log.d(TAG, "onActivityResults: received new bitmap from camera: ");
@@ -175,5 +180,28 @@ public class PhotoFragment extends Fragment {
                 ex.getStackTrace();
             }
         }
+    }
+    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
+
+        ExifInterface ei = new ExifInterface(selectedImage.getPath());
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+    private static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImg;
     }
 }
