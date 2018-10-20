@@ -94,6 +94,7 @@
     <string name="field_description">description</string>
     <string name="field_phone_number">phone_number</string>
 
+
     <string name="field_tags">tags</string>
     <string name="field_image_path">image_path</string>
 

@@ -19,11 +19,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.Models.UserSettings;
-import com.example.walterzhang.instagram2.Models.User;
+import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.GridImageAdapter;
@@ -39,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -165,14 +165,15 @@ public class ProfileFragment extends Fragment{
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     photos.add(singleSnapshot.getValue(Photo.class));
                 }
+                final ArrayList<Photo> photos_reversed = new ArrayList<>();
+                Collections.reverse(photos);
 
-                // Setup our image grid
                 int gridWidth = getResources().getDisplayMetrics().widthPixels;
                 int imageWidth = gridWidth / NUM_GRID_COLUMNS;
                 gridView.setColumnWidth(imageWidth);
 
                 ArrayList<String> imgUrls = new ArrayList<String>();
-                for (int i = photos.size()-1; i >= 0 ; i--) {
+                for (int i = 0; i < photos.size() ; i++) {
                     imgUrls.add(photos.get(i).getImage_path());
                 }
 
@@ -263,7 +264,6 @@ public class ProfileFragment extends Fragment{
                     mFollowingCount++;
                 }
                 mFollowing.setText(String.valueOf(mFollowingCount));
-
             }
 
             @Override
