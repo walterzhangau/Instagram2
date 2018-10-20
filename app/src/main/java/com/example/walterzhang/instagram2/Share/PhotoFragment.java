@@ -29,7 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by mingshunc on 24/9/18.
+ * This Fragment is for taking photo from the camera. It calls the camera intent and retrieves the photo, stores it in the file and
+ * send it to the Crop Activity. 
  */
 
 public class PhotoFragment extends Fragment {
@@ -181,6 +182,11 @@ public class PhotoFragment extends Fragment {
             }
         }
     }
+
+    /** The following methods fixes the bug where in some devices when a photo is clicked with camera intent, it is rotated.
+     *  These methods take the bitmap and image path to check if the photo is rotated or not.
+     *  It fixes the photo and then returns the bitmap. **/
+
     private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
 
         ExifInterface ei = new ExifInterface(selectedImage.getPath());
