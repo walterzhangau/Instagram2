@@ -12,13 +12,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.walterzhang.instagram2.Models.User;
 import com.example.walterzhang.instagram2.Profile.ProfileActivity;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.Search.SearchActivity;
-import com.example.walterzhang.instagram2.models.User;
-import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.example.walterzhang.instagram2.utils.UserListAdapter;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

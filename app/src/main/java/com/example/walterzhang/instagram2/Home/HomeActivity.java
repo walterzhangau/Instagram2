@@ -52,15 +52,18 @@ public class HomeActivity extends AppCompatActivity implements
         //Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
 
-        initImageLoader();
+        if (mAuth.getCurrentUser() != null) {
 
-        setupBottomNavigationView();
-        setupViewPager();
+            initImageLoader();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-                new IntentFilter("photo_info"));
+            setupBottomNavigationView();
+            setupViewPager();
 
-        photoId = getIntent().getStringExtra("photoId"); //use this to receive photo id from home activity
+            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                    new IntentFilter("photo_info"));
+
+            photoId = getIntent().getStringExtra("photoId"); //use this to receive photo id from home activity
+        }
     }
 
     private void initImageLoader(){
@@ -77,7 +80,7 @@ public class HomeActivity extends AppCompatActivity implements
         adpater.addFragment(new CameraFragment());
         adpater.addFragment(new PostListFragment());
         adpater.addFragment(new DiscoverFragment());
-        
+
         ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(adpater);
 
@@ -99,7 +102,7 @@ public class HomeActivity extends AppCompatActivity implements
         Log.d(TAG, "setupBottomNavigationView: setting up bottom nav view");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext,bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
