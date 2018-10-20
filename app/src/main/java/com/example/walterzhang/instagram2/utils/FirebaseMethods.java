@@ -273,7 +273,7 @@ public class FirebaseMethods {
      * Save new like photo to the database
      * @return
      */
-    public void addNewLike(final String photoId) {
+    public void addNewLike(final String photoId, final MyCallback myCallback) {
         Log.d(TAG, "addNewLike: starting...");
 
         newLikeId = myRef.push().getKey();
@@ -295,7 +295,7 @@ public class FirebaseMethods {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     final String userId = singleSnapshot.getKey();
                     Query query = myRef.child(mContext.getString(R.string.dbname_user_photos))
-                            .child(singleSnapshot.getKey());
+                            .child(userId);
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
@@ -310,6 +310,14 @@ public class FirebaseMethods {
                                             .setValue(like);
                                 }
                             }
+
+                            getLikesCount(photoId, new FirebaseMethods.MyCallback() {
+                                @Override
+                                public void onCallback(long likesCount) {
+                                    Log.d("TAG", "likes count: " + Long.toString(likesCount));
+                                    myCallback.onCallback(likesCount);
+                                }
+                            });
                         }
 
                         @Override
@@ -327,11 +335,15 @@ public class FirebaseMethods {
         });
     }
 
+    public interface MyCallback {
+        void onCallback(long count);
+    }
+
     /**
      * remove the like from the database
      * @return
      */
-    public void removeLike(final String photoId) {
+    public void removeLike(final String photoId, final MyCallback myCallback) {
         Log.d(TAG, "removeLike: starting...");
 
         //remove like from photos node:
@@ -355,6 +367,13 @@ public class FirebaseMethods {
                         break;
                     }
                 }
+                getLikesCount(photoId, new FirebaseMethods.MyCallback() {
+                    @Override
+                    public void onCallback(long likesCount) {
+                        Log.d("TAG", "likes count: " + Long.toString(likesCount));
+                        myCallback.onCallback(likesCount);
+                    }
+                });
             }
 
             @Override
@@ -402,6 +421,25 @@ public class FirebaseMethods {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });
+    }
+
+    public void getLikesCount(final String photoId, final MyCallback myCallback) {
+       Query query = myRef.child(mContext.getString(R.string.dbname_photos))
+           .child(photoId)
+           .child(mContext.getString(R.string.field_likes));
+       query.addListenerForSingleValueEvent(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               long count = 0;
+               count = dataSnapshot.getChildrenCount();
+               myCallback.onCallback(count);
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
         });
     }
 
