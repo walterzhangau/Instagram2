@@ -38,7 +38,7 @@ import java.util.TimeZone;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link //UserFeedListAdapter.MyViewHolder} and makes a call to the
- * specified {@link fragment_post_list.OnListFragmentInteractionListener}.
+ * specified {@link PostListFragment.OnListFragmentInteractionListener}.
  */
 public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapter.MyViewHolder> {
 

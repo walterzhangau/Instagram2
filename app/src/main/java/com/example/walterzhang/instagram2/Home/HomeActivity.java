@@ -28,10 +28,10 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity extends AppCompatActivity implements
-        fragment_post_list.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener,
-        UserFragment.OnFragmentInteractionListener, fragment_like_list.OnLikeListFragmentInteractionListener,
+        PostListFragment.OnListFragmentInteractionListener, PostFragment.OnFragmentInteractionListener,
+        UserFragment.OnFragmentInteractionListener, LikeListFragment.OnLikeListFragmentInteractionListener,
         CommentFragment.OnFragmentInteractionListener,
-        fragment_comment_list.onCommentListFragmentInteractionListener {
+        CommentListFragment.onCommentListFragmentInteractionListener {
     
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;
@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity implements
     private void setupViewPager(){
         SectionsPagerAdapter adpater = new SectionsPagerAdapter(getSupportFragmentManager());
         adpater.addFragment(new CameraFragment());
-        adpater.addFragment(new fragment_post_list());
+        adpater.addFragment(new PostListFragment());
         adpater.addFragment(new MessagesFragment());
         ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(adpater);

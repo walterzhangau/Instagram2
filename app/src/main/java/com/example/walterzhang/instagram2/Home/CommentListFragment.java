@@ -13,9 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.MyLikeRecyclerViewAdapter;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.models.Like;
+import com.example.walterzhang.instagram2.models.Comment;
 import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,57 +29,45 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnLikeListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link onCommentListFragmentInteractionListener}
  * interface.
  */
-public class fragment_like_list extends Fragment {
+public class CommentListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-
+    // TODO: Customize parameters
     private int mColumnCount = 1;
-    private fragment_like_list.OnLikeListFragmentInteractionListener mListener;
-    private MyLikeRecyclerViewAdapter mAdapter;
+
+    private CommentListFragment.onCommentListFragmentInteractionListener mListener;
+    private CommentRecyclerViewAdapter mAdapter;
     private RecyclerView mListRecyclerView;
     private DatabaseReference myRef;
-    private static final String TAG = "fragment_like_list";
+    private static final String TAG = "CommentListFragment";
     Context context;
-    View likesListView;
+    View commentsListView;
 
-    List<UserAccountSettings> usersSettingsLiked = new ArrayList<>();
-    UserAccountSettings userSettings;
+    List<Comment> commentsList = new ArrayList<>();
+    Comment commentDetails;
+    List<UserAccountSettings> usersSettingsCommentedList = new ArrayList<>();
+    UserAccountSettings userSettingsCommented;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public fragment_like_list() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static fragment_like_list newInstance(int columnCount) {
-        fragment_like_list fragment = new fragment_like_list();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    public CommentListFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_like_list, container, false);
-        mListRecyclerView = view.findViewById(R.id.likes_list);
+        View view = inflater.inflate(R.layout.fragment_comment_list, container, false);
+        mListRecyclerView = view.findViewById(R.id.comments_list);
         context = view.getContext();
         String photo_id = getArguments().getString("photo_message");
 
@@ -92,8 +79,7 @@ public class fragment_like_list extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            likesListView = view;
-            getUsersLikedPhoto(photo_id);
+            getCommentAndUsersDetails(photo_id);
         }
         return view;
     }
@@ -102,11 +88,11 @@ public class fragment_like_list extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof fragment_like_list.OnLikeListFragmentInteractionListener) {
-            mListener = (fragment_like_list.OnLikeListFragmentInteractionListener) context;
+        if (context instanceof onCommentListFragmentInteractionListener) {
+            mListener = (onCommentListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement onCommentListFragmentInteractionListener");
         }
     }
 
@@ -126,64 +112,57 @@ public class fragment_like_list extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnLikeListFragmentInteractionListener {
-        // TODO: Update argument type and name
+    public interface onCommentListFragmentInteractionListener {
         void onListFragmentInteraction(TextView item);
     }
 
-    public void getUsersLikedPhoto(final String photoId) {
+    public void getCommentAndUsersDetails(String photoId) {
         FirebaseDatabase mFirebaseDatabase;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
         Query queryPhotos = myRef.child(context.getString(R.string.dbname_photos))
                 .child(photoId)
-                .child(context.getString(R.string.field_likes));
+                .child(context.getString(R.string.field_comments));
         queryPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "searching likes...");
+                    Log.d(TAG, "searching comments...");
 
-                    //get the user account settings based on the user id:
-                    displayUsersLikedPhotoByUserId(singleSnapshot.getValue(Like.class).getUser_id());
+                    commentDetails = singleSnapshot.getValue(Comment.class);
+                    commentsList.add(commentDetails);
+                    final String userId = commentDetails.getUser_id();
+
+                    populateUsersSettingsCommentedList(userId);
                 }
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, "198");
+
             }
         });
     }
 
-    private void displayUsersLike() {
-        if (usersSettingsLiked != null && usersSettingsLiked.size() > 0) {
-            Log.d(TAG, "displayUsersLike: usersSettingsLiked found...");
+    public void populateUsersSettingsCommentedList(final String userId) {
 
-            mAdapter = new MyLikeRecyclerViewAdapter(usersSettingsLiked, mListener);
-            mListRecyclerView.setAdapter(mAdapter);
-        }
-        else {
-            Log.d(TAG, "displayUsersLike: null usersSettingsLiked...");
-        }
-    }
-
-    public void displayUsersLikedPhotoByUserId(final String userId) {
-
-        FirebaseDatabase mFirebaseDatabase;
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
-        context = likesListView.getContext();
         myRef.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "searching user accounts...");
-                userSettings = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class);
-                usersSettingsLiked.add(userSettings);
+                Log.d(TAG, "getting details of user who made a comment...");
+                userSettingsCommented = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class);
+                usersSettingsCommentedList.add(userSettingsCommented);
 
-                displayUsersLike();
+                if (commentsList != null && commentsList.size() > 0) {
+                    Log.d(TAG, "displayUsersLike: usersSettingsLiked found...");
+
+                    mAdapter = new CommentRecyclerViewAdapter(usersSettingsCommentedList, commentsList, mListener);
+                    mListRecyclerView.setAdapter(mAdapter);
+                }
+                else {
+                    Log.d(TAG, "displayUsersLike: null usersSettingsLiked...");
+                }
             }
 
             @Override

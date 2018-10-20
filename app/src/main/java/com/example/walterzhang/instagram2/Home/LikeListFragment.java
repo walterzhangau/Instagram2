@@ -1,9 +1,9 @@
 package com.example.walterzhang.instagram2.Home;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,10 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.example.walterzhang.instagram2.models.Photo;
+import com.example.walterzhang.instagram2.MyLikeRecyclerViewAdapter;
 import com.example.walterzhang.instagram2.R;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.walterzhang.instagram2.models.Like;
+import com.example.walterzhang.instagram2.models.UserAccountSettings;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,40 +25,42 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnLikeListFragmentInteractionListener}
  * interface.
  */
-public class fragment_post_list extends Fragment {
+public class LikeListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
-    private static final String TAG = "fragment_post_list";
 
-    private ArrayList<Photo> mPhotos;
-    private ArrayList<String> mFollowing;
+    private int mColumnCount = 1;
+    private LikeListFragment.OnLikeListFragmentInteractionListener mListener;
+    private MyLikeRecyclerViewAdapter mAdapter;
     private RecyclerView mListRecyclerView;
-    private UserFeedListAdapter mAdapter;
+    private DatabaseReference myRef;
+    private static final String TAG = "LikeListFragment";
+    Context context;
+    View likesListView;
+
+    List<UserAccountSettings> usersSettingsLiked = new ArrayList<>();
+    UserAccountSettings userSettings;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public fragment_post_list() {
+    public LikeListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static fragment_post_list newInstance(int columnCount) {
-        fragment_post_list fragment = new fragment_post_list();
+    public static LikeListFragment newInstance(int columnCount) {
+        LikeListFragment fragment = new LikeListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -75,11 +79,11 @@ public class fragment_post_list extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: starting...");
-        View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        mListRecyclerView = view.findViewById(R.id.list);
+        View view = inflater.inflate(R.layout.fragment_like_list, container, false);
+        mListRecyclerView = view.findViewById(R.id.likes_list);
+        context = view.getContext();
+        String photo_id = getArguments().getString("photo_message");
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -88,11 +92,8 @@ public class fragment_post_list extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-            getPhotosFromFollowedUsers();
-        }
-        else {
-            Log.d(TAG, "onCreateView: view not instance of RecyclerView...");
+            likesListView = view;
+            getUsersLikedPhoto(photo_id);
         }
         return view;
     }
@@ -101,8 +102,8 @@ public class fragment_post_list extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof LikeListFragment.OnLikeListFragmentInteractionListener) {
+            mListener = (LikeListFragment.OnLikeListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -125,83 +126,70 @@ public class fragment_post_list extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
-
+    public interface OnLikeListFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onListFragmentInteraction(TextView item);
     }
 
-    private  void getPhotosFromFollowedUsers() {
-        final ArrayList<String> userIds = new ArrayList<>();
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-        Query queryFollowing = reference.child("following/")
-                .child(FirebaseAuth.getInstance().getUid());
-        queryFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getUsersLikedPhoto(final String photoId) {
+        FirebaseDatabase mFirebaseDatabase;
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+        Query queryPhotos = myRef.child(context.getString(R.string.dbname_photos))
+                .child(photoId)
+                .child(context.getString(R.string.field_likes));
+        queryPhotos.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "getting followers: onDataChange...");
-                //mFollowing = new ArrayList<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    userIds.add(singleSnapshot.getKey());
+                    Log.d(TAG, "searching likes...");
+
+                    //get the user account settings based on the user id:
+                    displayUsersLikedPhotoByUserId(singleSnapshot.getValue(Like.class).getUser_id());
                 }
-                mFollowing = userIds;
-                getPhotos();
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        Log.d(TAG, "Users following count: " + userIds.size());
-    }
-
-    private void getPhotos() {
-        Log.d(TAG, "getPhotos");
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-        Query query = reference.child("photos/");  //todo: REMOVE STRING HARD CODING!
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange...");
-                mPhotos = new ArrayList<>();
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    final Photo photo  = singleSnapshot.getValue(Photo.class);
-
-                    if (mFollowing.contains(photo.getUser_id())) {
-                        mPhotos.add(photo);
-                    }
-                }
-
-                Collections.sort(mPhotos, new Comparator<Photo>() {
-                    @Override
-                    public int compare(Photo u1, Photo u2) {
-                        return u1.getDate_created().compareTo(u2.getDate_created());
-                    }
-                });
-                Collections.reverse(mPhotos);
-
-                if (mPhotos.size() > 0) {
-                    displayPhotos();
-                } else {
-                    Log.d(TAG, "Not following anyone!");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w(TAG, "getPhotos:onCancelled", databaseError.toException());
+                Log.d(TAG, "198");
             }
         });
     }
 
-    private void displayPhotos() {
-        if (mPhotos != null) {
-            mAdapter = new UserFeedListAdapter(getActivity(), R.layout.fragment_post_list, mPhotos);
+    private void displayUsersLike() {
+        if (usersSettingsLiked != null && usersSettingsLiked.size() > 0) {
+            Log.d(TAG, "displayUsersLike: usersSettingsLiked found...");
+
+            mAdapter = new MyLikeRecyclerViewAdapter(usersSettingsLiked, mListener);
             mListRecyclerView.setAdapter(mAdapter);
         }
         else {
-            Log.d(TAG, "displayPhotos: null mPhotos...");
+            Log.d(TAG, "displayUsersLike: null usersSettingsLiked...");
         }
+    }
+
+    public void displayUsersLikedPhotoByUserId(final String userId) {
+
+        FirebaseDatabase mFirebaseDatabase;
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+        context = likesListView.getContext();
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "searching user accounts...");
+                userSettings = dataSnapshot.child(context.getString(R.string.dbname_user_account_settings)).child(userId).getValue(UserAccountSettings.class);
+                usersSettingsLiked.add(userSettings);
+
+                displayUsersLike();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
