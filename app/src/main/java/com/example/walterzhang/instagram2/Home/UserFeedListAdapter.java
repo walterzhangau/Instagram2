@@ -145,6 +145,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: posting comment...");
                     onPostCommentClicked();
+                    setCommentsCount(photo.getPhoto_id());
                 }
             });
         }
@@ -156,13 +157,27 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
             if (mHeartWhite.getVisibility() == View.VISIBLE) {
                 mHeartWhite.setVisibility(View.GONE);
                 mHeartRed.setVisibility(View.VISIBLE);
-                //save the like information to the db:
-                mFirebaseMethods.addNewLike(photo.getPhoto_id());
+                //save the like information to the db and update like counter:
+                mFirebaseMethods.addNewLike(photo.getPhoto_id(), new FirebaseMethods.MyCallback() {
+                    @Override
+                    public void onCallback(long likesCount) {
+                        Log.d("TAG", Long.toString(likesCount));
+                        setLikesCount(likesCount);
+                    }
+                });
             }
             else {
                 mHeartRed.setVisibility(View.GONE);
                 mHeartWhite.setVisibility(View.VISIBLE);
-                mFirebaseMethods.removeLike(photo.getPhoto_id());
+
+                //delete the like from the database and update the like counter
+                mFirebaseMethods.removeLike(photo.getPhoto_id(), new FirebaseMethods.MyCallback() {
+                    @Override
+                    public void onCallback(long likesCount) {
+                        Log.d("TAG", "likes count: " + Long.toString(likesCount));
+                        setLikesCount(likesCount);
+                    }
+                });
             }
         }
 
@@ -205,33 +220,19 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
 
         /* show the number of users who liked the photo if at least one user liked
           the photo: */
-        private void setLikesCount(String photoId) {
-
-            Query query = myRef.child(view.getContext().getString(R.string.dbname_photos))
-                    .child(photoId)
-                    .child(view.getContext().getString(R.string.field_likes));
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    long count = 0;
-                    count = dataSnapshot.getChildrenCount();
-
-                    String text = "";
-                    if (count == 1) {
-                        text = count + " like";
-                        likesText.setText(text);
-                    }
-                    else if (count > 1) {
-                        text = count + " likes";
-                        likesText.setText(text);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+        private void setLikesCount(long count) {
+            String text = "";
+            if (count == 1) {
+                text = count + " like";
+                likesText.setText(text);
+            }
+            else if (count > 1) {
+                text = count + " likes";
+                likesText.setText(text);
+            }
+            else {
+                likesText.setText("");
+            }
         }
 
         /* If at least on person commented on the photo, show the number of users who commented on
@@ -333,7 +334,7 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         Glide.with(this.mContext).load(mDataset.get(position).getImage_path()).into(holder.image);
         holder.photo = mDataset.get(position);
         String photoId = holder.photo.getPhoto_id();
@@ -345,7 +346,15 @@ public class UserFeedListAdapter extends RecyclerView.Adapter<UserFeedListAdapte
         //if the photo has been liked by the user then set the heart to red:
         holder.setHeartColor(photoId);
 
-        holder.setLikesCount(photoId);
+        FirebaseMethods mFirebaseMethods = new FirebaseMethods(mContext);
+        mFirebaseMethods.getLikesCount(photoId, new FirebaseMethods.MyCallback() {
+            @Override
+            public void onCallback(long likesCount) {
+                Log.d("TAG", "likes count: " + Long.toString(likesCount));
+                holder.setLikesCount(likesCount);
+            }
+        });
+
         holder.setCommentsCount(photoId);
 
         holder.showTimeDifference();
