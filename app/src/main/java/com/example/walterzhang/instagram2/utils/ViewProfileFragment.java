@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.walterzhang.instagram2.Home.DiscoverFragment;
 import com.example.walterzhang.instagram2.models.Photo;
 import com.example.walterzhang.instagram2.models.User;
 import com.example.walterzhang.instagram2.models.UserAccountSettings;
@@ -55,6 +56,7 @@ public class ViewProfileFragment extends Fragment{
     private ImageView profileMenu, mBackArrow;
     private BottomNavigationViewEx bottomNavigationView;
     private Context mContext;
+    private DiscoverFragment discoverFragment;
 
 
     //Firebase
@@ -93,7 +95,7 @@ public class ViewProfileFragment extends Fragment{
         mBackArrow = view.findViewById(R.id.backArrow);
         bottomNavigationView = (BottomNavigationViewEx) view .findViewById(R.id.bottomNavViewBar);
         mContext = getActivity();
-
+        discoverFragment = new DiscoverFragment();
         Log.d(TAG, "onCreateView: started. ");
         setupFirebaseAuth();
         setupBottomNavigationView();
@@ -127,6 +129,8 @@ public class ViewProfileFragment extends Fragment{
                         .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 setFollowing();
                 getFollowersCount();
+
+
             }
         });
 

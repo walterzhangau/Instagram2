@@ -16,11 +16,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.dummy.DummyContent;
 import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class LikesListActivity extends AppCompatActivity implements fragment_like_list.OnLikeListFragmentInteractionListener {
+public class LikesListActivity extends AppCompatActivity implements LikeListFragment.OnLikeListFragmentInteractionListener {
     private static final String TAG = "LikesListActivity";
     private static final int ACTIVITY_NUM = 0;
 
@@ -36,7 +35,7 @@ public class LikesListActivity extends AppCompatActivity implements fragment_lik
 
         setupBottomNavigationView();
 
-        android.app.Fragment userFragment = new fragment_like_list();
+        android.app.Fragment userFragment = new LikeListFragment();
 
         photoId = getIntent().getStringExtra("photo_message"); // Use this to receive from home activity
 
