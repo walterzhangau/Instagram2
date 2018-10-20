@@ -31,7 +31,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
 
-    // image filters
+    //Image filters
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'com.jakewharton:butterknife:9.0.0-rc1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
@@ -49,11 +49,14 @@ dependencies {
     //Bottom Navigation View EX Library
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
     implementation "com.android.support:design:26."
-    //circle image view
+    //Circle image view
     implementation "de.hdodenhof:circleimageview:2.2.0"
 
     //Universal image loader
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
+    //Ucrop
+    compile 'com.github.yalantis:ucrop:2.2.2'
 
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.android.support:support-v4:23.4.0'

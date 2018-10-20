@@ -32,16 +32,16 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link onCommentListFragmentInteractionListener}
  * interface.
  */
-public class fragment_comment_list extends Fragment {
+public class CommentListFragment extends Fragment {
 
     // TODO: Customize parameters
     private int mColumnCount = 1;
 
-    private fragment_comment_list.onCommentListFragmentInteractionListener mListener;
+    private CommentListFragment.onCommentListFragmentInteractionListener mListener;
     private CommentRecyclerViewAdapter mAdapter;
     private RecyclerView mListRecyclerView;
     private DatabaseReference myRef;
-    private static final String TAG = "fragment_comment_list";
+    private static final String TAG = "CommentListFragment";
     Context context;
     View commentsListView;
 
@@ -54,7 +54,7 @@ public class fragment_comment_list extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public fragment_comment_list() {
+    public CommentListFragment() {
     }
 
     @Override

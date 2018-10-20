@@ -17,13 +17,13 @@ import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link TextView} and makes a call to the
- * specified {@link fragment_comment_list.onCommentListFragmentInteractionListener}.
+ * specified {@link CommentListFragment.onCommentListFragmentInteractionListener}.
  */
 public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder> {
 
     private final List<Comment> mComments;
     private final List<UserAccountSettings> mUsersSettings;
-    private final fragment_comment_list.onCommentListFragmentInteractionListener mListener;
+    private final CommentListFragment.onCommentListFragmentInteractionListener mListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,7 +39,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         }
     }
 
-    public CommentRecyclerViewAdapter(@NonNull List<UserAccountSettings> usersAccSettings, List<Comment> comments, fragment_comment_list.onCommentListFragmentInteractionListener listener) {
+    public CommentRecyclerViewAdapter(@NonNull List<UserAccountSettings> usersAccSettings, List<Comment> comments, CommentListFragment.onCommentListFragmentInteractionListener listener) {
         mUsersSettings = usersAccSettings;
         mComments = comments;
         mListener = listener;

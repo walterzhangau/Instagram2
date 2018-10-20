@@ -33,17 +33,17 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnLikeListFragmentInteractionListener}
  * interface.
  */
-public class fragment_like_list extends Fragment {
+public class LikeListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
 
     private int mColumnCount = 1;
-    private fragment_like_list.OnLikeListFragmentInteractionListener mListener;
+    private LikeListFragment.OnLikeListFragmentInteractionListener mListener;
     private MyLikeRecyclerViewAdapter mAdapter;
     private RecyclerView mListRecyclerView;
     private DatabaseReference myRef;
-    private static final String TAG = "fragment_like_list";
+    private static final String TAG = "LikeListFragment";
     Context context;
     View likesListView;
 
@@ -54,13 +54,13 @@ public class fragment_like_list extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public fragment_like_list() {
+    public LikeListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static fragment_like_list newInstance(int columnCount) {
-        fragment_like_list fragment = new fragment_like_list();
+    public static LikeListFragment newInstance(int columnCount) {
+        LikeListFragment fragment = new LikeListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -102,8 +102,8 @@ public class fragment_like_list extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof fragment_like_list.OnLikeListFragmentInteractionListener) {
-            mListener = (fragment_like_list.OnLikeListFragmentInteractionListener) context;
+        if (context instanceof LikeListFragment.OnLikeListFragmentInteractionListener) {
+            mListener = (LikeListFragment.OnLikeListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
