@@ -1,13 +1,15 @@
-package com.example.walterzhang.instagram2;
+package com.example.walterzhang.instagram2.utils;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,10 +17,7 @@ import android.widget.TextView;
 
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
-import com.example.walterzhang.instagram2.utils.BottomNavigationViewHelper;
-import com.example.walterzhang.instagram2.utils.FirebaseMethods;
-import com.example.walterzhang.instagram2.utils.SquareImageView;
-import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
+import com.example.walterzhang.instagram2.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -67,6 +66,8 @@ public class ViewPostFragment extends Fragment {
     private String photoUsername;
     private String photoUrl;
     private UserAccountSettings mUserAccountSettings;
+    private GestureDetector mGestureDetector;
+    private HeartActivity mHeart;
 
     @Nullable
     @Override
@@ -84,6 +85,11 @@ public class ViewPostFragment extends Fragment {
         mHeartWhite = (ImageView) view.findViewById(R.id.image_heart);
         mProfileImage = (ImageView) view.findViewById(R.id.profile_photo);
 
+        mHeartRed.setVisibility(View.GONE);
+        mHeartWhite.setVisibility(View.VISIBLE);
+        mHeart = new HeartActivity(mHeartWhite, mHeartRed);
+        mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
+
         try{
             mPhoto = getPhotoFromBundle();
             UniversalImageLoader.setImage(mPhoto.getImage_path(), mPostImage, null, "");
@@ -98,8 +104,38 @@ public class ViewPostFragment extends Fragment {
         setupBottomNavigationView();
         getPhotoDetails();
 
-
+        testToggle();
         return view;
+    }
+
+
+    private void testToggle(){
+        mHeartRed.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mGestureDetector.onTouchEvent(event);
+            }
+        });
+        mHeartWhite.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mGestureDetector.onTouchEvent(event);
+            }
+        });
+    }
+
+
+    public class GestureListener extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            mHeart.toggleLike();
+            return true;
+        }
     }
 
 
@@ -109,12 +145,21 @@ public class ViewPostFragment extends Fragment {
                 .child(getString(R.string.dbname_user_account_settings))
                 .orderByChild(getString(R.string.field_user_id))
                 .equalTo(mPhoto.getUser_id());
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, getString(R.string.dbname_user_account_settings));
+                    Log.d(TAG, getString(R.string.field_user_id));
+                    Log.d(TAG, mPhoto.getUser_id());
+                    Log.d(TAG, mPhoto.getUser_id());
+                    Log.d(TAG, mPhoto.getUser_id());
+                    Log.d(TAG, mPhoto.getUser_id());
+
                     mUserAccountSettings = singleSnapshot.getValue(UserAccountSettings.class);
                 }
+
                 setupWidgets();
 
             }
@@ -135,8 +180,9 @@ public class ViewPostFragment extends Fragment {
         }else{
             mTimestamp.setText("TODAY");
         }
-        UniversalImageLoader.setImage(mUserAccountSettings.getProfile_photo(), mProfileImage, null, "");
-        mUsername.setText(mUserAccountSettings.getUsername());
+
+        //UniversalImageLoader.setImage(mUserAccountSettings.getProfile_photo(), mProfileImage, null, "");
+        //mUsername.setText(mUserAccountSettings.getUsername());
     }
 
     /**

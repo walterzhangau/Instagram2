@@ -264,6 +264,7 @@ public class ProfileFragment extends Fragment{
                     mFollowingCount++;
                 }
                 mFollowing.setText(String.valueOf(mFollowingCount));
+
             }
 
             @Override

@@ -104,7 +104,7 @@ public class PhotoFragment extends Fragment {
                     try {
                         Log.d(TAG, "onActivityResults: received new bitmap from camera: " + bitmap);
                         Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                        //intent.putExtra(getString(R.string.selected_bitmap), bitmap);
                         intent.putExtra(getString(R.string.return_to_fragment),
                                 getString(R.string.edit_profile_fragment));
                         startActivity(intent);

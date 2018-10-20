@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.R;
-import com.example.walterzhang.instagram2.ViewPostFragment;
+import com.example.walterzhang.instagram2.utils.ViewPostFragment;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.example.walterzhang.instagram2.utils.ViewProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
