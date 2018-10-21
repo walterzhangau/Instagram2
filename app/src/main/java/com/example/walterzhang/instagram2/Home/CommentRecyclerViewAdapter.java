@@ -57,6 +57,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         holder.username.setText(mUsersSettings.get(position).getUsername());
         holder.commentText.setText(mComments.get(position).getComment());
 
+
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

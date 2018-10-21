@@ -118,7 +118,7 @@
     <string name="confirm_password_dialog">ConfirmPaswordDialog</string>
 
     <string name="activity_number">activity_number</string>
-    <string name="my_activity">YES</string>
+    <string name="my_activity">YOU</string>
     <string name="follow_activity">FOLLOWING</string>
 
 </resources>
