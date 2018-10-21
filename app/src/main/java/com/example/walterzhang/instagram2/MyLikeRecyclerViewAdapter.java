@@ -12,8 +12,11 @@ import com.example.walterzhang.instagram2.Home.LikeListFragment.OnLikeListFragme
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
 import com.example.walterzhang.instagram2.utils.FirebaseMethods;
+import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link LikeListFragment} and makes a call to the
@@ -27,6 +30,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        CircleImageView profilePicture;
         TextView username;
 
         private FirebaseMethods mFirebaseMethods;
@@ -41,7 +45,8 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
 
             mFirebaseMethods = new FirebaseMethods(v.getContext());
 
-            username = view.findViewById(R.id.uname);
+            profilePicture = view.findViewById(R.id.profile_image_comments);
+            username = view.findViewById(R.id.unameUser);
         }
     }
 
@@ -60,6 +65,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.username.setText(mUsersSettings.get(position).getUsername());
+        UniversalImageLoader.setImage(mUsersSettings.get(position).getProfile_photo(), holder.profilePicture, null, "");
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -118,14 +118,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Liked by George, Tom and 30 others"
+                    android:text="Loading"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:id="@+id/image_likes"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="walter.zhang photo caption #hashtag"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:id="@+id/image_caption"
@@ -134,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View all 50 comments"
+                    android:text=""
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:id="@+id/image_comments_link"
@@ -143,7 +143,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="14 DAYS AGO"
+                    android:text=""
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:id="@+id/image_time_posted"

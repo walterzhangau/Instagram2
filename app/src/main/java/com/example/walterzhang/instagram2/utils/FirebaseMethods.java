@@ -319,18 +319,6 @@ public class FirebaseMethods {
                                     }
 
                                 }
-//                                if (singleSnapshot2.getValue(Photo.class).getPhoto_id()
-//                                        .equals(photoId)) {
-//                                    myRef.child(mContext.getString(R.string.dbname_user_photos))
-//                                            .child(userId)
-//                                            .child(photoId)
-//                                            .child(mContext.getString(R.string.field_likes))
-//                                            .child(newLikeId)
-//                                            .setValue(like);
-//                                }
-
-
-
                             }
 
                             getLikesCount(photoId, new FirebaseMethods.MyCallback() {
@@ -496,7 +484,16 @@ public class FirebaseMethods {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
                             for (DataSnapshot singleSnapshot2 : dataSnapshot2.getChildren()) {
-                                if (singleSnapshot2.getValue(Photo.class).getPhoto_id()
+
+                                Photo newPhoto = new Photo();
+                                Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot2.getValue();
+
+
+                                if (objectMap.get(R.string.field_photo_id) != null){
+
+                                    newPhoto.setPhoto_id(objectMap.get(R.string.field_photo_id).toString());
+
+                                    if (newPhoto.getPhoto_id()
                                         .equals(photoId)) {
                                     myRef.child(mContext.getString(R.string.dbname_user_photos))
                                             .child(userId)
@@ -506,6 +503,8 @@ public class FirebaseMethods {
                                             .setValue(comment);
                                 }
                             }
+                            }
+
                         }
 
                         @Override
