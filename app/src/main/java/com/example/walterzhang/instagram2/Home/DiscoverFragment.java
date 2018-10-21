@@ -26,8 +26,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class DiscoverFragment extends Fragment {
@@ -53,9 +56,30 @@ public class DiscoverFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_messages,container,false);
         setupFirebaseAuth();
         mUser = mAuth.getCurrentUser();
+        mUserList = new ArrayList<>();
         listView = view.findViewById(R.id.listView);
+        suggestionList = new ArrayList<>();
+        myRef = FirebaseDatabase.getInstance().getReference();
+
+        mAdapter = new UserListAdapter(getActivity(), R.layout.discover_list, mUserList);
+        listView.setAdapter(mAdapter);
+        mUserList = Collections.synchronizedList(mUserList);
+        mUserList.clear();
+
+
         generateFollowingList();
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG,"onItemClick: selected user;" + mUserList.get(i).toString());
+                Intent intent=new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.search_activity));
+                intent.putExtra(getString(R.string.intent_user), mUserList.get(i));
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -64,7 +88,7 @@ public class DiscoverFragment extends Fragment {
 
         Log.d(TAG, "Finding Logged User suggestion list");
 
-        suggestionList = new ArrayList<>();
+
         suggestionList.clear();
         myRef = FirebaseDatabase.getInstance().getReference();
         final Object obj = new Object();
@@ -78,8 +102,9 @@ public class DiscoverFragment extends Fragment {
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                         Log.d(TAG, "Found Following User: "+ singleSnapshot.getValue());
                         HashMap<String,String> hmap = ((HashMap)singleSnapshot.getValue(obj.getClass()));
-                        if(!hmap.get("user_id").equals(mUser.getUid())){
+                        if(!hmap.get("user_id").equals(mUser.getUid()) && !suggestionList.contains(hmap.get("user_id"))){
                             suggestionList.add(hmap.get("user_id"));
+                            mUserList.clear();
                         }
                     }
                     if(suggestionList.isEmpty())
@@ -111,23 +136,43 @@ public class DiscoverFragment extends Fragment {
 
     private void populateUserList(){
 
-        mUserList = new ArrayList<>();
-        mUserList.clear();
 
-        myRef = FirebaseDatabase.getInstance().getReference();
+
+        mAdapter.notifyDataSetChanged();
+
+
 
         Log.d(TAG, "Populating User List");
 
         for (String user: suggestionList){
+            Log.d(TAG, "SuggestionList"+ user);
             Query query = myRef.child(getString(R.string.dbname_user)).orderByChild(getString(R.string.field_user_id)).equalTo(user);
 
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                        Log.d(TAG, "OnDataChange: found user details" + singleSnapshot.getValue(User.class).toString());
-                        mUserList.add(singleSnapshot.getValue(User.class));
-                        displaySuggestions();
+                        Log.d(TAG, "OnDataChange: found user details" + singleSnapshot.getValue(User.class));
+                        if(mUserList.isEmpty()){
+                            mUserList.add(singleSnapshot.getValue(User.class));
+                        }
+                        else {
+                            for (User user : mUserList) {
+                                Log.d(TAG, "Checking Usets" + user.getUser_id() + " & " + singleSnapshot.getValue(User.class).getUser_id());
+                                if (!user.getUser_id().equals(singleSnapshot.getValue(User.class).getUser_id())) {
+                                    Log.d(TAG, "Populating mUserlist" + singleSnapshot.getValue(User.class));
+                                    mUserList.add(singleSnapshot.getValue(User.class));
+                                    Log.d(TAG, "mUserList Size: " + mUserList.size());
+                                }
+                            }
+                        }
+                        /*`
+                        if(!mUserList.contains(singleSnapshot.getValue(User.class)))
+                        {
+
+                        }*/
+
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
 
@@ -137,26 +182,6 @@ public class DiscoverFragment extends Fragment {
                 }
             });
         }
-        displaySuggestions();
-
-    }
-
-    private void displaySuggestions() {
-
-        mAdapter = new UserListAdapter(getActivity(), R.layout.discover_list, mUserList);
-
-        listView.setAdapter(mAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG,"onItemClick: selected user;" + mUserList.get(i).toString());
-                Intent intent=new Intent(getActivity(), ProfileActivity.class);
-                intent.putExtra(getString(R.string.calling_activity),getString(R.string.search_activity));
-                intent.putExtra(getString(R.string.intent_user), mUserList.get(i));
-                startActivity(intent);
-            }
-        });
 
 
     }

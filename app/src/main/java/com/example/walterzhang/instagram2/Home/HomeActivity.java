@@ -52,15 +52,18 @@ public class HomeActivity extends AppCompatActivity implements
         //Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
 
-        initImageLoader();
+        if (mAuth.getCurrentUser() != null) {
 
-        setupBottomNavigationView();
-        setupViewPager();
+            initImageLoader();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-                new IntentFilter("photo_info"));
+            setupBottomNavigationView();
+            setupViewPager();
 
-        photoId = getIntent().getStringExtra("photoId"); //use this to receive photo id from home activity
+            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                    new IntentFilter("photo_info"));
+
+            photoId = getIntent().getStringExtra("photoId"); //use this to receive photo id from home activity
+        }
     }
 
     private void initImageLoader(){
@@ -77,7 +80,7 @@ public class HomeActivity extends AppCompatActivity implements
         adpater.addFragment(new CameraFragment());
         adpater.addFragment(new PostListFragment());
         adpater.addFragment(new DiscoverFragment());
-        
+
         ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(adpater);
 
