@@ -76,14 +76,7 @@
                     android:text="DESCRIPTION TEMP"
                     android:textSize="16sp"
                     android:layout_marginTop="5dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/website"
-                    android:textColor="@color/websiteBlue"
-                    android:text="WEBSITE TEMP"
-                    android:textSize="16sp"
-                    android:layout_marginTop="5dp"/>
+
 
                 
             </LinearLayout>

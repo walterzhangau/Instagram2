@@ -36,7 +36,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class FirebaseMethods {
@@ -300,15 +302,35 @@ public class FirebaseMethods {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
                             for (DataSnapshot singleSnapshot2 : dataSnapshot2.getChildren()) {
-                                if (singleSnapshot2.getValue(Photo.class).getPhoto_id()
-                                        .equals(photoId)) {
-                                    myRef.child(mContext.getString(R.string.dbname_user_photos))
-                                            .child(userId)
-                                            .child(photoId)
-                                            .child(mContext.getString(R.string.field_likes))
-                                            .child(newLikeId)
-                                            .setValue(like);
+
+                                Photo photo = new Photo();
+                                Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot2.getValue();
+                                if (objectMap.get(R.string.field_photo_id) != null){
+
+                                    photo.setPhoto_id(objectMap.get(R.string.field_photo_id).toString());
+
+                                    if (photo.getUser_id().equals(photoId)) {
+                                        myRef.child(mContext.getString(R.string.dbname_user_photos))
+                                                .child(userId)
+                                                .child(photoId)
+                                                .child(mContext.getString(R.string.field_likes))
+                                                .child(newLikeId)
+                                                .setValue(like);
+                                    }
+
                                 }
+//                                if (singleSnapshot2.getValue(Photo.class).getPhoto_id()
+//                                        .equals(photoId)) {
+//                                    myRef.child(mContext.getString(R.string.dbname_user_photos))
+//                                            .child(userId)
+//                                            .child(photoId)
+//                                            .child(mContext.getString(R.string.field_likes))
+//                                            .child(newLikeId)
+//                                            .setValue(like);
+//                                }
+
+
+
                             }
 
                             getLikesCount(photoId, new FirebaseMethods.MyCallback() {

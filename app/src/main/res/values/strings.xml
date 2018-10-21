@@ -97,6 +97,8 @@
     <string name="field_image_path">image_path</string>
 
 
+    <string name="view_comments_fragment">View Comments</string>
+
 
     <string name="field_photo_path">image_path</string>
     <string name="search_user">Search User</string>
