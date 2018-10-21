@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="walter.zhang"
-                android:id="@+id/comment_username"
+                android:id="@+id/user_username"
                 android:layout_marginLeft="15dp"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -47,7 +47,7 @@
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:layout_toRightOf="@+id/comment_username"
+                android:layout_toRightOf="@+id/user_username"
                 android:id="@+id/comment"/>
 
 

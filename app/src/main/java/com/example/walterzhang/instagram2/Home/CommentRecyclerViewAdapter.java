@@ -12,8 +12,11 @@ import android.widget.TextView;
 import com.example.walterzhang.instagram2.R;
 import com.example.walterzhang.instagram2.Models.Comment;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
+import com.example.walterzhang.instagram2.utils.UniversalImageLoader;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link TextView} and makes a call to the
@@ -27,6 +30,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        CircleImageView profilePicture;
         TextView username;
         EditText commentText;
         View view;
@@ -34,7 +38,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         public ViewHolder(View v) {
             super(v);
             view = v;
-            username = view.findViewById(R.id.unameComment);
+            profilePicture = view.findViewById(R.id.profile_image_comments);
+            username = view.findViewById(R.id.unameUser);
             commentText = view.findViewById(R.id.commentText);
         }
     }
@@ -56,6 +61,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.username.setText(mUsersSettings.get(position).getUsername());
         holder.commentText.setText(mComments.get(position).getComment());
+        UniversalImageLoader.setImage(mUsersSettings.get(position).getProfile_photo(), holder.profilePicture, null, "");
 
 
         holder.view.setOnClickListener(new View.OnClickListener() {

@@ -41,7 +41,7 @@ public class MyLikeRecyclerViewAdapter extends RecyclerView.Adapter<MyLikeRecycl
 
             mFirebaseMethods = new FirebaseMethods(v.getContext());
 
-            username = view.findViewById(R.id.uname);
+            username = view.findViewById(R.id.user_username);
         }
     }
 
