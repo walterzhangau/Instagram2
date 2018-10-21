@@ -8,6 +8,10 @@ public class Like {
 
     }
 
+    public Like(String user_id) {
+        this.user_id = user_id;
+    }
+
     public String getUser_id() {
         return user_id;
     }
@@ -15,4 +19,14 @@ public class Like {
     public void setUser_id(String setUser_id) {
         this.user_id = setUser_id;
     }
+
+    @Override
+    public String toString() {
+        return "Like{" +
+                "user_id='" + user_id + '\'' +
+                '}';
+    }
+
+
+
 }

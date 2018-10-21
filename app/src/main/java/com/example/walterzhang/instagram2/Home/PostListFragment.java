@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A fragment representing a list of Items.
@@ -163,12 +167,38 @@ public class PostListFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange...");
                 mPhotos = new ArrayList<>();
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    final Photo photo  = singleSnapshot.getValue(Photo.class);
 
-                    if (mFollowing.contains(photo.getUser_id())) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+
+
+
+//                    final Photo photo  = singleSnapshot.getValue(Photo.class);
+//
+//                    if (mFollowing.contains(photo.getUser_id())) {
+//                        mPhotos.add(photo);
+//                    }
+                    Photo photo = new Photo();
+                    Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+
+                    photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
+                    photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                    photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
+                    photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
+                    photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
+                    photo.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
+
+                    List<Like> likesList = new ArrayList<Like>();
+                    for (DataSnapshot dSnapshot : singleSnapshot
+                            .child(getString(R.string.field_likes)).getChildren()){
+                        Like like = new Like();
+                        like.setUser_id(dSnapshot.getValue(Like.class).getUser_id());
+                        likesList.add(like);
+                    }
+                    photo.setLikes(likesList);
+                    if(mFollowing.contains(photo.getUser_id())) {
                         mPhotos.add(photo);
                     }
+
                 }
 
                 Collections.sort(mPhotos, new Comparator<Photo>() {
