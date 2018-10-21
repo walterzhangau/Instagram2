@@ -158,7 +158,7 @@ public class PostListFragment extends Fragment {
         Log.d(TAG, "getPhotos");
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-        Query query = reference.child("photos/");  //todo: REMOVE STRING HARD CODING!
+        Query query = reference.child("photos/");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

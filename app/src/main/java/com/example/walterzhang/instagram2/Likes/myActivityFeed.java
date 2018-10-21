@@ -9,11 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.example.walterzhang.instagram2.Home.UserFeedListAdapter;
 import com.example.walterzhang.instagram2.Models.Comment;
 import com.example.walterzhang.instagram2.Models.Like;
+import com.example.walterzhang.instagram2.Models.MyActivity;
 import com.example.walterzhang.instagram2.Models.Photo;
+import com.example.walterzhang.instagram2.Models.User;
+import com.example.walterzhang.instagram2.Models.UserAccountSettings;
+import com.example.walterzhang.instagram2.Models.UserSettings;
 import com.example.walterzhang.instagram2.R;
+import com.example.walterzhang.instagram2.utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +47,9 @@ public class myActivityFeed extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private ArrayList<Photo> userPhotos;
-
+    private ListView listView;
+    private MyActivityAdapter myActivityAdapter;
+    private List<MyActivity> myActivityList;
     public myActivityFeed() {
         // Required empty public constructor
     }
@@ -49,10 +58,16 @@ public class myActivityFeed extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view =inflater.inflate(R.layout.fragment_my_activity_feed,container,false);
         setupFirebaseAuth();
-        getAllUserPhotos();
+        myActivityList = new ArrayList<>();
+        myActivityAdapter = new MyActivityAdapter(getActivity(), R.layout.layout_my_activity_row, myActivityList );
+        listView = view.findViewById(R.id.listview_activity);
+        listView.setAdapter(myActivityAdapter);
 
-        return inflater.inflate(R.layout.fragment_my_activity_feed, container, false);
+        getAllUserPhotos();
+        getFollowersList();
+        return view;
 
 
 
@@ -105,6 +120,12 @@ public class myActivityFeed extends Fragment {
                 Collections.reverse(photos);
 
                 Log.d(TAG,"Photos added: " + photos.size());
+                if(photos.isEmpty()){}
+                else
+                {
+                    getUserLike(photos);
+                }
+
 
             }
 
@@ -118,7 +139,97 @@ public class myActivityFeed extends Fragment {
 
     }
 
+    private void getUserLike(ArrayList<Photo> photos) {
 
+
+        Log.d(TAG, "Fetching users who liked the photos");
+
+        for(final Photo photo:photos){
+        Log.d(TAG, "Getting likes for photo:" + photo);
+
+        Query query = myRef.child(getString(R.string.dbname_photos)).child(photo.getPhoto_id()).child(getString(R.string.field_likes));
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapShot: dataSnapshot.getChildren()){
+
+                    Log.d(TAG, "Finding Likes for photo:"+ singleSnapShot.getValue(Like.class));
+                    final String user_id = singleSnapShot.getValue(Like.class).getUser_id();
+                    myActivityList.add(new MyActivity(photo,user_id));
+                    Log.d(TAG, "myActivityList: " + myActivityList.size());
+                    Collections.reverse(myActivityList);
+                    myActivityAdapter.notifyDataSetChanged();
+
+                  /*  myRef.addValueEventListener(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "setting photo author name...");
+                            String authorName = dataSnapshot.child(getString(R.string.dbname_user_account_settings)).child(user_id).getValue(UserAccountSettings.class).getUsername();
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });*/
+
+
+                    /*Query query1 = myRef.child(getString(R.string.dbname_user_account_settings))
+                            .child(singleSnapShot.getValue(Like.class).getUser_id());
+                    query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });*/
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    }
+
+    private void getFollowersList(){
+            Log.d(TAG, "Getting Follower list");
+
+            Query query = myRef.child(getString(R.string.dbname_followers)).child(mAuth.getCurrentUser().getUid());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot singleSnapShot: dataSnapshot.getChildren()){
+                        Log.d(TAG, "Found Follower:"+ singleSnapShot.getValue(User.class).toString());
+                        myActivityList.add(new MyActivity(null, singleSnapShot.getValue(User.class).getUser_id()));
+                        Log.d(TAG, "myActivityList: " + myActivityList.size());
+                        Collections.reverse(myActivityList);
+                        myActivityAdapter.notifyDataSetChanged();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+    }
 
 
     /**
