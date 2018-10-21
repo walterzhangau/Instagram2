@@ -145,6 +145,7 @@ public class ViewProfileFragment extends Fragment{
                 getFollowersCount();
 
 
+
             }
         });
 

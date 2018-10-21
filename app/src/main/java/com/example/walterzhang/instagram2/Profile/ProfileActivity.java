@@ -24,7 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ProfileActivity extends AppCompatActivity implements
         ProfileFragment.OnGridImageSelectedListener ,
-        ViewPostFragment.OnCommentThreadSelectedListener{
+        ViewPostFragment.OnCommentThreadSelectedListener ,
+        ViewProfileFragment.OnGridImageSelectedListener {
 
     private static final String TAG = "ProfileActivity";
     private FirebaseAuth mAuth;
