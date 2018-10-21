@@ -10,7 +10,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
@@ -18,7 +20,7 @@
             app:civ_border_color="@color/black"
             app:civ_border_width="0.5dp"
             android:id="@+id/profile_image_comments"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
             android:layout_centerVertical="true"
 
             />
