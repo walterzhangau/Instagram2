@@ -319,18 +319,6 @@ public class FirebaseMethods {
                                     }
 
                                 }
-//                                if (singleSnapshot2.getValue(Photo.class).getPhoto_id()
-//                                        .equals(photoId)) {
-//                                    myRef.child(mContext.getString(R.string.dbname_user_photos))
-//                                            .child(userId)
-//                                            .child(photoId)
-//                                            .child(mContext.getString(R.string.field_likes))
-//                                            .child(newLikeId)
-//                                            .setValue(like);
-//                                }
-
-
-
                             }
 
                             getLikesCount(photoId, new FirebaseMethods.MyCallback() {
