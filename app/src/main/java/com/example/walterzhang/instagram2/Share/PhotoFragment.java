@@ -2,6 +2,8 @@ package com.example.walterzhang.instagram2.Share;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,7 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by mingshunc on 24/9/18.
+ * This Fragment is for taking photo from the camera. It calls the camera intent and retrieves the photo, stores it in the file and
+ * send it to the Crop Activity. 
  */
 
 public class PhotoFragment extends Fragment {
@@ -133,7 +136,7 @@ public class PhotoFragment extends Fragment {
                 File file = new File(mCurrentPhotoPath);
                 Bitmap bitmap = MediaStore.Images.Media
                         .getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
-
+                bitmap = rotateImageIfRequired(bitmap, Uri.fromFile(file));
                 FilePaths filePaths = new FilePaths();
                 File storedPhotoFile = new File(filePaths.UNISOCIAL + "/" +
                         generateImageFilename() + ".jpg");
@@ -147,6 +150,9 @@ public class PhotoFragment extends Fragment {
                 }
 
                 if (bitmap != null) {
+
+
+
                     if (isRootTask()) {
                         try {
                             Log.d(TAG, "onActivityResults: received new bitmap from camera: ");
@@ -159,10 +165,9 @@ public class PhotoFragment extends Fragment {
                         }
                     } else {
                         try {
-                            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                             Log.d(TAG, "onActivityResults: received new bitmap from camera: ");
                             Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                            intent.putExtra(getString(R.string.selected_bitmap), thumbnail);
+                            intent.putExtra(getString(R.string.selected_image), storedPhotoFile.toString());
                             intent.putExtra(getString(R.string.return_to_fragment),
                                     getString(R.string.edit_profile_fragment));
                             startActivity(intent);
@@ -176,5 +181,33 @@ public class PhotoFragment extends Fragment {
                 ex.getStackTrace();
             }
         }
+    }
+
+    /** The following methods fixes the bug where in some devices when a photo is clicked with camera intent, it is rotated.
+     *  These methods take the bitmap and image path to check if the photo is rotated or not.
+     *  It fixes the photo and then returns the bitmap. **/
+
+    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
+
+        ExifInterface ei = new ExifInterface(selectedImage.getPath());
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+    private static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImg;
     }
 }
