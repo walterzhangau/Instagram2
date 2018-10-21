@@ -46,7 +46,7 @@
                     android:layout_height="45dp"
 
 
-                    android:hint="@string/string_username"
+                    android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:paddingLeft="5dp"
