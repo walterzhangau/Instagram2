@@ -65,8 +65,6 @@ public class filter extends AppCompatActivity implements FiltersListFragment.Fil
     Bitmap originalImage;
     Bitmap filteredImage;
 
-    public static final String IMAGE_NAME = "dog.jpg";
-
     Bitmap finalImage;
     String imgUrl;
 
