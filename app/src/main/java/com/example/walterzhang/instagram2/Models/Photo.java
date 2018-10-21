@@ -14,12 +14,12 @@ public class Photo implements Parcelable {
     private String caption;
     private String tags;
     private List<Like> likes;
-
+    private List<Comment> comments;
     public Photo() {
 
     }
 
-    public Photo(String photo_id, String user_id, String date_created, String image_path, String caption, String tags, List<Like> likes) {
+    public Photo(String photo_id, String user_id, String date_created, String image_path, String caption, String tags, List<Like> likes, List<Comment> comments) {
         this.photo_id = photo_id;
         this.user_id = user_id;
         this.date_created = date_created;
@@ -27,6 +27,15 @@ public class Photo implements Parcelable {
         this.caption = caption;
         this.tags = tags;
         this.likes = likes;
+        this.comments = comments;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public List<Like> getLikes() {

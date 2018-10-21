@@ -82,38 +82,14 @@
                     android:hint="Display Name"/>
             </RelativeLayout>
 
-            <!--website section-->
+
+            <!--Description section-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@+id/relLayout2"
                 android:background="@drawable/grey_border_bottom"
                 android:id="@+id/relLayout3">
-
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/ic_website"
-                    android:layout_centerVertical="true"/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/website"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="40dp"
-                    android:background="@null"
-                    android:inputType="textNoSuggestions"
-                    android:hint="Website"/>
-            </RelativeLayout>
-
-            <!--Description section-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/relLayout3"
-                android:background="@drawable/grey_border_bottom"
-                android:id="@+id/relLayout4">
 
                 <ImageView
                     android:layout_width="35dp"
@@ -131,13 +107,13 @@
                     android:inputType="textNoSuggestions"
                     android:hint="Description"/>
             </RelativeLayout>
-            
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
                 android:text="PRIVATE INFORMATION"
-                android:layout_below="@id/relLayout4"
+                android:layout_below="@id/relLayout3"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
                 android:textColor="@color/black"
@@ -150,7 +126,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/textPrivateInfo"
                 android:background="@drawable/grey_border_bottom"
-                android:id="@+id/relLayout5">
+                android:id="@+id/relLayout4">
 
                 <ImageView
                     android:layout_width="35dp"
@@ -169,11 +145,11 @@
                     android:hint="Email"/>
             </RelativeLayout>
 
-            <!--Description section-->
+            <!--Phone section-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@+id/relLayout5"
+                android:layout_below="@+id/relLayout4"
                 android:background="@drawable/grey_border_bottom"
                 android:id="@+id/relLayout6">
 

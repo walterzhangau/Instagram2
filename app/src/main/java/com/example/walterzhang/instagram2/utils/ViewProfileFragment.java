@@ -79,7 +79,7 @@ public class ViewProfileFragment extends Fragment{
 
         mDisplayName = (TextView) view .findViewById(R.id.display_name);
         mUsername = (TextView) view .findViewById(R.id.username);
-        mWebsite = (TextView) view .findViewById(R.id.website);
+
         mDescription = (TextView) view .findViewById(R.id.description);
         mProfilePhoto = (CircleImageView) view .findViewById(R.id.profile_photo);
         mFollow = view.findViewById(R.id.follow);

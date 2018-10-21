@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.walterzhang.instagram2.Models.Comment;
 import com.example.walterzhang.instagram2.Models.Like;
 import com.example.walterzhang.instagram2.Models.Photo;
 import com.example.walterzhang.instagram2.Models.UserAccountSettings;
@@ -89,7 +90,6 @@ public class ProfileFragment extends Fragment{
 
         mDisplayName = (TextView) view .findViewById(R.id.display_name);
         mUsername = (TextView) view .findViewById(R.id.username);
-        mWebsite = (TextView) view .findViewById(R.id.website);
         mDescription = (TextView) view .findViewById(R.id.description);
         mProfilePhoto = (CircleImageView) view .findViewById(R.id.profile_photo);
         mPosts = (TextView) view .findViewById(R.id.tvPosts);
@@ -177,6 +177,19 @@ public class ProfileFragment extends Fragment{
                     photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
                     photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
 
+
+                    ArrayList<Comment> comments = new ArrayList<Comment>();
+                    for (DataSnapshot dSnapshot : singleSnapshot
+                            .child(getString(R.string.field_comments)).getChildren()){
+                        Comment comment = new Comment();
+                        comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                        comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                        comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                        comments.add(comment);
+                    }
+
+                    photo.setComments(comments);
+
                     List<Like> likesList = new ArrayList<Like>();
                     for (DataSnapshot dSnapshot : singleSnapshot.child(getString(R.string.field_likes)).getChildren()){
                         Like like = new Like();
@@ -227,7 +240,7 @@ public class ProfileFragment extends Fragment{
                 Log.d(TAG, "onClick: navigation to account settings clicked ");
                 Intent intent =new Intent(mContext,AccountSettingsActivity.class);
                 startActivity(intent);
-
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
     }
