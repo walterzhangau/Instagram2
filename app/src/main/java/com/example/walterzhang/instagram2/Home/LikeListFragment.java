@@ -57,7 +57,7 @@ public class LikeListFragment extends Fragment {
     public LikeListFragment() {
     }
 
-    // TODO: Customize parameter initialization
+
     @SuppressWarnings("unused")
     public static LikeListFragment newInstance(int columnCount) {
         LikeListFragment fragment = new LikeListFragment();
@@ -127,7 +127,7 @@ public class LikeListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnLikeListFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onListFragmentInteraction(TextView item);
     }
 

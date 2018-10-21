@@ -63,6 +63,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         holder.commentText.setText(mComments.get(position).getComment());
         UniversalImageLoader.setImage(mUsersSettings.get(position).getProfile_photo(), holder.profilePicture, null, "");
 
+
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -101,9 +101,8 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
                 Bitmap thumbImage;
 
                 if(bitmap == null){
-                    thumbImage = BitmapUtils.getBitmapFromAssets(getActivity(), filter.IMAGE_NAME, 100, 100);
+                    thumbImage = null;
                     Log.d("FiltersFragment", "bitmap is null");
-
                 }
                 else{
                     thumbImage= Bitmap.createScaledBitmap(bitmap, 100, 100, false);
